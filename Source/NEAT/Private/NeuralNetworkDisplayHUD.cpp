@@ -8,59 +8,44 @@ void ANeuralNetworkDisplayHUD::DrawHUD()
 	int ySpace = 30;
 	int xSpace = 60;
 	int squareSize = 10;
+	FLinearColor nodeColor = FLinearColor(0.2, 0.2, 1, 1);
+	FLinearColor textColor = FLinearColor(0, 0, 0, 1);
+	FLinearColor connectionColor = FLinearColor(0, 1, 0, 1);
 
 	int x = 0;
 	int y = 0;
 
+	//Draw the input nodes
 	for (std::list<Node>::iterator itInput = network.inputNodes.begin(); itInput != network.inputNodes.end(); ++itInput)
 	{
-		DrawRect(FLinearColor(0, 1, 0, 1), 20 + xSpace * x, 20 + ySpace * y, squareSize, squareSize);
+		DrawRect(nodeColor, 20 + xSpace * x, 20 + ySpace * y, squareSize, squareSize);
 		y++;
 	}
 
 	x++;
 	y = 0;
 
+	//Draw the hidden layers and their connections
 	for (std::list <std::list<Node>>::iterator itLayer = network.hiddenNodes.begin(); itLayer != network.hiddenNodes.end(); ++itLayer)
 	{
 		for (std::list<Node>::iterator itHidden = itLayer->begin(); itHidden != itLayer->end(); ++itHidden)
 		{
-			DrawRect(FLinearColor(0, 1, 0, 1), 20 + xSpace * x, 20 + ySpace * y, squareSize, squareSize);
+			DrawRect(nodeColor, 20 + xSpace * x, 20 + ySpace * y, squareSize, squareSize);
 			
 			//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%i"), itHidden->previousNodes.size()));
 
 			for (std::map<Node*, float>::iterator nodes = itHidden->previousNodes.begin(); nodes != itHidden->previousNodes.end(); ++nodes)
 			{
-				std::list<Node>::iterator itPrev;
-				std::list<Node>::iterator itPrevEnd;
+				int x2 = x;
 				int y2 = 0;
 
-				if (itLayer == network.hiddenNodes.begin())
-				{
-					itPrev = network.inputNodes.begin();
-					itPrevEnd = network.inputNodes.end();
-				}
-				else {
-					itPrev = std::prev(itLayer)->begin();
-					itPrevEnd = std::prev(itLayer)->end();
-				}
+				bool found = findNodePos(x2, y2, itLayer, *nodes);
 
-				for (itPrev; itPrev != itPrevEnd; ++itPrev)
-				{
+				DrawLine(20 + xSpace * x2 + squareSize / 2, 20 + ySpace * y2 + squareSize / 2, 20 + xSpace * x + squareSize / 2, 20 + ySpace * y + squareSize / 2, connectionColor, 2);
 
-					if (&*itPrev == nodes->first)
-					{
-						DrawLine(20 + xSpace * (x - 1) + squareSize / 2, 20 + ySpace * y2 + squareSize / 2, 20 + xSpace * x + squareSize / 2, 20 + ySpace * y + squareSize / 2, FLinearColor(0, 1, 0, 1), 2);
-						
-						float textY = (y < y2 ? y : y2) + abs(y - y2) / 2;
-						
-						DrawText(FString::Printf(TEXT("%.2f"), nodes->second), FColor::Black, 20 + xSpace * (x - 0.5) + squareSize / 2 - 10, 20 + ySpace * textY + squareSize / 2);
-						
-						break;
-					}
+				float textY = (y < y2 ? y : y2) + abs(y - y2) / 2;
 
-					y2++;
-				}
+				DrawText(FString::Printf(TEXT("%.2f"), nodes->second), textColor, 20 + xSpace * x - (x - x2) / 2.f * 55 + squareSize / 2.f - 10, 20 + ySpace * textY + squareSize / 2);
 			}
 
 			y++;
@@ -70,44 +55,75 @@ void ANeuralNetworkDisplayHUD::DrawHUD()
 		y = 0;
 	}
 
+	//Draw the the output nodes and their connections
 	for (std::list<Node>::iterator itOutput = network.outputNodes.begin(); itOutput != network.outputNodes.end(); ++itOutput)
 	{
-		DrawRect(FLinearColor(0, 1, 0, 1), 20 + xSpace * x, 20 + ySpace * y, 10, 10);
+		DrawRect(nodeColor, 20 + xSpace * x, 20 + ySpace * y, 10, 10);
 		
 		for (std::map<Node*, float>::iterator nodes = itOutput->previousNodes.begin(); nodes != itOutput->previousNodes.end(); ++nodes)
 		{
-			std::list<Node>::iterator itPrev = network.hiddenNodes.back().begin();
-			std::list<Node>::iterator itPrevEnd = network.hiddenNodes.back().end();
-
+			int x2 = x;
 			int y2 = 0;
 
-			for (itPrev; itPrev != itPrevEnd; ++itPrev)
-			{
+			std::list <std::list<Node>>::iterator itLayer = network.hiddenNodes.end();
 
-				if (&*itPrev == nodes->first)
-				{
-					DrawLine(20 + xSpace * (x - 1) + squareSize / 2, 20 + ySpace * y2 + squareSize / 2, 20 + xSpace * x + squareSize / 2, 20 + ySpace * y + squareSize / 2, FLinearColor(0, 1, 0, 1), 2);
-					
-					float textY = (y < y2 ? y : y2) + abs(y - y2)/2;
+			bool found = findNodePos(x2, y2, itLayer, *nodes);
 
-					DrawText(FString::Printf(TEXT("%.2f"), nodes->second), FColor::Black, 20 + xSpace * (x - 0.5) + squareSize / 2 - 10, 20 + ySpace * textY + squareSize / 2);
+			DrawLine(20 + xSpace * x2 + squareSize / 2, 20 + ySpace * y2 + squareSize / 2, 20 + xSpace * x + squareSize / 2, 20 + ySpace * y + squareSize / 2, connectionColor, 2);
 
-					break;
-				}
+			float textY = (y < y2 ? y : y2) + abs(y - y2) / 2;
 
-				y2++;
-			}
+			DrawText(FString::Printf(TEXT("%.2f"), nodes->second), textColor, 20 + xSpace * x - (x - x2) / 2.f * 55 + squareSize / 2.f - 10, 20 + ySpace * textY + squareSize / 2);
 
 		}
 
 		y++;
 	}
+}
 
-	
+bool ANeuralNetworkDisplayHUD::findNodePos(int& x, int& y, const std::list <std::list<Node>>::iterator& itLayer, const std::pair<Node*, float>& connection)
+{
+	//Function automatically walks one step backward
+	std::list <std::list<Node>>::reverse_iterator itPrevLayer = std::make_reverse_iterator(itLayer);
+	bool found = false;
 
-	/*DrawRect(FLinearColor(0, 1, 0, 1), 20, 20, 10, 10);
-	DrawLine(100, 100, 300, 300, FLinearColor(0, 1, 0, 1), 2);
-	DrawRect(FLinearColor(0, 1, 0, 1), 300, 300, 50, 50);*/
+	//Search in the hidden layers
+	while (itPrevLayer != network.hiddenNodes.rend() && found == false)
+	{
+		found = findNodePosInLayer(y, itPrevLayer->begin(), itPrevLayer->end(), connection);
+
+		x--;
+		++itPrevLayer;
+	}
+
+	//Search in the input layer 
+	if (found == false)
+	{
+		x = 0;
+		found = findNodePosInLayer(y, network.inputNodes.begin(), network.inputNodes.end(), connection);
+	}
+
+	return false;
+}
+
+
+bool ANeuralNetworkDisplayHUD::findNodePosInLayer(int& y, std::list<Node>::iterator nodes, std::list<Node>::iterator nodesEnd, const std::pair<Node*, float>& connection)
+{
+	y = 0;
+
+	while (nodes != nodesEnd)
+	{
+		if (&*nodes == connection.first)
+		{
+
+			return true;
+		}
+
+		y++;
+		++nodes;
+	}
+
+	return false;
 }
 
 void ANeuralNetworkDisplayHUD::BeginPlay()

@@ -5,6 +5,7 @@
 
 NeuralNetwork::NeuralNetwork()
 {
+	//Just for testing purpose
 	addInputNode();
 	addInputNode();
 	addInputNode();
@@ -27,6 +28,9 @@ NeuralNetwork::NeuralNetwork()
 	connectNodes(0, 2, 1, 0, 1.5);
 	connectNodes(1, 0, 2, 2, 0.75);
 	connectNodes(2, 2, 3, 0, 3);
+
+	connectNodes(0, 2, 3, 0, 1.5);
+
 	std::vector<float> inputs, ouputs;
 
 	inputs.push_back(1);
@@ -44,18 +48,29 @@ NeuralNetwork::~NeuralNetwork()
 
 void NeuralNetwork::fullyConnect()
 {
+	//Connect ouput nodes to previous layer
 	std::list<Node>::iterator itOutput;
 
 	for (itOutput = outputNodes.begin(); itOutput != outputNodes.end(); ++itOutput)
 	{
 		std::list<Node>::iterator itPrevious;
 
-		for (itPrevious = hiddenNodes.back().begin(); itPrevious != hiddenNodes.back().end(); ++itPrevious)
+		if (hiddenNodes.size() > 0)
 		{
-			itOutput->addConnection(&(*itPrevious), 0.5);
+			for (itPrevious = hiddenNodes.back().begin(); itPrevious != hiddenNodes.back().end(); ++itPrevious)
+			{
+				itOutput->addConnection(&(*itPrevious), 0.5);
+			}
+		}
+		else {
+			for (itPrevious = inputNodes.begin(); itPrevious != inputNodes.end(); ++itPrevious)
+			{
+				itOutput->addConnection(&(*itPrevious), 0.5);
+			}
 		}
 	}
 
+	//Connect hidden layers to previous hidden layers
 	std::list <std::list<Node>>::reverse_iterator itLayer = hiddenNodes.rbegin();
 	std::list<Node>::iterator itNext = itLayer->begin();
 	std::list<Node>::iterator itNextEnd = itLayer->end();
@@ -77,6 +92,7 @@ void NeuralNetwork::fullyConnect()
 		itNextEnd = itLayer->end();
 	}
 
+	//Connect first hidden layer to input layer 
 	//std::list<Node>::iterator itNext;
 	for (itNext = hiddenNodes.front().begin(); itNext != hiddenNodes.front().end(); ++itNext)
 	{
@@ -127,6 +143,12 @@ void NeuralNetwork::removeHiddenNode(int layer)
 
 void NeuralNetwork::connectNodes(int layerA, int nodeA, int layerB, int nodeB, float weight)
 {
+	if (layerA >= layerB)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Error connecting nodes, layerA is superior or equal to layerB");
+	}
+
+
 	Node *previousNode, *nextNode;
 
 	previousNode = getNode(layerA, nodeA);
@@ -173,6 +195,7 @@ void NeuralNetwork::compute(std::vector<float>& inputs, std::vector<float>& outp
 {
 	if (inputs.size() >= inputNodes.size())
 	{
+		//Reset the hidden nodes
 		for (std::list<std::list<Node>>::iterator it = hiddenNodes.begin(); it != hiddenNodes.end(); ++it)
 		{
 			for (std::list<Node>::iterator itNode = it->begin(); itNode != it->end(); ++itNode)
@@ -181,12 +204,14 @@ void NeuralNetwork::compute(std::vector<float>& inputs, std::vector<float>& outp
 			}
 		}
 
+		//Set the input values
 		int i = 0;
 		for (std::list<Node>::iterator it = inputNodes.begin(); it != inputNodes.end(); ++it, ++i)
 		{
 			it->setValue(inputs[i]);
 		}
 
+		//Compute the result
 		for (std::list<Node>::iterator it = outputNodes.begin(); it != outputNodes.end(); ++it)
 		{
 			it->reset();
