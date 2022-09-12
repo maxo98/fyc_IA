@@ -6,7 +6,7 @@
 NeuralNetwork::NeuralNetwork()
 {
 	//Just for testing purpose
-	addInputNode();
+	/*addInputNode();
 	addInputNode();
 	addInputNode();
 
@@ -37,7 +37,7 @@ NeuralNetwork::NeuralNetwork()
 	inputs.push_back(1);
 	inputs.push_back(2);
 
-	compute(inputs, ouputs);
+	compute(inputs, ouputs);*/
 
 	//fullyConnect();
 }
