@@ -125,8 +125,3 @@ bool ANeuralNetworkDisplayHUD::findNodePosInLayer(int& y, std::list<Node>::itera
 
 	return false;
 }
-
-void ANeuralNetworkDisplayHUD::BeginPlay()
-{
-    Super::BeginPlay();
-}

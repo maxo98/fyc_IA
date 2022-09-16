@@ -2,8 +2,12 @@
 
 
 #include "NEATGameModeBase.h"
+#include <stdlib.h>     
+#include <time.h>       
 
 ANEATGameModeBase::ANEATGameModeBase()
 {
 	HUDClass = ANeuralNetworkDisplayHUD::StaticClass();
+
+	srand(time(NULL));
 }
