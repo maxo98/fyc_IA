@@ -11,7 +11,7 @@
 class NEAT_API GeneConnection
 {
 public:
-	GeneConnection();
+	GeneConnection();//Necessary to put it in a unordered_map or something else
 	GeneConnection(int _innovation, int _nodeA, int _nodeB);
 	~GeneConnection();
 

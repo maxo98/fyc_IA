@@ -32,15 +32,15 @@ NeatAlgoGen::~NeatAlgoGen()
 void NeatAlgoGen::mutate(Genome& genome)
 {
 	if (pbMutateLink > rand() % 1) {
-		//genome.mutateLink(innova)
+		genome.mutateLink(allConnections);
 	}if (pbMutateNode > rand() % 1) {
-		//mutate_node();
+		genome.mutateNode(allConnections);
 	}if (pbWeightShift > rand() % 1) {
-		//mutate_weight_shift();
+		genome.mutateWeightShift(pbWeightShift);
 	}if (pbWeightRandom > rand() % 1) {
-		//mutate_weight_random();
+		genome.mutateWeightRandom(pbWeightShift);
 	}if (pbToggleLink > rand() % 1) {
-		//mutate_link_toggle();
+		genome.mutateLinkToggle();
 	}
 }
 
