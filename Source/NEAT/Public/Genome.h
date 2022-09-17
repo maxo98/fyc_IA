@@ -8,6 +8,7 @@
 #include <deque>
 #include <unordered_map>
 
+//Needed for unordered map
 // custom specialization of std::hash can be injected in namespace std
 template<>
 struct std::hash<std::pair<int, int>>
