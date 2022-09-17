@@ -18,9 +18,11 @@ public:
 
 	void mutate(Genome& genome);
 
+	void generateNetworks();
+
 private:
 	std::vector<NeuralNetwork> networks;
-	std::list<Genome> genomes;
+	std::vector<Genome> genomes;
 	std::unordered_map<std::pair<int, int>, int> allConnections;//Innovation number starts at 0
 	int populationSize, input, output;
 	float pbMutateLink, pbMutateNode, pbWeightShift, pbWeightRandom, pbToggleLink;//Probability of each mutation

@@ -18,6 +18,10 @@ NeatAlgoGen::NeatAlgoGen(int _populationSize, int _input, int _output, float _pb
 	weightShiftStrength = _weightShiftStrength;
 	weightRandomStrength = _weightRandomStrength;
 
+	networks.reserve(populationSize);
+	genomes.reserve(populationSize);
+
+
 	for (int i = 0; i < populationSize; i++)
 	{
 		genomes.push_back(Genome(input, output));
