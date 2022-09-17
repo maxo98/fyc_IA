@@ -7,7 +7,7 @@
 #include "Node.h"
 
 /**
- * 
+ * Refer to the nodes by there index starting from 0
  */
 class NEAT_API NeuralNetwork
 {
@@ -30,8 +30,11 @@ public:
 	inline void removeOutputNode() { outputNodes.pop_back(); };
 
 	void connectNodes(int layerA, int nodeA, int layerB, int nodeB, float weight);
+	void connectNodes(std::pair<int, int> nodeA, std::pair<int, int> nodeB, float weight);
 
 	void compute(std::vector<float> &inputs , std::vector<float> &outputs);
+
+	void clear();
 
 private:
 	Node* getNode(int layer, int node);

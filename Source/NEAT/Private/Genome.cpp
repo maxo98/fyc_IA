@@ -13,7 +13,7 @@ Genome::Genome(int input, int output)
  
     for (int i = 0; i < output; i++)
     {
-        nodes.push_back(GeneNode(NODE_TYPE::OUTPUT, 1));
+        nodes.push_back(GeneNode(NODE_TYPE::OUTPUT, 999999));
     }
 }
 
@@ -21,6 +21,10 @@ Genome::~Genome()
 {
 }
 
+/**
+*Check if the connection already exist, if so use it's innovation number
+* otherwise add it to the register
+*/
 void Genome::addConnection(int nodeA, int nodeB, std::unordered_map<std::pair<int, int>, int>& allConnections)
 {
     std::unordered_map<std::pair<int, int>, int>::iterator found = allConnections.find(std::pair(nodeA, nodeB));
@@ -57,9 +61,8 @@ bool Genome::mutateLink(std::unordered_map<std::pair<int, int>, int>& allConnect
         nodeA = rand() % nodes.size();
         nodeB = rand() % nodes.size();
 
-        if (nodeA == nodeB)
+        if (nodeA == nodeB || nodes[nodeA].layer == nodes[nodeB].layer || (nodes[nodeA].type == NODE_TYPE::OUTPUT && nodes[nodeB].type == NODE_TYPE::OUTPUT))
         {
-            i++;
             continue;
         }
             
@@ -96,7 +99,7 @@ bool Genome::mutateNode(std::unordered_map<std::pair<int, int>, int>& allConnect
     //Try to find an enabled connection to create a 100 times
     while (i < 100 && foundMutation == false)
     {
-        geneConnectionIndex = rand() % nodes.size();
+        geneConnectionIndex = rand() % connections.size();
 
         if (connections[geneConnectionIndex].enabled == true)
         {
@@ -170,7 +173,7 @@ void Genome::mutateWeightShift(float weightShiftStrength)
     //Try to find an enabled connection to create a 100 times
     while (i < 100 && foundMutation == false)
     {
-        geneConnectionIndex = rand() % nodes.size();
+        geneConnectionIndex = rand() % connections.size();
 
         if (connections[geneConnectionIndex].enabled == true)
         {
@@ -183,7 +186,7 @@ void Genome::mutateWeightShift(float weightShiftStrength)
     if (foundMutation == true)
     {
         //Shift the weight by a random offset
-        connections[geneConnectionIndex].weight += rand() / 2 - 1 * weightShiftStrength;
+        connections[geneConnectionIndex].weight += (static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 2)) - 1) * weightShiftStrength;
     }
 }
 
@@ -196,7 +199,7 @@ void Genome::mutateWeightRandom(float weightRandomStrength)
     //Try to find an enabled connection to create a 100 times
     while (i < 100 && foundMutation == false)
     {
-        geneConnectionIndex = rand() % nodes.size();
+        geneConnectionIndex = rand() % connections.size();
 
         if (connections[geneConnectionIndex].enabled == true)
         {
@@ -209,13 +212,13 @@ void Genome::mutateWeightRandom(float weightRandomStrength)
     if (foundMutation == true)
     {
         //Set a new random weight
-        connections[geneConnectionIndex].weight = rand() / 2 - 1 * weightRandomStrength;
+        connections[geneConnectionIndex].weight = (static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 2)) -1 ) * weightRandomStrength;
     }
 }
 
 void Genome::mutateLinkToggle()
 {
-    int geneConnectionIndex = rand() % nodes.size();
+    int geneConnectionIndex = rand() % connections.size();
 
     //Switches the activation of the connection
     connections[geneConnectionIndex].enabled = !connections[geneConnectionIndex].enabled;

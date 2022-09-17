@@ -107,6 +107,12 @@ void NeuralNetwork::fullyConnect()
 int NeuralNetwork::getNHiddenNode(int layer)
 {
 	layer--;
+
+	if (layer >= hiddenNodes.size())
+	{
+		return 0;
+	}
+
 	int i = 0;
 	std::list<std::list<Node>>::iterator it;
 	for(it = hiddenNodes.begin(); it != hiddenNodes.end() && i != layer; ++it, ++i);
@@ -116,9 +122,9 @@ int NeuralNetwork::getNHiddenNode(int layer)
 
 void NeuralNetwork::addHiddenNode(int layer)
 {
-	if (layer >= hiddenNodes.size())
+	if (layer > hiddenNodes.size())
 	{
-		while (layer >= hiddenNodes.size())
+		while (layer > hiddenNodes.size())
 		{
 			hiddenNodes.push_back(std::list<Node>());
 		}
@@ -127,6 +133,8 @@ void NeuralNetwork::addHiddenNode(int layer)
 
 		return;
 	}
+
+	layer--;
 
 	int i = 0;
 	std::list<std::list<Node>>::iterator it;
@@ -145,6 +153,11 @@ void NeuralNetwork::removeHiddenNode(int layer)
 	it->pop_back();
 }
 
+void NeuralNetwork::connectNodes(std::pair<int, int> nodeA, std::pair<int, int> nodeB, float weight)
+{
+	connectNodes(nodeA.first, nodeA.second, nodeB.first, nodeB.second, weight);
+}
+
 void NeuralNetwork::connectNodes(int layerA, int nodeA, int layerB, int nodeB, float weight)
 {
 	if (layerA >= layerB)
@@ -152,11 +165,21 @@ void NeuralNetwork::connectNodes(int layerA, int nodeA, int layerB, int nodeB, f
 		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Error connecting nodes, layerA is superior or equal to layerB");
 	}
 
+	if (layerB >= getLayerSize())
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Error connecting nodes, layerB doesn't exist.");
+	}
 
 	Node *previousNode, *nextNode;
 
 	previousNode = getNode(layerA, nodeA);
 	nextNode = getNode(layerB, nodeB);
+
+	if (previousNode == nullptr || nextNode == nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Error connecting nodes, one node doesn't exist.");
+		return;
+	}
 
 	nextNode->addConnection(previousNode, weight);
 }
@@ -170,13 +193,17 @@ Node* NeuralNetwork::getNode(int layer, int node)
 	else if ((layer-1) == hiddenNodes.size()) {
 		return getNodeFromLayer(outputNodes, node);
 	}
-	else {
+	else if((layer - 1) < hiddenNodes.size()){
 		layer--;
 		int i = 0;
 		std::list<std::list<Node>>::iterator it;
 		for (it = hiddenNodes.begin(); it != hiddenNodes.end() && i != layer; ++it, ++i);
 
 		return getNodeFromLayer(*it, node);
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("Trying to get a node layer %i while max layer is %i"), layer, getLayerSize()));
+		return nullptr;
 	}
 }
 
@@ -191,6 +218,8 @@ Node* NeuralNetwork::getNodeFromLayer(std::list<Node>& layer, int node)
 		return &*it;
 	}
 	else {
+		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Trying to get a node that doesn't exist");
+
 		return nullptr;
 	}
 }
@@ -225,4 +254,11 @@ void NeuralNetwork::compute(std::vector<float>& inputs, std::vector<float>& outp
 			
 		}
 	}
+}
+
+void NeuralNetwork::clear()
+{
+	hiddenNodes.clear();
+	inputNodes.clear();
+	outputNodes.clear();
 }

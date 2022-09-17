@@ -5,18 +5,23 @@
 
 void ANeuralNetworkDisplayHUD::DrawHUD()
 {
+	drawNetwork(&neat.networks[0]);
+}
+
+void ANeuralNetworkDisplayHUD::drawNetwork(NeuralNetwork* network)
+{
 	int ySpace = 30;
 	int xSpace = 60;
 	int squareSize = 10;
 	FLinearColor nodeColor = FLinearColor(0.2, 0.2, 1, 1);
-	FLinearColor textColor = FLinearColor(0, 0, 0, 1);
+	FLinearColor textColor = FLinearColor(1, 1, 1, 1);
 	FLinearColor connectionColor = FLinearColor(0, 1, 0, 1);
 
 	int x = 0;
 	int y = 0;
 
 	//Draw the input nodes
-	for (std::list<Node>::iterator itInput = network.inputNodes.begin(); itInput != network.inputNodes.end(); ++itInput)
+	for (std::list<Node>::iterator itInput = network->inputNodes.begin(); itInput != network->inputNodes.end(); ++itInput)
 	{
 		DrawRect(nodeColor, 20 + xSpace * x, 20 + ySpace * y, squareSize, squareSize);
 		y++;
@@ -26,12 +31,12 @@ void ANeuralNetworkDisplayHUD::DrawHUD()
 	y = 0;
 
 	//Draw the hidden layers and their connections
-	for (std::list <std::list<Node>>::iterator itLayer = network.hiddenNodes.begin(); itLayer != network.hiddenNodes.end(); ++itLayer)
+	for (std::list <std::list<Node>>::iterator itLayer = network->hiddenNodes.begin(); itLayer != network->hiddenNodes.end(); ++itLayer)
 	{
 		for (std::list<Node>::iterator itHidden = itLayer->begin(); itHidden != itLayer->end(); ++itHidden)
 		{
 			DrawRect(nodeColor, 20 + xSpace * x, 20 + ySpace * y, squareSize, squareSize);
-			
+
 			//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%i"), itHidden->previousNodes.size()));
 
 			for (std::map<Node*, float>::iterator nodes = itHidden->previousNodes.begin(); nodes != itHidden->previousNodes.end(); ++nodes)
@@ -39,7 +44,12 @@ void ANeuralNetworkDisplayHUD::DrawHUD()
 				int x2 = x;
 				int y2 = 0;
 
-				bool found = findNodePos(x2, y2, itLayer, *nodes);
+				bool found = findNodePos(x2, y2, itLayer, *nodes, network);
+
+				if (found == false)
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Can't find second node to draw connection");
+				}
 
 				DrawLine(20 + xSpace * x2 + squareSize / 2, 20 + ySpace * y2 + squareSize / 2, 20 + xSpace * x + squareSize / 2, 20 + ySpace * y + squareSize / 2, connectionColor, 2);
 
@@ -56,18 +66,23 @@ void ANeuralNetworkDisplayHUD::DrawHUD()
 	}
 
 	//Draw the the output nodes and their connections
-	for (std::list<Node>::iterator itOutput = network.outputNodes.begin(); itOutput != network.outputNodes.end(); ++itOutput)
+	for (std::list<Node>::iterator itOutput = network->outputNodes.begin(); itOutput != network->outputNodes.end(); ++itOutput)
 	{
 		DrawRect(nodeColor, 20 + xSpace * x, 20 + ySpace * y, 10, 10);
-		
+
 		for (std::map<Node*, float>::iterator nodes = itOutput->previousNodes.begin(); nodes != itOutput->previousNodes.end(); ++nodes)
 		{
 			int x2 = x;
 			int y2 = 0;
 
-			std::list <std::list<Node>>::iterator itLayer = network.hiddenNodes.end();
+			std::list <std::list<Node>>::iterator itLayer = network->hiddenNodes.end();
 
-			bool found = findNodePos(x2, y2, itLayer, *nodes);
+			bool found = findNodePos(x2, y2, itLayer, *nodes, network);
+
+			if (found == false)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Can't find second node to draw connection");
+			}
 
 			DrawLine(20 + xSpace * x2 + squareSize / 2, 20 + ySpace * y2 + squareSize / 2, 20 + xSpace * x + squareSize / 2, 20 + ySpace * y + squareSize / 2, connectionColor, 2);
 
@@ -81,14 +96,14 @@ void ANeuralNetworkDisplayHUD::DrawHUD()
 	}
 }
 
-bool ANeuralNetworkDisplayHUD::findNodePos(int& x, int& y, const std::list <std::list<Node>>::iterator& itLayer, const std::pair<Node*, float>& connection)
+bool ANeuralNetworkDisplayHUD::findNodePos(int& x, int& y, const std::list <std::list<Node>>::iterator& itLayer, const std::pair<Node*, float>& connection, NeuralNetwork* network)
 {
 	//Function automatically walks one step backward
 	std::list <std::list<Node>>::reverse_iterator itPrevLayer = std::make_reverse_iterator(itLayer);
 	bool found = false;
 
 	//Search in the hidden layers
-	while (itPrevLayer != network.hiddenNodes.rend() && found == false)
+	while (itPrevLayer != network->hiddenNodes.rend() && found == false)
 	{
 		found = findNodePosInLayer(y, itPrevLayer->begin(), itPrevLayer->end(), connection);
 
@@ -100,10 +115,13 @@ bool ANeuralNetworkDisplayHUD::findNodePos(int& x, int& y, const std::list <std:
 	if (found == false)
 	{
 		x = 0;
-		found = findNodePosInLayer(y, network.inputNodes.begin(), network.inputNodes.end(), connection);
+		return findNodePosInLayer(y, network->inputNodes.begin(), network->inputNodes.end(), connection);
+	}
+	else {
+		return true;
 	}
 
-	return false;
+	//return false;
 }
 
 
@@ -115,7 +133,6 @@ bool ANeuralNetworkDisplayHUD::findNodePosInLayer(int& y, std::list<Node>::itera
 	{
 		if (&*nodes == connection.first)
 		{
-
 			return true;
 		}
 

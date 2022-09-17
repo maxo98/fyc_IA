@@ -13,12 +13,15 @@
 class NEAT_API NeatAlgoGen
 {
 public:
+	NeatAlgoGen();//Just for testing purposes
 	NeatAlgoGen(int _populationSize, int _input, int _output, float _pbMutateLink, float _pbMutateNode, float _pbWeightShift, float _pbWeightRandom, float _pbToggleLink, float _weightShiftStrength, float _weightRandomStrength);
 	~NeatAlgoGen();
 
 	void mutate(Genome& genome);
 
 	void generateNetworks();
+
+	friend class ANeuralNetworkDisplayHUD;
 
 private:
 	std::vector<NeuralNetwork> networks;

@@ -15,6 +15,11 @@ public:
 	GeneConnection(int _innovation, int _nodeA, int _nodeB);
 	~GeneConnection();
 
+	inline int getNodeA() { return nodeA; };
+	inline int getNodeB() { return nodeB; };
+	inline float getWeight() { return weight; };
+	inline bool isEnabled() { return enabled; };
+
 	friend class Genome;
 
 private:
