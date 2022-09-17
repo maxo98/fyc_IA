@@ -22,10 +22,6 @@ public:
 	inline int getNInputNode() { return inputNodes.size(); }
 	inline int getNOutputNode() { return outputNodes.size(); }
 
-	/**
-	 * if layer parameter is bigger than the current number of layer, just one layer is appended at the end regardless of the layer value
-	 * and a node is added to that layer
-	 */
 	void addHiddenNode(int layer);
 	inline void addInputNode() { inputNodes.push_back(Node()); };
 	inline void addOutputNode() { outputNodes.push_back(Node()); };

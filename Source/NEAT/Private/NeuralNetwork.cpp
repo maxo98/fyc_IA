@@ -6,21 +6,21 @@
 NeuralNetwork::NeuralNetwork()
 {
 	//Just for testing purpose
-	/*addInputNode();
-	addInputNode();
-	addInputNode();
+	//addInputNode();
+	//addInputNode();
+	//addInputNode();
 
-	addOutputNode();
-	addOutputNode();
-	addOutputNode();
+	//addOutputNode();
+	//addOutputNode();
+	//addOutputNode();
 
-	addHiddenNode(0);
-	addHiddenNode(0);
-	addHiddenNode(1);
-	addHiddenNode(1);
-	addHiddenNode(1);
+	//addHiddenNode(0);
+	//addHiddenNode(0);
+	//addHiddenNode(1);
+	//addHiddenNode(1);
+	//addHiddenNode(1);
 
-	connectNodes(0, 0, 1, 1, 0.5);
+	/*connectNodes(0, 0, 1, 1, 0.5);
 	connectNodes(0, 1, 1, 1, 0.5);
 	connectNodes(1, 1, 2, 0, 1.5);
 	connectNodes(2, 0, 3, 2, 1);
@@ -118,7 +118,11 @@ void NeuralNetwork::addHiddenNode(int layer)
 {
 	if (layer >= hiddenNodes.size())
 	{
-		hiddenNodes.push_back(std::list<Node>());
+		while (layer >= hiddenNodes.size())
+		{
+			hiddenNodes.push_back(std::list<Node>());
+		}
+		
 		hiddenNodes.back().push_back(Node());
 
 		return;
