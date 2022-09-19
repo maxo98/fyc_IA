@@ -68,7 +68,7 @@ NeatAlgoGen::NeatAlgoGen()
 		genome->mutateLinkToggle();
 	}
 
-	//generateNetworks();
+	generateNetworks();
 }
 
 NeatAlgoGen::~NeatAlgoGen()
@@ -148,7 +148,7 @@ void NeatAlgoGen::generateNetworks()
 		{
 			if (connection->second.isEnabled() == true)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%i %i %i %i"), nodePosition[connection->second.getNodeA()].first, nodePosition[connection->second.getNodeA()].second, nodePosition[connection->second.getNodeB()].first, nodePosition[connection->second.getNodeB()].second));
+				if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%i %i %i %i"), nodePosition[connection->second.getNodeA()].first, nodePosition[connection->second.getNodeA()].second, nodePosition[connection->second.getNodeB()].first, nodePosition[connection->second.getNodeB()].second));
 				//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%i %i"), connection->second.getNodeA(), nodes->size()));
 
 				networks[cpt].connectNodes(nodePosition[connection->second.getNodeA()], nodePosition[connection->second.getNodeB()], connection->second.getWeight());
