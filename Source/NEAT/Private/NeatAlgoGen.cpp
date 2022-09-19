@@ -68,7 +68,7 @@ NeatAlgoGen::NeatAlgoGen()
 		genome->mutateLinkToggle();
 	}
 
-	generateNetworks();
+	//generateNetworks();
 }
 
 NeatAlgoGen::~NeatAlgoGen()
