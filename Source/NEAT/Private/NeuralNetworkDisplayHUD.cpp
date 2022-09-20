@@ -5,10 +5,10 @@
 
 void ANeuralNetworkDisplayHUD::DrawHUD()
 {
-	drawNetwork(&neat.networks[0]);
+	drawNetwork(&neat.networks[0], 0, 0); 
 }
 
-void ANeuralNetworkDisplayHUD::drawNetwork(NeuralNetwork* network)
+void ANeuralNetworkDisplayHUD::drawNetwork(NeuralNetwork* network, float xOffset, float yOffset)
 {
 	int ySpace = 30;
 	int xSpace = 60;
@@ -23,7 +23,7 @@ void ANeuralNetworkDisplayHUD::drawNetwork(NeuralNetwork* network)
 	//Draw the input nodes
 	for (std::list<Node>::iterator itInput = network->inputNodes.begin(); itInput != network->inputNodes.end(); ++itInput)
 	{
-		DrawRect(nodeColor, 20 + xSpace * x, 20 + ySpace * y, squareSize, squareSize);
+		DrawRect(nodeColor, 20 + xSpace * x + xOffset, 20 + ySpace * y + yOffset, squareSize, squareSize);
 		y++;
 	}
 
@@ -35,7 +35,7 @@ void ANeuralNetworkDisplayHUD::drawNetwork(NeuralNetwork* network)
 	{
 		for (std::list<Node>::iterator itHidden = itLayer->begin(); itHidden != itLayer->end(); ++itHidden)
 		{
-			DrawRect(nodeColor, 20 + xSpace * x, 20 + ySpace * y, squareSize, squareSize);
+			DrawRect(nodeColor, 20 + xSpace * x + xOffset, 20 + ySpace * y + yOffset, squareSize, squareSize);
 
 			//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%i"), itHidden->previousNodes.size()));
 
@@ -48,14 +48,14 @@ void ANeuralNetworkDisplayHUD::drawNetwork(NeuralNetwork* network)
 
 				if (found == false)
 				{
-					GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Can't find second node to draw connection");
+					//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Can't find second node to draw connection");
 				}
 
-				DrawLine(20 + xSpace * x2 + squareSize / 2, 20 + ySpace * y2 + squareSize / 2, 20 + xSpace * x + squareSize / 2, 20 + ySpace * y + squareSize / 2, connectionColor, 2);
+				DrawLine(20 + xSpace * x2 + squareSize / 2 + xOffset, 20 + ySpace * y2 + squareSize / 2 + yOffset, 20 + xSpace * x + squareSize / 2 + xOffset, 20 + ySpace * y + squareSize / 2 + yOffset, connectionColor, 2);
 
 				float textY = (y < y2 ? y : y2) + abs(y - y2) / 2;
 
-				DrawText(FString::Printf(TEXT("%.2f"), nodes->second), textColor, 20 + xSpace * x - (x - x2) / 2.f * 55 + squareSize / 2.f - 10, 20 + ySpace * textY + squareSize / 2);
+				DrawText(FString::Printf(TEXT("%.2f"), nodes->second), textColor, 20 + xSpace * x - (x - x2) / 2.f * 55 + squareSize / 2.f - 10 + xOffset, 20 + ySpace * textY + squareSize / 2 + yOffset);
 			}
 
 			y++;
@@ -68,7 +68,7 @@ void ANeuralNetworkDisplayHUD::drawNetwork(NeuralNetwork* network)
 	//Draw the the output nodes and their connections
 	for (std::list<Node>::iterator itOutput = network->outputNodes.begin(); itOutput != network->outputNodes.end(); ++itOutput)
 	{
-		DrawRect(nodeColor, 20 + xSpace * x, 20 + ySpace * y, 10, 10);
+		DrawRect(nodeColor, 20 + xSpace * x + xOffset, 20 + ySpace * y + yOffset, 10, 10);
 
 		for (std::map<Node*, float>::iterator nodes = itOutput->previousNodes.begin(); nodes != itOutput->previousNodes.end(); ++nodes)
 		{
@@ -81,14 +81,14 @@ void ANeuralNetworkDisplayHUD::drawNetwork(NeuralNetwork* network)
 
 			if (found == false)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Can't find second node to draw connection");
+				//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Can't find second node to draw connection");
 			}
 
-			DrawLine(20 + xSpace * x2 + squareSize / 2, 20 + ySpace * y2 + squareSize / 2, 20 + xSpace * x + squareSize / 2, 20 + ySpace * y + squareSize / 2, connectionColor, 2);
+			DrawLine(20 + xSpace * x2 + squareSize / 2 + xOffset, 20 + ySpace * y2 + squareSize / 2 + yOffset, 20 + xSpace * x + squareSize / 2 + xOffset, 20 + ySpace * y + squareSize / 2 + yOffset, connectionColor, 2);
 
 			float textY = (y < y2 ? y : y2) + abs(y - y2) / 2;
 
-			DrawText(FString::Printf(TEXT("%.2f"), nodes->second), textColor, 20 + xSpace * x - (x - x2) / 2.f * 55 + squareSize / 2.f - 10, 20 + ySpace * textY + squareSize / 2);
+			DrawText(FString::Printf(TEXT("%.2f"), nodes->second), textColor, 20 + xSpace * x - (x - x2) / 2.f * 55 + squareSize / 2.f - 10 + xOffset, 20 + ySpace * textY + squareSize / 2 + yOffset);
 
 		}
 

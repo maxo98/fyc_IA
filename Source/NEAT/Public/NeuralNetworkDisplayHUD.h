@@ -17,7 +17,7 @@ class NEAT_API ANeuralNetworkDisplayHUD : public AHUD
 
 	virtual void DrawHUD();
 
-	void drawNetwork(NeuralNetwork* network);
+	void drawNetwork(NeuralNetwork* network, float xOffset, float yOffset);
 
 	//Searches for a node in the previous layers and returns its position, first argument should be set to the position of the current layer
 	//It also searches in the input layer, if it didn't find it

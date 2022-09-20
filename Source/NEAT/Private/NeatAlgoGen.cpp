@@ -32,7 +32,7 @@ NeatAlgoGen::NeatAlgoGen(int _populationSize, int _input, int _output, float _pb
 NeatAlgoGen::NeatAlgoGen()
 {
 
-	populationSize = 1;
+	populationSize = 3;
 	input = 3;
 	output = 3;
 
@@ -56,15 +56,16 @@ NeatAlgoGen::NeatAlgoGen()
 		genome->mutateLink(allConnections);
 		genome->mutateNode(allConnections);
 		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections);
-		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections);
-		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections);
-		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections);
+		//genome->mutateNode(allConnections);
+		//genome->mutateLink(allConnections);
+		//genome->mutateNode(allConnections);
+		//genome->mutateLink(allConnections);
+		//genome->mutateNode(allConnections);
+		//genome->mutateLink(allConnections);
+		//genome->mutateNode(allConnections);
 		//genome->mutateWeightRandom(2);
 		genome->mutateWeightShift(0.5);
+		genome->mutateLinkToggle();
 		genome->mutateLinkToggle();
 	}
 
@@ -154,5 +155,8 @@ void NeatAlgoGen::generateNetworks()
 				networks[cpt].connectNodes(nodePosition[connection->second.getNodeA()], nodePosition[connection->second.getNodeB()], connection->second.getWeight());
 			}
 		}
+
+		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "End network");
+
 	}
 }

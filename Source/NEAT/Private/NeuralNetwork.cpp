@@ -162,12 +162,12 @@ void NeuralNetwork::connectNodes(int layerA, int nodeA, int layerB, int nodeB, f
 {
 	if (layerA >= layerB)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Error connecting nodes, layerA is superior or equal to layerB");
+		if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Error connecting nodes, layerA is superior or equal to layerB");
 	}
 
 	if (layerB >= getLayerSize())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Error connecting nodes, layerB doesn't exist.");
+		if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Error connecting nodes, layerB doesn't exist.");
 	}
 
 	Node *previousNode, *nextNode;
@@ -177,7 +177,7 @@ void NeuralNetwork::connectNodes(int layerA, int nodeA, int layerB, int nodeB, f
 
 	if (previousNode == nullptr || nextNode == nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Error connecting nodes, one node doesn't exist.");
+		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Error connecting nodes, one node doesn't exist.");
 		return;
 	}
 
@@ -202,7 +202,7 @@ Node* NeuralNetwork::getNode(int layer, int node)
 		return getNodeFromLayer(*it, node);
 	}
 	else {
-		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("Trying to get a node layer %i while max layer is %i"), layer, getLayerSize()));
+		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("Trying to get a node layer %i while max layer is %i"), layer, getLayerSize()));
 		return nullptr;
 	}
 }
@@ -218,7 +218,7 @@ Node* NeuralNetwork::getNodeFromLayer(std::list<Node>& layer, int node)
 		return &*it;
 	}
 	else {
-		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Trying to get a node that doesn't exist");
+		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Trying to get a node that doesn't exist");
 
 		return nullptr;
 	}
@@ -250,7 +250,7 @@ void NeuralNetwork::compute(std::vector<float>& inputs, std::vector<float>& outp
 			it->reset();
 			outputs.push_back(it->compute());
 
-			GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%.3f"), it->compute()));
+			if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%.3f"), it->compute()));
 			
 		}
 	}

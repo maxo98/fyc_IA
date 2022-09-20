@@ -43,6 +43,6 @@ private:
 	void addConnection(int nodeA, int nodeB, std::unordered_map<std::pair<int, int>, int>& allConnections);
 
 	std::unordered_map<int, GeneConnection> connections;
-	std::unordered_map<std::pair<int, int>, GeneConnection*> nodesToConnection;
+	std::unordered_map<std::pair<int, int>, int> nodesToConnection;//From a pair of nodes to innovation number of connection
 	std::deque<GeneNode> nodes;
 };
