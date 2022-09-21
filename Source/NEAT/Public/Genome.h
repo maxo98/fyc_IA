@@ -38,6 +38,7 @@ public:
 	inline std::unordered_map<int, GeneConnection>* const getConnections() { return &connections; };
 	inline std::deque<GeneNode>* const getNodes() { return &nodes; };
 
+	//Parent A should be the fittest
 	void crossover(Genome& parentA, Genome& parentB);
 
 private:

@@ -26,6 +26,7 @@ NeatAlgoGen::NeatAlgoGen(int _populationSize, int _input, int _output, float _pb
 	{
 		genomes.push_back(Genome(input, output));
 		Genome* genome = &genomes.back();
+		genome->mutateLink(allConnections);//Minimum structure
 	}
 }
 
@@ -59,17 +60,21 @@ NeatAlgoGen::NeatAlgoGen()
 		genome->mutateNode(allConnections);
 		genome->mutateLink(allConnections);
 		genome->mutateNode(allConnections);
-		//genome->mutateLink(allConnections);
-		//genome->mutateNode(allConnections);
-		//genome->mutateLink(allConnections);
-		//genome->mutateNode(allConnections);
-		//genome->mutateWeightRandom(2);
+		genome->mutateLink(allConnections);
+		genome->mutateNode(allConnections);
+		genome->mutateLink(allConnections);
+		genome->mutateNode(allConnections);
+		genome->mutateWeightRandom(2);
+		genome->mutateWeightShift(0.5);
+		genome->mutateWeightRandom(2);
+		genome->mutateWeightShift(0.5);
+		genome->mutateWeightRandom(2);
 		genome->mutateWeightShift(0.5);
 		genome->mutateLinkToggle();
 		genome->mutateLinkToggle();
 	}
 
-	//genomes[2].crossover(genomes[0], genomes[1]);
+	genomes[2].crossover(genomes[0], genomes[1]);
 
 	generateNetworks();
 }

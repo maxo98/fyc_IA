@@ -199,6 +199,7 @@ void Genome::mutateLinkToggle()
     connection->enabled = !connection->enabled;
 }
 
+//Parent A should be the fittest
 void Genome::crossover(Genome& parentA, Genome& parentB)
 {
     nodes.clear();
@@ -209,65 +210,40 @@ void Genome::crossover(Genome& parentA, Genome& parentB)
     std::deque<GeneNode>* nodesA = parentA.getNodes();
     std::deque<GeneNode>* nodesB = parentB.getNodes();
 
-    for (int i = 0; i < nodesA->size() || i < nodesB->size(); i++)
+    for (int i = 0; i < nodesA->size(); i++)
     {
-        int layer;
+        int layer = (*nodesA)[i].getLayer();
 
-        if (i < nodesA->size() && i < nodesB->size())
-        {
-            layer = (*nodesA)[i].getLayer() > (*nodesB)[i].getLayer() ? (*nodesA)[i].getLayer() : (*nodesB)[i].getLayer();
-
-            nodes.push_back(GeneNode((*nodesA)[i].getType(), layer));
-        }
-        else if (i < nodesA->size())
-        {
-            layer = (*nodesA)[i].getLayer();
-
-            nodes.push_back(GeneNode((*nodesA)[i].getType(), layer));
-        }
-        else if (i < nodesB->size())
-        {
-            layer = (*nodesB)[i].getLayer();
-
-            nodes.push_back(GeneNode((*nodesB)[i].getType(), layer));
-        }
+        nodes.push_back(GeneNode((*nodesA)[i].getType(), layer));
     }
 
-    //Insert connections parentA
-    std::unordered_map<int, GeneConnection>* parentConnections = parentA.getConnections();
+    //Insert connections of fittest parent (aka parentA)
+    std::unordered_map<int, GeneConnection>* parentAConnections = parentA.getConnections();
+    std::unordered_map<int, GeneConnection>* parentBConnections = parentB.getConnections();
+    
 
-    for (std::unordered_map<int, GeneConnection>::iterator it = (*parentConnections).begin(); it != (*parentConnections).end(); ++it)
+    for (std::unordered_map<int, GeneConnection>::iterator itA = (*parentAConnections).begin(); itA != (*parentAConnections).end(); ++itA)
     {
-        connections[it->first] = it->second;
+        std::unordered_map<int, GeneConnection>::iterator found = parentBConnections->find(itA->first);
 
-        nodesToConnection[std::pair(connections[it->first].getNodeA(), connections[it->first].getNodeB())] = it->first;
-    }
-
-    //Insert connections parentB
-    parentConnections = parentB.getConnections();
-
-    for (std::unordered_map<int, GeneConnection>::iterator it = (*parentConnections).begin(); it != (*parentConnections).end(); ++it)
-    {
-        std::unordered_map<int, GeneConnection>::iterator found = connections.find(it->first);
-
-        if (found != connections.end() && it->second.isEnabled() == false)
+        //If both parent have the same gene pick one randomly
+        if (found != parentBConnections->end())
         {
-            found->second.enabled = false;
+            uint8 aOrB = rand() % 2;
+
+            if (aOrB == 0)
+            {
+                connections[itA->first] = itA->second;
+            }
+            else {
+                connections[found->first] = found->second;
+            }
         }
         else {
-
-            connections[it->first] = it->second;
-
-            nodesToConnection[std::pair(connections[it->first].getNodeA(), connections[it->first].getNodeB())] = it->first;
+            connections[itA->first] = itA->second;
         }
-    }
 
-    for (std::unordered_map<std::pair<int, int>, int>::iterator it = nodesToConnection.begin(); it != nodesToConnection.end(); ++it)
-    {
-        if (nodes[it->first.first].getLayer() >= nodes[it->first.second].getLayer())
-        {
-            shiftNodes(it->first.second, nodes[it->first.first].getLayer());
-        }
+        nodesToConnection[std::pair(connections[itA->first].getNodeA(), connections[itA->first].getNodeB())] = itA->first;
     }
 }
 
