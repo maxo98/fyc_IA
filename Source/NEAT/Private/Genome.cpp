@@ -125,37 +125,7 @@ bool Genome::mutateNode(std::unordered_map<std::pair<int, int>, int>& allConnect
     //Shift node's layer
     if (nodes[nodeA].layer + 1 == nodes[nodeB].layer)
     {
-        std::stack<int> nodeToShift;
-
-        nodeToShift.push(nodeB);
-        nodes[nodeB].layer++;
-
-        while (nodeToShift.empty() == false)
-        {
-            int node = nodeToShift.top();
-            nodeToShift.pop();
-            
-            //Search connection and check if it needs a shift
-            for (i = 0; i < nodes.size(); i++)
-            {
-                if (i == node) continue;
-
-                std::unordered_map<std::pair<int, int>, int>::iterator it = nodesToConnection.find(std::pair(node, i));
-
-                if (it != nodesToConnection.end())
-                {
-                    if (nodes[it->first.second].layer == nodes[node].layer)
-                    {
-                        nodes[it->first.second].layer++;
-
-                        if (nodes[it->first.second].type != NODE_TYPE::OUTPUT)
-                        {
-                            nodeToShift.push(it->first.second);
-                        }
-                    }
-                }
-            }
-        }
+        shiftNodes(nodeB, nodes[nodeB].layer);
     }
 
     //Create the new connections
@@ -228,4 +198,110 @@ void Genome::mutateLinkToggle()
     //Switches the activation of the connection
     connection->enabled = !connection->enabled;
 }
+
+void Genome::crossover(Genome& parentA, Genome& parentB)
+{
+    nodes.clear();
+    connections.clear();
+    nodesToConnection.clear();
+
+    //Insert nodes
+    std::deque<GeneNode>* nodesA = parentA.getNodes();
+    std::deque<GeneNode>* nodesB = parentB.getNodes();
+
+    for (int i = 0; i < nodesA->size() || i < nodesB->size(); i++)
+    {
+        int layer;
+
+        if (i < nodesA->size() && i < nodesB->size())
+        {
+            layer = (*nodesA)[i].getLayer() > (*nodesB)[i].getLayer() ? (*nodesA)[i].getLayer() : (*nodesB)[i].getLayer();
+
+            nodes.push_back(GeneNode((*nodesA)[i].getType(), layer));
+        }
+        else if (i < nodesA->size())
+        {
+            layer = (*nodesA)[i].getLayer();
+
+            nodes.push_back(GeneNode((*nodesA)[i].getType(), layer));
+        }
+        else if (i < nodesB->size())
+        {
+            layer = (*nodesB)[i].getLayer();
+
+            nodes.push_back(GeneNode((*nodesB)[i].getType(), layer));
+        }
+    }
+
+    //Insert connections parentA
+    std::unordered_map<int, GeneConnection>* parentConnections = parentA.getConnections();
+
+    for (std::unordered_map<int, GeneConnection>::iterator it = (*parentConnections).begin(); it != (*parentConnections).end(); ++it)
+    {
+        connections[it->first] = it->second;
+
+        nodesToConnection[std::pair(connections[it->first].getNodeA(), connections[it->first].getNodeB())] = it->first;
+    }
+
+    //Insert connections parentB
+    parentConnections = parentB.getConnections();
+
+    for (std::unordered_map<int, GeneConnection>::iterator it = (*parentConnections).begin(); it != (*parentConnections).end(); ++it)
+    {
+        std::unordered_map<int, GeneConnection>::iterator found = connections.find(it->first);
+
+        if (found != connections.end() && it->second.isEnabled() == false)
+        {
+            found->second.enabled = false;
+        }
+        else {
+
+            connections[it->first] = it->second;
+
+            nodesToConnection[std::pair(connections[it->first].getNodeA(), connections[it->first].getNodeB())] = it->first;
+        }
+    }
+
+    for (std::unordered_map<std::pair<int, int>, int>::iterator it = nodesToConnection.begin(); it != nodesToConnection.end(); ++it)
+    {
+        if (nodes[it->first.first].getLayer() >= nodes[it->first.second].getLayer())
+        {
+            shiftNodes(it->first.second, nodes[it->first.first].getLayer());
+        }
+    }
+}
+
+void Genome::shiftNodes(int node, int layerMin)
+{
+    std::stack<int> nodeToShift;
+
+    nodeToShift.push(node);
+    nodes[node].layer = layerMin + 1;
+
+    while (nodeToShift.empty() == false)
+    {
+        int node = nodeToShift.top();
+        nodeToShift.pop();
+
+        //Search connection and check if it needs a shift
+        for (int i = 0; i < nodes.size(); i++)
+        {
+            if (i == node) continue;
+
+            std::unordered_map<std::pair<int, int>, int>::iterator it = nodesToConnection.find(std::pair(node, i));
+
+            if (it != nodesToConnection.end())
+            {
+                if (nodes[it->first.second].layer == nodes[node].layer)
+                {
+                    nodes[it->first.second].layer = nodes[node].layer + 1;
+
+                    if (nodes[it->first.second].type != NODE_TYPE::OUTPUT)
+                    {
+                        nodeToShift.push(it->first.second);
+                    }
+                }
+            }
+        }
+    }
 }

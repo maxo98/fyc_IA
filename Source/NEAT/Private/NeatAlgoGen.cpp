@@ -56,9 +56,9 @@ NeatAlgoGen::NeatAlgoGen()
 		genome->mutateLink(allConnections);
 		genome->mutateNode(allConnections);
 		genome->mutateLink(allConnections);
-		//genome->mutateNode(allConnections);
-		//genome->mutateLink(allConnections);
-		//genome->mutateNode(allConnections);
+		genome->mutateNode(allConnections);
+		genome->mutateLink(allConnections);
+		genome->mutateNode(allConnections);
 		//genome->mutateLink(allConnections);
 		//genome->mutateNode(allConnections);
 		//genome->mutateLink(allConnections);
@@ -68,6 +68,8 @@ NeatAlgoGen::NeatAlgoGen()
 		genome->mutateLinkToggle();
 		genome->mutateLinkToggle();
 	}
+
+	//genomes[2].crossover(genomes[0], genomes[1]);
 
 	generateNetworks();
 }
@@ -149,14 +151,13 @@ void NeatAlgoGen::generateNetworks()
 		{
 			if (connection->second.isEnabled() == true)
 			{
-				if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%i %i %i %i"), nodePosition[connection->second.getNodeA()].first, nodePosition[connection->second.getNodeA()].second, nodePosition[connection->second.getNodeB()].first, nodePosition[connection->second.getNodeB()].second));
+				//if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%i %i %i %i"), nodePosition[connection->second.getNodeA()].first, nodePosition[connection->second.getNodeA()].second, nodePosition[connection->second.getNodeB()].first, nodePosition[connection->second.getNodeB()].second));
 				//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%i %i"), connection->second.getNodeA(), nodes->size()));
 
 				networks[cpt].connectNodes(nodePosition[connection->second.getNodeA()], nodePosition[connection->second.getNodeB()], connection->second.getWeight());
 			}
 		}
 
-		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "End network");
-
+		//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "End network");
 	}
 }
