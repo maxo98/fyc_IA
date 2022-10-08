@@ -15,7 +15,7 @@ class NEAT_API ANeuralNetworkDisplayHUD : public AHUD
 {
 	GENERATED_BODY()
 
-	virtual void DrawHUD();
+	virtual void drawHUD();
 
 	void drawNetwork(NeuralNetwork* network, float xOffset, float yOffset);
 
@@ -28,3 +28,5 @@ class NEAT_API ANeuralNetworkDisplayHUD : public AHUD
 public:
 	NeatAlgoGen neat;
 };
+
+

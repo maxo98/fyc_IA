@@ -3,7 +3,7 @@
 
 #include "NeuralNetworkDisplayHUD.h"
 
-void ANeuralNetworkDisplayHUD::DrawHUD()
+void ANeuralNetworkDisplayHUD::drawHUD()
 {
 	drawNetwork(&neat.networks[0], 0, 0); 
 	drawNetwork(&neat.networks[1], 0, 200);
