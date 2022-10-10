@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include <map>
+#include "Activation.h"
 
 /**
  * 
@@ -11,7 +12,7 @@
 class NEAT_API Node
 {
 public:
-	Node();
+	Node(ActivationFunction activation);
 	~Node();
 
 	void wipeConnections();
@@ -21,8 +22,6 @@ public:
 
 	inline void setValue(float x) { value = x; computed = true; };
 
-	inline float sigmoidActivation(float x) { return 1 / (1 + exp(-x)); };
-
 	float compute();
 	void reset() { computed = false; };
 
@@ -31,6 +30,8 @@ public:
 	
 
 private:
+
+	ActivationFunction activation;
 	std::map<Node*, float> previousNodes;
 	bool computed;
 	float value;

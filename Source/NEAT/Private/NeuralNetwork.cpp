@@ -120,7 +120,7 @@ int NeuralNetwork::getNHiddenNode(int layer)
 	return it->size();
 }
 
-void NeuralNetwork::addHiddenNode(int layer)
+void NeuralNetwork::addHiddenNode(int layer, ActivationFunction activation)
 {
 	if (layer > hiddenNodes.size())
 	{
@@ -129,7 +129,7 @@ void NeuralNetwork::addHiddenNode(int layer)
 			hiddenNodes.push_back(std::list<Node>());
 		}
 		
-		hiddenNodes.back().push_back(Node());
+		hiddenNodes.back().push_back(Node(activation));
 
 		return;
 	}
@@ -140,7 +140,7 @@ void NeuralNetwork::addHiddenNode(int layer)
 	std::list<std::list<Node>>::iterator it;
 	for (it = hiddenNodes.begin(); it != hiddenNodes.end() && i != layer; ++it, ++i);
 
-	it->push_back(Node());
+	it->push_back(Node(activation));
 }
 
 void NeuralNetwork::removeHiddenNode(int layer)

@@ -22,9 +22,9 @@ public:
 	inline int getNInputNode() { return inputNodes.size(); }
 	inline int getNOutputNode() { return outputNodes.size(); }
 
-	void addHiddenNode(int layer);
-	inline void addInputNode() { inputNodes.push_back(Node()); };
-	inline void addOutputNode() { outputNodes.push_back(Node()); };
+	void addHiddenNode(int layer, ActivationFunction activation);
+	inline void addInputNode() { inputNodes.push_back(Node(nullptr)); };
+	inline void addOutputNode(ActivationFunction activation) { outputNodes.push_back(Node(activation)); };
 	void removeHiddenNode(int layer);
 	inline void removeInputNode() { inputNodes.pop_back(); };
 	inline void removeOutputNode() { outputNodes.pop_back(); };

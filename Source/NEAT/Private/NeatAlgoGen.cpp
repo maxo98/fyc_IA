@@ -3,20 +3,13 @@
 
 #include "NeatAlgoGen.h"
 
-NeatAlgoGen::NeatAlgoGen(int _populationSize, int _input, int _output, float _pbMutateLink, float _pbMutateNode, float _pbWeightShift, float _pbWeightRandom, float _pbToggleLink, float _weightShiftStrength, float _weightRandomStrength)
+NeatAlgoGen::NeatAlgoGen(int _populationSize, int _input, int _output, NeatParameters _neatParamters)
 {
 	populationSize = _populationSize;
 	input = _input;
 	output = _output;
 
-	pbMutateLink = _pbMutateLink;
-	pbMutateNode = _pbMutateNode;
-	pbWeightShift = _pbWeightShift;
-	pbWeightRandom = _pbWeightRandom;
-	pbToggleLink = _pbToggleLink;
-
-	weightShiftStrength = _weightShiftStrength;
-	weightRandomStrength = _weightRandomStrength;
+	neatParamters = _neatParamters;
 
 	networks.resize(populationSize);
 	genomes.reserve(populationSize);
@@ -24,27 +17,20 @@ NeatAlgoGen::NeatAlgoGen(int _populationSize, int _input, int _output, float _pb
 
 	for (int i = 0; i < populationSize; i++)
 	{
-		genomes.push_back(Genome(input, output));
+		genomes.push_back(Genome(input, output, neatParamters.activationFunctions));
 		Genome* genome = &genomes.back();
 		genome->mutateLink(allConnections);//Minimum structure
+		genome->mutateWeightRandom(neatParamters.pbWeightRandom);
 	}
 }
 
 NeatAlgoGen::NeatAlgoGen()
 {
+	neatParamters.activationFunctions.push_back(sigmoidActivation);
 
 	populationSize = 3;
 	input = 3;
 	output = 3;
-
-	pbMutateLink = 0;
-	pbMutateNode = 0;
-	pbWeightShift = 0;
-	pbWeightRandom = 0;
-	pbToggleLink = 0;
-
-	weightShiftStrength = 0;
-	weightRandomStrength = 0;
 
 	networks.resize(populationSize);
 	genomes.reserve(populationSize);
@@ -52,18 +38,18 @@ NeatAlgoGen::NeatAlgoGen()
 
 	for (int i = 0; i < populationSize; i++)
 	{
-		genomes.push_back(Genome(input, output));
+		genomes.push_back(Genome(input, output, neatParamters.activationFunctions));
 		Genome* genome = &genomes.back();
 		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections);
+		genome->mutateNode(allConnections, neatParamters.activationFunctions[0]);
 		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections);
+		genome->mutateNode(allConnections, neatParamters.activationFunctions[0]);
 		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections);
+		genome->mutateNode(allConnections, neatParamters.activationFunctions[0]);
 		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections);
+		genome->mutateNode(allConnections, neatParamters.activationFunctions[0]);
 		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections);
+		genome->mutateNode(allConnections, neatParamters.activationFunctions[0]);
 		genome->mutateWeightRandom(2);
 		genome->mutateWeightShift(0.5);
 		genome->mutateWeightRandom(2);
@@ -85,23 +71,28 @@ NeatAlgoGen::~NeatAlgoGen()
 
 void NeatAlgoGen::mutate(Genome& genome)
 {
-	if (pbMutateLink > rand() % 1) {
+	if (neatParamters.activationFunctions.size() == 0)
+		return;
+
+	if (neatParamters.pbMutateLink > rand() % 1) {
 		genome.mutateLink(allConnections);
 	}
 	
-	if (pbMutateNode > rand() % 1) {
-		genome.mutateNode(allConnections);
+	if (neatParamters.pbMutateNode > rand() % 1) {
+
+		int index = rand() % neatParamters.activationFunctions.size();
+		genome.mutateNode(allConnections, neatParamters.activationFunctions[index]);
 	}
 	
-	if (pbWeightShift > rand() % 1) {
-		genome.mutateWeightShift(pbWeightShift);
+	if (neatParamters.pbWeightShift > rand() % 1) {
+		genome.mutateWeightShift(neatParamters.pbWeightShift);
 	}
 	
-	if (pbWeightRandom > rand() % 1) {
-		genome.mutateWeightRandom(pbWeightShift);
+	if (neatParamters.pbWeightRandom > rand() % 1) {
+		genome.mutateWeightRandom(neatParamters.pbWeightRandom);
 	}
 	
-	if (pbToggleLink > rand() % 1) {
+	if (neatParamters.pbToggleLink > rand() % 1) {
 		genome.mutateLinkToggle();
 	}
 }
@@ -126,7 +117,7 @@ void NeatAlgoGen::generateNetworks()
 			{
 			case NODE_TYPE::HIDDEN:
 				nodePosition.push_back(std::pair<int, int>(layer, networks[cpt].getNHiddenNode(layer)));
-				networks[cpt].addHiddenNode(layer);
+				networks[cpt].addHiddenNode(layer, node->getActivation());
 				break;
 
 			case NODE_TYPE::INPUT:
@@ -136,7 +127,7 @@ void NeatAlgoGen::generateNetworks()
 				
 			case NODE_TYPE::OUTPUT:
 				nodePosition.push_back(std::pair<int, int>(-1, networks[cpt].getNOutputNode()));
-				networks[cpt].addOutputNode();
+				networks[cpt].addOutputNode(node->getActivation());
 				break;
 			}
 		}

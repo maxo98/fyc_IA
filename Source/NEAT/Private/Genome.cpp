@@ -4,8 +4,10 @@
 #include "Genome.h"
 #include <stack>
 
-Genome::Genome(int input, int output)
+Genome::Genome(int _input, int output, std::vector<ActivationFunction> activationFunctions)
 {
+    input = _input;
+
     for (int i = 0; i < input; i++)
     {
         nodes.push_back(GeneNode(NODE_TYPE::INPUT, 0));
@@ -13,7 +15,9 @@ Genome::Genome(int input, int output)
  
     for (int i = 0; i < output; i++)
     {
-        nodes.push_back(GeneNode(NODE_TYPE::OUTPUT, 999999));
+        int activationIndex = rand() % activationFunctions.size();
+
+        nodes.push_back(GeneNode(NODE_TYPE::OUTPUT, activationFunctions[activationIndex], 999999));
     }
 }
 
@@ -90,7 +94,7 @@ bool Genome::mutateLink(std::unordered_map<std::pair<int, int>, int>& allConnect
     return false;
 }
 
-bool Genome::mutateNode(std::unordered_map<std::pair<int, int>, int>& allConnections)
+bool Genome::mutateNode(std::unordered_map<std::pair<int, int>, int>& allConnections, ActivationFunction activationFunction)
 {
     int i = 0;
     bool foundMutation = false;
@@ -119,7 +123,7 @@ bool Genome::mutateNode(std::unordered_map<std::pair<int, int>, int>& allConnect
     int nodeB = connection->nodeB;
     float oldWeight = connection->weight;
     connection->enabled = false;
-    nodes.push_back(GeneNode(NODE_TYPE::HIDDEN, nodes[connection->getNodeA()].layer + 1));
+    nodes.push_back(GeneNode(NODE_TYPE::HIDDEN, activationFunction, nodes[connection->getNodeA()].layer + 1));
     int nodeC = nodes.size()-1;
 
     //Shift node's layer
@@ -199,6 +203,12 @@ void Genome::mutateLinkToggle()
     connection->enabled = !connection->enabled;
 }
 
+void Genome::mutateActivation(ActivationFunction activationFunction)
+{
+    int nodeIndex = (rand() % (nodes.size() - input)) + input;
+    nodes[nodeIndex].setActivation(activationFunction);
+}
+
 //Parent A should be the fittest
 void Genome::crossover(Genome& parentA, Genome& parentB)
 {
@@ -214,7 +224,7 @@ void Genome::crossover(Genome& parentA, Genome& parentB)
     {
         int layer = (*nodesA)[i].getLayer();
 
-        nodes.push_back(GeneNode((*nodesA)[i].getType(), layer));
+        nodes.push_back(GeneNode((*nodesA)[i].getType(), (*nodesA)[i].getActivation(), layer));
     }
 
     //Insert connections of fittest parent (aka parentA)

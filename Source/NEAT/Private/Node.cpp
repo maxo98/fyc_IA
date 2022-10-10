@@ -3,8 +3,9 @@
 
 #include "Node.h"
 
-Node::Node()
+Node::Node(ActivationFunction _activation)
 {
+	activation = _activation;
 }
 
 Node::~Node()
@@ -42,7 +43,7 @@ float Node::compute()
 			value += nodes->first->compute() * nodes->second;
 		}
 
-		value = sigmoidActivation(value);
+		value = activation(value);
 	}
 
 	return value;
