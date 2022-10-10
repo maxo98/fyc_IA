@@ -10,7 +10,7 @@ GeneConnection::GeneConnection()
 	nodeB = -1;
 }
 
-GeneConnection::GeneConnection(int _innovation, int _nodeA, int _nodeB)
+GeneConnection::GeneConnection(unsigned int _innovation, unsigned int _nodeA, unsigned int _nodeB)
 {
 	innovation = _innovation;
 	nodeA = _nodeA;

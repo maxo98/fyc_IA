@@ -18,11 +18,11 @@ enum class NODE_TYPE
 class NEAT_API GeneNode
 {
 public:
-	GeneNode(NODE_TYPE _type, ActivationFunction _activationFunction, int _layer = 0);
+	GeneNode(NODE_TYPE _type, ActivationFunction _activationFunction, unsigned int _layer = 0);
 	~GeneNode();
 
 	inline NODE_TYPE getType() { return type; };
-	inline int getLayer() { return layer; };
+	inline unsigned int getLayer() { return layer; };
 	inline void setActivation(ActivationFunction _activationFunction) { activationFunction = _activationFunction; };
 	inline ActivationFunction getActivation() { return activationFunction; };
 
@@ -31,6 +31,6 @@ public:
 private:
 
 	ActivationFunction activationFunction;
-	int layer;
+	unsigned int layer;
 	NODE_TYPE type;
 };

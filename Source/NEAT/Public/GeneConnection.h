@@ -12,19 +12,19 @@ class NEAT_API GeneConnection
 {
 public:
 	GeneConnection();//Necessary to put it in a unordered_map or something else
-	GeneConnection(int _innovation, int _nodeA, int _nodeB);
+	GeneConnection(unsigned int _innovation, unsigned int _nodeA, unsigned int _nodeB);
 	~GeneConnection();
 
-	inline int getNodeA() { return nodeA; };
-	inline int getNodeB() { return nodeB; };
+	inline unsigned int getNodeA() { return nodeA; };
+	inline unsigned int getNodeB() { return nodeB; };
 	inline float getWeight() { return weight; };
 	inline bool isEnabled() { return enabled; };
 
 	friend class Genome;
 
 private:
-	int innovation;
-	int nodeA, nodeB;
+	unsigned int innovation;
+	unsigned int nodeA, nodeB;
 	bool enabled = true;
 	float weight = 1;
 };

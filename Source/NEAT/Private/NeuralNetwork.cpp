@@ -104,7 +104,7 @@ void NeuralNetwork::fullyConnect()
 	}
 }
 
-int NeuralNetwork::getNHiddenNode(int layer)
+unsigned int NeuralNetwork::getNHiddenNode(unsigned int layer)
 {
 	layer--;
 
@@ -120,7 +120,7 @@ int NeuralNetwork::getNHiddenNode(int layer)
 	return it->size();
 }
 
-void NeuralNetwork::addHiddenNode(int layer, ActivationFunction activation)
+void NeuralNetwork::addHiddenNode(unsigned int layer, ActivationFunction activation)
 {
 	if (layer > hiddenNodes.size())
 	{
@@ -143,7 +143,7 @@ void NeuralNetwork::addHiddenNode(int layer, ActivationFunction activation)
 	it->push_back(Node(activation));
 }
 
-void NeuralNetwork::removeHiddenNode(int layer)
+void NeuralNetwork::removeHiddenNode(unsigned int layer)
 {
 	layer--;
 	int i = 0;
@@ -153,12 +153,12 @@ void NeuralNetwork::removeHiddenNode(int layer)
 	it->pop_back();
 }
 
-void NeuralNetwork::connectNodes(std::pair<int, int> nodeA, std::pair<int, int> nodeB, float weight)
+void NeuralNetwork::connectNodes(std::pair<unsigned int, unsigned int> nodeA, std::pair<unsigned int, unsigned int> nodeB, float weight)
 {
 	connectNodes(nodeA.first, nodeA.second, nodeB.first, nodeB.second, weight);
 }
 
-void NeuralNetwork::connectNodes(int layerA, int nodeA, int layerB, int nodeB, float weight)
+void NeuralNetwork::connectNodes(unsigned int layerA, unsigned int nodeA, unsigned int layerB, unsigned int nodeB, float weight)
 {
 	if (layerA >= layerB)
 	{
@@ -184,7 +184,7 @@ void NeuralNetwork::connectNodes(int layerA, int nodeA, int layerB, int nodeB, f
 	nextNode->addConnection(previousNode, weight);
 }
 
-Node* NeuralNetwork::getNode(int layer, int node)
+Node* NeuralNetwork::getNode(unsigned int layer, unsigned int node)
 {
 	if (layer == 0)
 	{
@@ -207,11 +207,11 @@ Node* NeuralNetwork::getNode(int layer, int node)
 	}
 }
 
-Node* NeuralNetwork::getNodeFromLayer(std::list<Node>& layer, int node)
+Node* NeuralNetwork::getNodeFromLayer(std::list<Node>& layer, unsigned int node)
 {
 	if (node < layer.size())
 	{
-		int i = 0;
+		unsigned int i = 0;
 		std::list<Node>::iterator it;
 		for (it = layer.begin(); it != layer.end() && i != node; ++it, ++i);
 
@@ -238,7 +238,7 @@ void NeuralNetwork::compute(std::vector<float>& inputs, std::vector<float>& outp
 		}
 
 		//Set the input values
-		int i = 0;
+		unsigned int i = 0;
 		for (std::list<Node>::iterator it = inputNodes.begin(); it != inputNodes.end(); ++it, ++i)
 		{
 			it->setValue(inputs[i]);

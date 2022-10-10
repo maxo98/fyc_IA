@@ -3,7 +3,7 @@
 
 #include "NeatAlgoGen.h"
 
-NeatAlgoGen::NeatAlgoGen(int _populationSize, int _input, int _output, NeatParameters _neatParamters)
+NeatAlgoGen::NeatAlgoGen(unsigned int _populationSize, unsigned int _input, unsigned int _output, NeatParameters _neatParamters)
 {
 	populationSize = _populationSize;
 	input = _input;
@@ -15,7 +15,7 @@ NeatAlgoGen::NeatAlgoGen(int _populationSize, int _input, int _output, NeatParam
 	genomes.reserve(populationSize);
 
 
-	for (int i = 0; i < populationSize; i++)
+	for (unsigned int i = 0; i < populationSize; i++)
 	{
 		genomes.push_back(Genome(input, output, neatParamters.activationFunctions));
 		Genome* genome = &genomes.back();
@@ -36,7 +36,7 @@ NeatAlgoGen::NeatAlgoGen()
 	genomes.reserve(populationSize);
 
 
-	for (int i = 0; i < populationSize; i++)
+	for (unsigned int i = 0; i < populationSize; i++)
 	{
 		genomes.push_back(Genome(input, output, neatParamters.activationFunctions));
 		Genome* genome = &genomes.back();
@@ -80,7 +80,7 @@ void NeatAlgoGen::mutate(Genome& genome)
 	
 	if (neatParamters.pbMutateNode > rand() % 1) {
 
-		int index = rand() % neatParamters.activationFunctions.size();
+		unsigned int index = rand() % neatParamters.activationFunctions.size();
 		genome.mutateNode(allConnections, neatParamters.activationFunctions[index]);
 	}
 	
@@ -100,40 +100,40 @@ void NeatAlgoGen::mutate(Genome& genome)
 void NeatAlgoGen::generateNetworks()
 {
 
-	for (int cpt = 0; cpt < genomes.size(); cpt++)
+	for (unsigned int cpt = 0; cpt < genomes.size(); cpt++)
 	{
 		networks[cpt].clear();
 
 		std::deque<GeneNode>* nodes = genomes[cpt].getNodes();
-		std::vector<std::pair<int, int>> nodePosition;//Stores postion of the nodes in the network
+		std::vector<std::pair<unsigned int, unsigned int>> nodePosition;//Stores postion of the nodes in the network
 		nodePosition.reserve(nodes->size());
 
 		//Add the nodes to the layer
 		for (std::deque<GeneNode>::iterator node = nodes->begin(); node != nodes->end(); ++node)
 		{
-			int layer = node->getLayer();
+			unsigned int layer = node->getLayer();
 
 			switch(node->getType())
 			{
 			case NODE_TYPE::HIDDEN:
-				nodePosition.push_back(std::pair<int, int>(layer, networks[cpt].getNHiddenNode(layer)));
+				nodePosition.push_back(std::pair<unsigned int, unsigned int>(layer, networks[cpt].getNHiddenNode(layer)));
 				networks[cpt].addHiddenNode(layer, node->getActivation());
 				break;
 
 			case NODE_TYPE::INPUT:
-				nodePosition.push_back(std::pair<int, int>(0, networks[cpt].getNInputNode()));
+				nodePosition.push_back(std::pair<unsigned int, unsigned int>(0, networks[cpt].getNInputNode()));
 				networks[cpt].addInputNode();
 				break;
 				
 			case NODE_TYPE::OUTPUT:
-				nodePosition.push_back(std::pair<int, int>(-1, networks[cpt].getNOutputNode()));
+				nodePosition.push_back(std::pair<unsigned int, unsigned int>(-1, networks[cpt].getNOutputNode()));
 				networks[cpt].addOutputNode(node->getActivation());
 				break;
 			}
 		}
 
 		//Need to find on which layer the output nodes really are
-		for (int i = 0; i < nodePosition.size(); i++)
+		for (unsigned int i = 0; i < nodePosition.size(); i++)
 		{
 			if (nodePosition[i].first == -1)
 			{
@@ -141,9 +141,9 @@ void NeatAlgoGen::generateNetworks()
 			}
 		}
 
-		std::unordered_map<int, GeneConnection>* connections = genomes[cpt].getConnections();
+		std::unordered_map<unsigned int, GeneConnection>* connections = genomes[cpt].getConnections();
 
-		for (std::unordered_map<int, GeneConnection>::iterator connection = connections->begin(); connection != connections->end(); ++connection)
+		for (std::unordered_map<unsigned int, GeneConnection>::iterator connection = connections->begin(); connection != connections->end(); ++connection)
 		{
 			if (connection->second.isEnabled() == true)
 			{

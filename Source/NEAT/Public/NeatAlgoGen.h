@@ -28,7 +28,7 @@ class NEAT_API NeatAlgoGen
 {
 public:
 	NeatAlgoGen();//Just for testing purposes
-	NeatAlgoGen(int _populationSize, int _input, int _output, NeatParameters _neatParamters);
+	NeatAlgoGen(unsigned int _populationSize, unsigned int _input, unsigned int _output, NeatParameters _neatParamters);
 	~NeatAlgoGen();
 
 	virtual void mutate(Genome& genome);
@@ -40,7 +40,7 @@ public:
 protected:
 	std::vector<NeuralNetwork> networks;
 	std::vector<Genome> genomes;
-	std::unordered_map<std::pair<int, int>, int> allConnections;//Innovation number starts at 0
-	int populationSize, input, output;
+	std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int> allConnections;//Innovation number starts at 0
+	unsigned int populationSize, input, output;
 	NeatParameters neatParamters;
 };

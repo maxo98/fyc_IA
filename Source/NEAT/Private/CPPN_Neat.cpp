@@ -3,7 +3,7 @@
 
 #include "CPPN_Neat.h"
 
-CPPN_Neat::CPPN_Neat()
+CPPN_Neat::CPPN_Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, NeatParameters _neatParamters): NeatAlgoGen(_populationSize, _input, _output, _neatParamters)
 {
 }
 
@@ -22,7 +22,7 @@ void CPPN_Neat::mutate(Genome& genome)
 
 	if (neatParamters.pbMutateNode > rand() % 1) {
 
-		int index = rand() % neatParamters.activationFunctions.size();
+		unsigned int index = rand() % neatParamters.activationFunctions.size();
 		genome.mutateNode(allConnections, neatParamters.activationFunctions[index]);
 	}
 
@@ -39,6 +39,6 @@ void CPPN_Neat::mutate(Genome& genome)
 	}
 
 	if (neatParamters.pbMutateActivation > rand() % 1) {
-		int index = rand() % neatParamters.activationFunctions.size();
+		unsigned int index = rand() % neatParamters.activationFunctions.size();
 	}
 }

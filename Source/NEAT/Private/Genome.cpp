@@ -4,18 +4,18 @@
 #include "Genome.h"
 #include <stack>
 
-Genome::Genome(int _input, int output, std::vector<ActivationFunction> activationFunctions)
+Genome::Genome(unsigned int _input, unsigned int output, std::vector<ActivationFunction> activationFunctions)
 {
     input = _input;
 
-    for (int i = 0; i < input; i++)
+    for (unsigned int i = 0; i < input; i++)
     {
         nodes.push_back(GeneNode(NODE_TYPE::INPUT, 0));
     }
  
-    for (int i = 0; i < output; i++)
+    for (unsigned int i = 0; i < output; i++)
     {
-        int activationIndex = rand() % activationFunctions.size();
+        unsigned int activationIndex = rand() % activationFunctions.size();
 
         nodes.push_back(GeneNode(NODE_TYPE::OUTPUT, activationFunctions[activationIndex], 999999));
     }
@@ -29,11 +29,11 @@ Genome::~Genome()
 *Check if the connection already exist, if so use it's innovation number
 * otherwise add it to the register
 */
-void Genome::addConnection(int nodeA, int nodeB, std::unordered_map<std::pair<int, int>, int>& allConnections)
+void Genome::addConnection(unsigned int nodeA, unsigned int nodeB, std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections)
 {
-    std::unordered_map<std::pair<int, int>, int>::iterator found = allConnections.find(std::pair(nodeA, nodeB));
+    std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>::iterator found = allConnections.find(std::pair(nodeA, nodeB));
 
-    int innovationNumber = -1;
+    unsigned int innovationNumber = -1;
 
     if (found == allConnections.end())
     {
@@ -48,13 +48,13 @@ void Genome::addConnection(int nodeA, int nodeB, std::unordered_map<std::pair<in
     nodesToConnection[std::pair(nodeA, nodeB)] = innovationNumber;
 }
 
-bool Genome::mutateLink(std::unordered_map<std::pair<int, int>, int>& allConnections)
+bool Genome::mutateLink(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections)
 {
-    int i = 0;
+    unsigned int i = 0;
     bool foundMutation = false;
 
-    int nodeA;
-    int nodeB;
+    unsigned int nodeA;
+    unsigned int nodeB;
 
     //Try to find a non-existant connection to create a 100 times
     while(i < 100 && foundMutation == false)
@@ -73,7 +73,7 @@ bool Genome::mutateLink(std::unordered_map<std::pair<int, int>, int>& allConnect
         //Make sure we connect them in the right order
         if(nodes[nodeA].layer > nodes[nodeB].layer)
         {
-            int c = nodeA;
+            unsigned int c = nodeA;
             nodeA = nodeB;
             nodeB = c;
         }
@@ -94,11 +94,11 @@ bool Genome::mutateLink(std::unordered_map<std::pair<int, int>, int>& allConnect
     return false;
 }
 
-bool Genome::mutateNode(std::unordered_map<std::pair<int, int>, int>& allConnections, ActivationFunction activationFunction)
+bool Genome::mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, ActivationFunction activationFunction)
 {
-    int i = 0;
+    unsigned int i = 0;
     bool foundMutation = false;
-    int geneConnectionIndex;
+    unsigned int geneConnectionIndex;
     GeneConnection* connection = nullptr;
 
     //Try to find an enabled connection to create a 100 times
@@ -119,12 +119,12 @@ bool Genome::mutateNode(std::unordered_map<std::pair<int, int>, int>& allConnect
     if (foundMutation == false) return false;
 
     //Create the new node, disable old connection and gather info
-    int nodeA = connection->nodeA;
-    int nodeB = connection->nodeB;
+    unsigned int nodeA = connection->nodeA;
+    unsigned int nodeB = connection->nodeB;
     float oldWeight = connection->weight;
     connection->enabled = false;
     nodes.push_back(GeneNode(NODE_TYPE::HIDDEN, activationFunction, nodes[connection->getNodeA()].layer + 1));
-    int nodeC = nodes.size()-1;
+    unsigned int nodeC = nodes.size()-1;
 
     //Shift node's layer
     if (nodes[nodeA].layer + 1 == nodes[nodeB].layer)
@@ -141,8 +141,8 @@ bool Genome::mutateNode(std::unordered_map<std::pair<int, int>, int>& allConnect
 void Genome::mutateWeightShift(float weightShiftStrength)
 {
     bool foundMutation = false;
-    int geneConnectionIndex;
-    int i = 0;
+    unsigned int geneConnectionIndex;
+    unsigned int i = 0;
     GeneConnection* connection = nullptr;
 
     //Try to find an enabled connection to create a 100 times
@@ -169,8 +169,8 @@ void Genome::mutateWeightShift(float weightShiftStrength)
 void Genome::mutateWeightRandom(float weightRandomStrength)
 {
     bool foundMutation = false;
-    int geneConnectionIndex;
-    int i = 0;
+    unsigned int geneConnectionIndex;
+    unsigned int i = 0;
     GeneConnection* connection = nullptr;
 
     //Try to find an enabled connection to create a 100 times
@@ -196,7 +196,7 @@ void Genome::mutateWeightRandom(float weightRandomStrength)
 
 void Genome::mutateLinkToggle()
 {
-    int geneConnectionIndex = rand() % connections.size();
+    unsigned int geneConnectionIndex = rand() % connections.size();
     GeneConnection* connection = &std::next(connections.begin(), geneConnectionIndex)->second;
 
     //Switches the activation of the connection
@@ -205,7 +205,7 @@ void Genome::mutateLinkToggle()
 
 void Genome::mutateActivation(ActivationFunction activationFunction)
 {
-    int nodeIndex = (rand() % (nodes.size() - input)) + input;
+    unsigned int nodeIndex = (rand() % (nodes.size() - input)) + input;
     nodes[nodeIndex].setActivation(activationFunction);
 }
 
@@ -220,21 +220,21 @@ void Genome::crossover(Genome& parentA, Genome& parentB)
     std::deque<GeneNode>* nodesA = parentA.getNodes();
     std::deque<GeneNode>* nodesB = parentB.getNodes();
 
-    for (int i = 0; i < nodesA->size(); i++)
+    for (unsigned int i = 0; i < nodesA->size(); i++)
     {
-        int layer = (*nodesA)[i].getLayer();
+        unsigned int layer = (*nodesA)[i].getLayer();
 
         nodes.push_back(GeneNode((*nodesA)[i].getType(), (*nodesA)[i].getActivation(), layer));
     }
 
     //Insert connections of fittest parent (aka parentA)
-    std::unordered_map<int, GeneConnection>* parentAConnections = parentA.getConnections();
-    std::unordered_map<int, GeneConnection>* parentBConnections = parentB.getConnections();
+    std::unordered_map<unsigned int, GeneConnection>* parentAConnections = parentA.getConnections();
+    std::unordered_map<unsigned int, GeneConnection>* parentBConnections = parentB.getConnections();
     
 
-    for (std::unordered_map<int, GeneConnection>::iterator itA = (*parentAConnections).begin(); itA != (*parentAConnections).end(); ++itA)
+    for (std::unordered_map<unsigned int, GeneConnection>::iterator itA = (*parentAConnections).begin(); itA != (*parentAConnections).end(); ++itA)
     {
-        std::unordered_map<int, GeneConnection>::iterator found = parentBConnections->find(itA->first);
+        std::unordered_map<unsigned int, GeneConnection>::iterator found = parentBConnections->find(itA->first);
 
         //If both parent have the same gene pick one randomly
         if (found != parentBConnections->end())
@@ -257,16 +257,16 @@ void Genome::crossover(Genome& parentA, Genome& parentB)
     }
 }
 
-void Genome::shiftNodes(int node, int layerMin)
+void Genome::shiftNodes(unsigned int node, unsigned int layerMin)
 {
-    std::stack<int> nodeToShift;
+    std::stack<unsigned int> nodeToShift;
 
     nodeToShift.push(node);
     nodes[node].layer = layerMin + 1;
 
     while (nodeToShift.empty() == false)
     {
-        int node = nodeToShift.top();
+        unsigned int node = nodeToShift.top();
         nodeToShift.pop();
 
         //Search connection and check if it needs a shift
@@ -274,7 +274,7 @@ void Genome::shiftNodes(int node, int layerMin)
         {
             if (i == node) continue;
 
-            std::unordered_map<std::pair<int, int>, int>::iterator it = nodesToConnection.find(std::pair(node, i));
+            std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>::iterator it = nodesToConnection.find(std::pair(node, i));
 
             if (it != nodesToConnection.end())
             {
