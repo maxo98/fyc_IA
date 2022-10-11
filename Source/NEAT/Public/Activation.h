@@ -23,3 +23,16 @@ inline float hyperTanActivation(float x) { return (1 - exp(-x * 2)) / (1 + exp(-
 inline float tanhActivation(float x) { return tanh(x); };
 
 inline float sincActivation(float x) { return sin(x)/x; };
+
+inline float gaussianActivation(float x) { return exp(-(x*x)); };
+
+inline float swishActivation(float x) { return x / (1 + exp(-x)); };
+
+inline float hyperbolSecantActivation(float x) { return 2 / (exp(x) + exp(-x)); };
+
+inline float cedricSpikeActivation(float x) { return (1 / (abs(x) + 0.2))/5; };
+
+inline float invPyramidActivation(float x) { return (abs(x) < 1 ? 1/(-abs(x)) + 1 : 0); };
+
+inline float jigsawActivation(float x) { return x - floor(x); };
+
