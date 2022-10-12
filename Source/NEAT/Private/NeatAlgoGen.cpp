@@ -42,7 +42,7 @@ NeatAlgoGen::NeatAlgoGen()
 		Genome* genome = &genomes.back();
 		genome->mutateLink(allConnections);
 		genome->mutateNode(allConnections, neatParamters.activationFunctions[0]);
-		genome->mutateLink(allConnections);
+		/*genome->mutateLink(allConnections);
 		genome->mutateNode(allConnections, neatParamters.activationFunctions[0]);
 		genome->mutateLink(allConnections);
 		genome->mutateNode(allConnections, neatParamters.activationFunctions[0]);
@@ -57,12 +57,26 @@ NeatAlgoGen::NeatAlgoGen()
 		genome->mutateWeightRandom(2);
 		genome->mutateWeightShift(0.5);
 		genome->mutateLinkToggle();
-		genome->mutateLinkToggle();
+		genome->mutateLinkToggle();*/
 	}
 
 	genomes[2].crossover(genomes[0], genomes[1]);
 
 	generateNetworks();
+
+	std::vector<float> inputNet;
+
+	inputNet.push_back(0);
+	inputNet.push_back(0);
+	inputNet.push_back(0);
+
+	std::vector<float> outputNet;
+
+	outputNet.push_back(0);
+	outputNet.push_back(0);
+	outputNet.push_back(0);
+
+	networks[0].compute(inputNet, outputNet);
 }
 
 NeatAlgoGen::~NeatAlgoGen()

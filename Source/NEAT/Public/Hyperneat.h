@@ -9,37 +9,40 @@
 typedef bool (*ThresholdFunction) (std::vector<float> constants, std::vector<float> values, std::vector<float> p1, std::vector<float> p2);
 
 //Returns the values to pass in input of the CPPN
-typedef std::deque<float> (*CppnInputFunction) (std::vector<float> constants, std::vector<float> p1, std::vector<float> p2);
+typedef std::vector<float> (*CppnInputFunction) (std::vector<float> constants, std::vector<float> p1, std::vector<float> p2);
 
 //Returns the weight to apply to the connection
 typedef float (*WeightModifierFunction) (std::vector<float> constants, float weight, std::vector<float> p1, std::vector<float> p2);
 
 /**
  * This implementation supposes that we use the same activation function as for all the substrate
- * S: geometric dimension
  */
-template<unsigned int S>
 class NEAT_API Hyperneat
 {
 public:
-	Hyperneat(unsigned int _populationSize, NeatParameters _neatParamters, int _cppnInput, int _cppnOutput,
+	Hyperneat(unsigned int _populationSize, unsigned int _nDimensions, NeatParameters _neatParamters, unsigned int _cppnInput, unsigned int _cppnOutput,
 		ActivationFunction _activationFunction, ThresholdFunction _thresholdFunction, CppnInputFunction _cppnInputFunction, WeightModifierFunction _weightModifierFunction,
 		std::vector<float> _thresholdConstants = std::vector<float>(), std::vector<float> _inputConstants = std::vector<float>(), std::vector<float> _weightConstants = std::vector<float>());
 
 	~Hyperneat();
 
-	inline void addInput(std::array<float, S> node) { inputSubstrate.push_back(node); };
-	inline void addOutput(std::array<float, S> node) { inputSubstrate.push_back(node); };
-	inline void addHiddenNode(unsigned int layer, std::array<float, S> node) { inputSubstrate[layer].push_back(node); };
+	void addInput(std::vector<float> node);
+	void addOutput(std::vector<float> node);
+	void addHiddenNode(unsigned int layer, std::vector<float> node);
 
 	void clear();
 
 	virtual void generateNetworks();
 
+	inline NeuralNetwork* getNeuralNetwork(int i) { return &networks[i]; };
+
 protected:
-	std::list<std::array<float, S>> inputSubstrate;
-	std::list<std::array<float, S>> outputSubstrate;
-	std::list<std::list<std::array<float, S>>> hiddenSubstrates;
+	void addLayerAndConnect(unsigned int layer, unsigned int networkIndex, std::list<std::vector<float>>::iterator itNode, std::list<std::vector<float>>::iterator itNodeEnd,
+		std::list<std::vector<float>>::iterator beginPreviousLayer, std::list<std::vector<float>>::iterator endPreviousLayer);
+
+	std::list<std::vector<float>> inputSubstrate;
+	std::list<std::vector<float>> outputSubstrate;
+	std::deque<std::list<std::vector<float>>> hiddenSubstrates;
 
 	std::vector<NeuralNetwork> networks;
 
@@ -50,14 +53,14 @@ protected:
 
 	CPPN_Neat cppns;
 
-	int cppnInput, cppnOutput;
+	unsigned int cppnInput, cppnOutput, nDimensions;
 	std::vector<float> thresholdConstants, inputConstants, weightConstants;
 };
 
 //CPPN Input Functions
-std::deque<float> basicCppnInput(std::vector<float> constants, std::vector<float> p1, std::vector<float> p2);
-std::deque<float> sqrDistCppnInput(std::vector<float> constants, std::vector<float> p1, std::vector<float> p2);
-std::deque<float> deltaDistCppnInput(std::vector<float> constants, std::vector<float> p1, std::vector<float> p2);
+std::vector<float> basicCppnInput(std::vector<float> constants, std::vector<float> p1, std::vector<float> p2);
+std::vector<float> sqrDistCppnInput(std::vector<float> constants, std::vector<float> p1, std::vector<float> p2);
+std::vector<float> deltaDistCppnInput(std::vector<float> constants, std::vector<float> p1, std::vector<float> p2);
 
 //Threshold functions
 inline bool fixedThreshold(std::vector<float> constants, std::vector<float> values, std::vector<float> p1, std::vector<float> p2)

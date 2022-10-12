@@ -35,6 +35,9 @@ public:
 
 	void generateNetworks();
 
+	inline NeuralNetwork* getNeuralNetwork(int i) { return &networks[i]; };
+	inline int getPopulationSize() { return networks.size(); };
+
 	friend class ANeuralNetworkDisplayHUD;
 
 protected:
