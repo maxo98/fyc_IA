@@ -3,24 +3,11 @@
 
 #include "Hyperneat.h"
 
-Hyperneat::Hyperneat(unsigned int _populationSize, unsigned int _nDimensions, NeatParameters _neatParamters, unsigned int _cppnInput, unsigned int _cppnOutput,
-	ActivationFunction _activationFunction, ThresholdFunction _thresholdFunction, CppnInputFunction _cppnInputFunction, WeightModifierFunction _weightModifierFunction,
-	std::vector<float> _thresholdConstants, std::vector<float> _inputConstants, std::vector<float> _weightConstants)
+Hyperneat::Hyperneat(unsigned int _populationSize, NeatParameters _neatParamters, HyperneatParameters _hyperparam)
 {
-	activationFunction = _activationFunction;
-	thresholdFunction = _thresholdFunction;
-	cppnInputFunction = _cppnInputFunction;
-	weightModifierFunction = _weightModifierFunction;
+	hyperparam = _hyperparam;
 
-	thresholdConstants = _thresholdConstants;
-	inputConstants = _inputConstants;
-	weightConstants = _weightConstants;
-
-	cppnInput = _cppnInput;
-	cppnOutput = _cppnOutput;
-	nDimensions = _nDimensions;
-
-	cppns = CPPN_Neat(_populationSize, cppnInput, cppnOutput, _neatParamters);
+	cppns = CPPN_Neat(_populationSize, hyperparam.cppnInput, hyperparam.cppnOutput, _neatParamters);
 
 	networks.resize(_populationSize);
 }
@@ -31,7 +18,7 @@ Hyperneat::~Hyperneat()
 
 void Hyperneat::addInput(std::vector<float> node)
 { 
-	if (node.size() != nDimensions)
+	if (node.size() != hyperparam.nDimensions)
 	{
 		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("Error adding input of wrong dimension")));
 
@@ -43,7 +30,7 @@ void Hyperneat::addInput(std::vector<float> node)
 
 void Hyperneat::addOutput(std::vector<float> node)
 { 
-	if (node.size() != nDimensions)
+	if (node.size() != hyperparam.nDimensions)
 	{
 		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("Error adding input of wrong dimension")));
 
@@ -55,7 +42,7 @@ void Hyperneat::addOutput(std::vector<float> node)
 
 void Hyperneat::addHiddenNode(unsigned int layer, std::vector<float> node)
 { 
-	if (node.size() != nDimensions)
+	if (node.size() != hyperparam.nDimensions)
 	{
 		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("Error adding input of wrong dimension")));
 
@@ -117,7 +104,7 @@ void Hyperneat::addLayerAndConnect(unsigned int layer, unsigned int networkIndex
 	//For each node in the layer to add
 	for (itNode; itNode != itNodeEnd; ++itNode)
 	{
-		networks[networkIndex].addHiddenNode(layer, activationFunction);
+		networks[networkIndex].addHiddenNode(layer, hyperparam.activationFunction);
 
 		std::list<std::vector<float>>::iterator prevLayer = beginPreviousLayer;
 
@@ -130,15 +117,15 @@ void Hyperneat::addLayerAndConnect(unsigned int layer, unsigned int networkIndex
 		{
 			std::vector<float> output, input;
 			std::vector<float> p1 = std::vector<float>(prevLayer->begin(), prevLayer->end());
-			input = cppnInputFunction(inputConstants, p1, p2);
+			input = hyperparam.cppnInputFunction(hyperparam.inputConstants, p1, p2);
 
-			output.resize(cppnOutput);
+			output.resize(hyperparam.cppnOutput);
 			networks[networkIndex].compute(input, output);
 
 			//Check if we should create a connection
-			if (thresholdFunction(thresholdConstants, output, p1, p2) == true)
+			if (hyperparam.thresholdFunction(hyperparam.thresholdConstants, output, p1, p2) == true)
 			{
-				float weight = weightModifierFunction(weightConstants, output[0], p1, p2);
+				float weight = hyperparam.weightModifierFunction(hyperparam.weightConstants, output[0], p1, p2);
 				networks[networkIndex].connectNodes(layer - 1, nodeA, layer, nodeB, weight);
 			}
 

@@ -14,15 +14,32 @@ typedef std::vector<float> (*CppnInputFunction) (std::vector<float> constants, s
 //Returns the weight to apply to the connection
 typedef float (*WeightModifierFunction) (std::vector<float> constants, float weight, std::vector<float> p1, std::vector<float> p2);
 
+//Hyperneat configuration
+typedef struct {
+	unsigned int nDimensions;
+
+	unsigned int cppnInput;
+	unsigned int cppnOutput;
+
+	ActivationFunction activationFunction;
+	ThresholdFunction thresholdFunction; 
+	CppnInputFunction cppnInputFunction; 
+	WeightModifierFunction weightModifierFunction;
+
+	//Optionnal
+	std::vector<float> thresholdConstants;
+	std::vector<float> inputConstants;
+	std::vector<float> weightConstants;
+
+} HyperneatParameters;
+
 /**
  * This implementation supposes that we use the same activation function as for all the substrate
  */
 class NEAT_API Hyperneat
 {
 public:
-	Hyperneat(unsigned int _populationSize, unsigned int _nDimensions, NeatParameters _neatParamters, unsigned int _cppnInput, unsigned int _cppnOutput,
-		ActivationFunction _activationFunction, ThresholdFunction _thresholdFunction, CppnInputFunction _cppnInputFunction, WeightModifierFunction _weightModifierFunction,
-		std::vector<float> _thresholdConstants = std::vector<float>(), std::vector<float> _inputConstants = std::vector<float>(), std::vector<float> _weightConstants = std::vector<float>());
+	Hyperneat(unsigned int _populationSize, NeatParameters _neatParamters, HyperneatParameters _hyperparam);
 
 	~Hyperneat();
 
@@ -46,15 +63,9 @@ protected:
 
 	std::vector<NeuralNetwork> networks;
 
-	ActivationFunction activationFunction;
-	ThresholdFunction thresholdFunction;
-	CppnInputFunction cppnInputFunction;
-	WeightModifierFunction weightModifierFunction;
+	HyperneatParameters hyperparam;
 
 	CPPN_Neat cppns;
-
-	unsigned int cppnInput, cppnOutput, nDimensions;
-	std::vector<float> thresholdConstants, inputConstants, weightConstants;
 };
 
 //CPPN Input Functions

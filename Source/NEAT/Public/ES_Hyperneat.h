@@ -11,10 +11,7 @@
 class NEAT_API ES_Hyperneat: public Hyperneat
 {
 public:
-	ES_Hyperneat(unsigned int _populationSize, unsigned int _nDimensions, NeatParameters _neatParamters, unsigned int _cppnInput, unsigned int _cppnOutput, unsigned int _nDecomposition,
-		ActivationFunction _activationFunction, ThresholdFunction _thresholdFunction, CppnInputFunction _cppnInputFunction, WeightModifierFunction _weightModifierFunction,
-		std::vector<float> _thresholdConstants = std::vector<float>(), std::vector<float> _inputConstants = std::vector<float>(), 
-		std::vector<float> _weightConstants = std::vector<float>());
+	ES_Hyperneat(unsigned int _populationSize, NeatParameters _neatParamters, HyperneatParameters _hyperparam, unsigned int _nDecomposition);
 	~ES_Hyperneat();
 
 	virtual void generateNetworks();
