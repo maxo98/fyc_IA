@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "HyperNeat.h"
 
+
 /**
  * 
  */
@@ -16,6 +17,18 @@ public:
 
 	virtual void generateNetworks();
 
+	void divAndInit(std::vector<float> pos, bool outgoing);
+
 protected:
 	unsigned int nDecomposition;
+
+	class SubstrateTree {
+	public:
+		std::vector<float> pos;
+		float width;
+		float level;
+		float weight;
+
+		std::list<SubstrateTree> leaves;
+	};
 };
