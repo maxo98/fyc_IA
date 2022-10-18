@@ -22,9 +22,9 @@ public:
 	inline unsigned int getNInputNode() { return inputNodes.size(); }
 	inline unsigned int getNOutputNode() { return outputNodes.size(); }
 
-	void addHiddenNode(unsigned int layer, ActivationFunction activation);
-	inline void addInputNode() { inputNodes.push_back(Node(nullptr)); };
-	inline void addOutputNode(ActivationFunction activation) { outputNodes.push_back(Node(activation)); };
+	std::pair<unsigned int, unsigned int> addHiddenNode(unsigned int layer, ActivationFunction activation);
+	std::pair<unsigned int, unsigned int> addInputNode();
+	std::pair<unsigned int, unsigned int> addOutputNode(ActivationFunction activation);
 	void removeHiddenNode(unsigned int layer);
 	inline void removeInputNode() { inputNodes.pop_back(); };
 	inline void removeOutputNode() { outputNodes.pop_back(); };

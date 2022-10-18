@@ -3,11 +3,11 @@
 
 #include "Hyperneat.h"
 
-Hyperneat::Hyperneat(unsigned int _populationSize, NeatParameters _neatParamters, HyperneatParameters _hyperparam)
+Hyperneat::Hyperneat(unsigned int _populationSize, NeatParameters _neatParam, HyperneatParameters _hyperParam)
 {
-	hyperparam = _hyperparam;
+	hyperParam = _hyperParam;
 
-	cppns = CPPN_Neat(_populationSize, hyperparam.cppnInput, hyperparam.cppnOutput, _neatParamters);
+	cppns = CPPN_Neat(_populationSize, hyperParam.cppnInput, hyperParam.cppnOutput, _neatParam);
 
 	networks.resize(_populationSize);
 }
@@ -18,38 +18,38 @@ Hyperneat::~Hyperneat()
 
 void Hyperneat::addInput(std::vector<float> node)
 { 
-	if (node.size() != hyperparam.nDimensions)
+	if (node.size() != hyperParam.nDimensions)
 	{
 		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("Error adding input of wrong dimension")));
 
 		return;
 	}
 
-	inputSubstrate.push_back(node); 
+	inputSubstrate.emplace(node); 
 }
 
 void Hyperneat::addOutput(std::vector<float> node)
 { 
-	if (node.size() != hyperparam.nDimensions)
+	if (node.size() != hyperParam.nDimensions)
 	{
 		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("Error adding input of wrong dimension")));
 
 		return;
 	}
 
-	outputSubstrate.push_back(node);
+	outputSubstrate.emplace(node);
 }
 
 void Hyperneat::addHiddenNode(unsigned int layer, std::vector<float> node)
 { 
-	if (node.size() != hyperparam.nDimensions)
+	if (node.size() != hyperParam.nDimensions)
 	{
 		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("Error adding input of wrong dimension")));
 
 		return;
 	}
 
-	hiddenSubstrates[layer].push_back(node);
+	hiddenSubstrates[layer].emplace(node);
 };
 
 void Hyperneat::clear()
@@ -71,13 +71,13 @@ void Hyperneat::generateNetworks()
 			networks[cpt].addInputNode();
 		}
 
-		std::list<std::vector<float>>::iterator beginPreviousLayer = inputSubstrate.begin();
-		std::list<std::vector<float>>::iterator endPreviousLayer = inputSubstrate.end();
+		std::unordered_set<std::vector<float>, HyperNodeHash>::iterator beginPreviousLayer = inputSubstrate.begin();
+		std::unordered_set<std::vector<float>, HyperNodeHash>::iterator endPreviousLayer = inputSubstrate.end();
 
 		int layer = 1;
 		
 		//Add and connect the hidden layers
-		for (std::deque<std::list<std::vector<float>>>::iterator itLayer = hiddenSubstrates.begin(); itLayer != hiddenSubstrates.end(); ++itLayer)
+		for (std::deque<std::unordered_set<std::vector<float>, HyperNodeHash>>::iterator itLayer = hiddenSubstrates.begin(); itLayer != hiddenSubstrates.end(); ++itLayer)
 		{
 			addLayerAndConnect(layer, cpt, itLayer->begin(), itLayer->end(), beginPreviousLayer, endPreviousLayer);
 
@@ -96,17 +96,25 @@ void Hyperneat::generateNetworks()
 * Add nodes of a layer to the neuralnetwork
 * and connect it to the previous layer
 */
-void Hyperneat::addLayerAndConnect(unsigned int layer, unsigned int networkIndex, std::list<std::vector<float>>::iterator itNode, std::list<std::vector<float>>::iterator itNodeEnd,
-	std::list<std::vector<float>>::iterator beginPreviousLayer, const std::list<std::vector<float>>::iterator endPreviousLayer)
+void Hyperneat::addLayerAndConnect(unsigned int layer, unsigned int networkIndex, std::unordered_set<std::vector<float>, HyperNodeHash>::iterator itNode,
+	std::unordered_set<std::vector<float>, HyperNodeHash>::iterator itNodeEnd,
+	std::unordered_set<std::vector<float>, HyperNodeHash>::iterator beginPreviousLayer, const std::unordered_set<std::vector<float>, HyperNodeHash>::iterator endPreviousLayer,
+	bool outputLayer)
 {
 	int nodeB = 0;
 
 	//For each node in the layer to add
 	for (itNode; itNode != itNodeEnd; ++itNode)
 	{
-		networks[networkIndex].addHiddenNode(layer, hyperparam.activationFunction);
-
-		std::list<std::vector<float>>::iterator prevLayer = beginPreviousLayer;
+		if (outputLayer == false)
+		{
+			networks[networkIndex].addHiddenNode(layer, hyperParam.activationFunction);
+		}
+		else {
+			networks[networkIndex].addOutputNode(hyperParam.activationFunction);
+		}
+		
+		std::unordered_set<std::vector<float>, HyperNodeHash>::iterator prevLayer = beginPreviousLayer;
 
 		int nodeA = 0;
 		std::vector<float> p2 = std::vector<float>(itNode->begin(), itNode->end());
@@ -117,15 +125,15 @@ void Hyperneat::addLayerAndConnect(unsigned int layer, unsigned int networkIndex
 		{
 			std::vector<float> output, input;
 			std::vector<float> p1 = std::vector<float>(prevLayer->begin(), prevLayer->end());
-			input = hyperparam.cppnInputFunction(hyperparam.inputConstants, p1, p2);
+			input = hyperParam.cppnInputFunction(hyperParam.inputConstants, p1, p2);
 
-			output.resize(hyperparam.cppnOutput);
+			output.resize(hyperParam.cppnOutput);
 			networks[networkIndex].compute(input, output);
 
 			//Check if we should create a connection
-			if (hyperparam.thresholdFunction(hyperparam.thresholdConstants, output, p1, p2) == true)
+			if (hyperParam.thresholdFunction(hyperParam.thresholdConstants, output, p1, p2) == true)
 			{
-				float weight = hyperparam.weightModifierFunction(hyperparam.weightConstants, output[0], p1, p2);
+				float weight = hyperParam.weightModifierFunction(hyperParam.weightConstants, output[0], p1, p2);
 				networks[networkIndex].connectNodes(layer - 1, nodeA, layer, nodeB, weight);
 			}
 

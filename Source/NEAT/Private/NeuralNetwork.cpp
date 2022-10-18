@@ -2,6 +2,7 @@
 
 
 #include "NeuralNetwork.h"
+#include <limits>
 
 NeuralNetwork::NeuralNetwork()
 {
@@ -120,7 +121,7 @@ unsigned int NeuralNetwork::getNHiddenNode(unsigned int layer)
 	return it->size();
 }
 
-void NeuralNetwork::addHiddenNode(unsigned int layer, ActivationFunction activation)
+std::pair<unsigned int, unsigned int> NeuralNetwork::addHiddenNode(unsigned int layer, ActivationFunction activation)
 {
 	if (layer > hiddenNodes.size())
 	{
@@ -131,7 +132,7 @@ void NeuralNetwork::addHiddenNode(unsigned int layer, ActivationFunction activat
 		
 		hiddenNodes.back().push_back(Node(activation));
 
-		return;
+		return std::pair(layer, hiddenNodes.back().size()-1);
 	}
 
 	layer--;
@@ -141,6 +142,20 @@ void NeuralNetwork::addHiddenNode(unsigned int layer, ActivationFunction activat
 	for (it = hiddenNodes.begin(); it != hiddenNodes.end() && i != layer; ++it, ++i);
 
 	it->push_back(Node(activation));
+
+	return std::pair(layer, it->size() - 1);
+}
+
+std::pair<unsigned int, unsigned int> NeuralNetwork::addInputNode()
+{ 
+	inputNodes.push_back(Node(nullptr)); 
+	return std::pair(0, inputNodes.size() - 1);
+}
+
+std::pair<unsigned int, unsigned int> NeuralNetwork::addOutputNode(ActivationFunction activation)
+{ 
+	outputNodes.push_back(Node(activation)); 
+	return std::pair(std::numeric_limits<int>::max(), outputNodes.size() - 1);
 }
 
 void NeuralNetwork::removeHiddenNode(unsigned int layer)
