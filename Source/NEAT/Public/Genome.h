@@ -19,6 +19,7 @@ struct std::hash<std::pair<unsigned int, unsigned int>>
 	}
 };
 
+class CPPN_Neat;
 
 /**
  * 
@@ -41,6 +42,8 @@ public:
 
 	//Parent A should be the fittest
 	void crossover(Genome& parentA, Genome& parentB);
+
+	friend class CPPN_Neat;
 
 private:
 	void addConnection(unsigned int nodeA, unsigned int nodeB, std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections);

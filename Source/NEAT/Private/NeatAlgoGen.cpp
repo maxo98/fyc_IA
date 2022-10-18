@@ -3,13 +3,13 @@
 
 #include "NeatAlgoGen.h"
 
-NeatAlgoGen::NeatAlgoGen(unsigned int _populationSize, unsigned int _input, unsigned int _output, NeatParameters _neatParamters)
+NeatAlgoGen::NeatAlgoGen(unsigned int _populationSize, unsigned int _input, unsigned int _output, NeatParameters _neatParam)
 {
 	populationSize = _populationSize;
 	input = _input;
 	output = _output;
 
-	neatParamters = _neatParamters;
+	neatParam = _neatParam;
 
 	networks.resize(populationSize);
 	genomes.reserve(populationSize);
@@ -17,16 +17,16 @@ NeatAlgoGen::NeatAlgoGen(unsigned int _populationSize, unsigned int _input, unsi
 
 	for (unsigned int i = 0; i < populationSize; i++)
 	{
-		genomes.push_back(Genome(input, output, neatParamters.activationFunctions));
+		genomes.push_back(Genome(input, output, neatParam.activationFunctions));
 		Genome* genome = &genomes.back();
 		genome->mutateLink(allConnections);//Minimum structure
-		genome->mutateWeightRandom(neatParamters.pbWeightRandom);
+		genome->mutateWeightRandom(neatParam.pbWeightRandom);
 	}
 }
 
 NeatAlgoGen::NeatAlgoGen()
 {
-	neatParamters.activationFunctions.push_back(sigmoidActivation);
+	neatParam.activationFunctions.push_back(sigmoidActivation);
 
 	populationSize = 3;
 	input = 3;
@@ -38,18 +38,18 @@ NeatAlgoGen::NeatAlgoGen()
 
 	for (unsigned int i = 0; i < populationSize; i++)
 	{
-		genomes.push_back(Genome(input, output, neatParamters.activationFunctions));
+		genomes.push_back(Genome(input, output, neatParam.activationFunctions));
 		Genome* genome = &genomes.back();
 		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections, neatParamters.activationFunctions[0]);
+		genome->mutateNode(allConnections, neatParam.activationFunctions[0]);
 		/*genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections, neatParamters.activationFunctions[0]);
+		genome->mutateNode(allConnections, neatParam.activationFunctions[0]);
 		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections, neatParamters.activationFunctions[0]);
+		genome->mutateNode(allConnections, neatParam.activationFunctions[0]);
 		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections, neatParamters.activationFunctions[0]);
+		genome->mutateNode(allConnections, neatParam.activationFunctions[0]);
 		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections, neatParamters.activationFunctions[0]);
+		genome->mutateNode(allConnections, neatParam.activationFunctions[0]);
 		genome->mutateWeightRandom(2);
 		genome->mutateWeightShift(0.5);
 		genome->mutateWeightRandom(2);
@@ -85,28 +85,28 @@ NeatAlgoGen::~NeatAlgoGen()
 
 void NeatAlgoGen::mutate(Genome& genome)
 {
-	if (neatParamters.activationFunctions.size() == 0)
+	if (neatParam.activationFunctions.size() == 0)
 		return;
 
-	if (neatParamters.pbMutateLink > rand() % 1) {
+	if (neatParam.pbMutateLink > rand() % 1) {
 		genome.mutateLink(allConnections);
 	}
 	
-	if (neatParamters.pbMutateNode > rand() % 1) {
+	if (neatParam.pbMutateNode > rand() % 1) {
 
-		unsigned int index = rand() % neatParamters.activationFunctions.size();
-		genome.mutateNode(allConnections, neatParamters.activationFunctions[index]);
+		unsigned int index = rand() % neatParam.activationFunctions.size();
+		genome.mutateNode(allConnections, neatParam.activationFunctions[index]);
 	}
 	
-	if (neatParamters.pbWeightShift > rand() % 1) {
-		genome.mutateWeightShift(neatParamters.pbWeightShift);
+	if (neatParam.pbWeightShift > rand() % 1) {
+		genome.mutateWeightShift(neatParam.pbWeightShift);
 	}
 	
-	if (neatParamters.pbWeightRandom > rand() % 1) {
-		genome.mutateWeightRandom(neatParamters.pbWeightRandom);
+	if (neatParam.pbWeightRandom > rand() % 1) {
+		genome.mutateWeightRandom(neatParam.pbWeightRandom);
 	}
 	
-	if (neatParamters.pbToggleLink > rand() % 1) {
+	if (neatParam.pbToggleLink > rand() % 1) {
 		genome.mutateLinkToggle();
 	}
 }

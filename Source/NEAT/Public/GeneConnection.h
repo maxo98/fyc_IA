@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GeneNode.h"
 
+class CPPN_Neat;
+
 /**
  * 
  */
@@ -21,6 +23,7 @@ public:
 	inline bool isEnabled() { return enabled; };
 
 	friend class Genome;
+	friend class CPPN_Neat;
 
 private:
 	unsigned int innovation;

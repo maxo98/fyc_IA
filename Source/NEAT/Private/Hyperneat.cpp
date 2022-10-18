@@ -79,7 +79,7 @@ void Hyperneat::generateNetworks()
 		//Add and connect the hidden layers
 		for (std::deque<std::unordered_set<std::vector<float>, HyperNodeHash>>::iterator itLayer = hiddenSubstrates.begin(); itLayer != hiddenSubstrates.end(); ++itLayer)
 		{
-			addLayerAndConnect(layer, cpt, itLayer->begin(), itLayer->end(), beginPreviousLayer, endPreviousLayer);
+			addLayerAndConnect(layer, cpt, itLayer->begin(), itLayer->end(), beginPreviousLayer, endPreviousLayer, false);
 
 			beginPreviousLayer = itLayer->begin();
 			endPreviousLayer = itLayer->end();
@@ -88,7 +88,7 @@ void Hyperneat::generateNetworks()
 		}
 
 		//Add and connect the output layer
-		addLayerAndConnect(layer, cpt, outputSubstrate.begin(), outputSubstrate.end(), beginPreviousLayer, endPreviousLayer);
+		addLayerAndConnect(layer, cpt, outputSubstrate.begin(), outputSubstrate.end(), beginPreviousLayer, endPreviousLayer, true);
 	}
 }
 
