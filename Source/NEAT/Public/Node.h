@@ -17,13 +17,16 @@ public:
 
 	void wipeConnections();
 	void removeConnection(Node*);
-	void addConnection(Node*, float);
+	void addConnection(Node*, float, bool);
 	void changeWeight(Node*, float);
+
+	inline float getOldValue() { return oldValue; }
 
 	inline void setValue(float x) { value = x; computed = true; };
 
 	float compute();
-	void reset() { computed = false; };
+	inline void reset() { computed = false; oldValue = 0; value = 0; };
+	inline void next() { computed = false; oldValue = value; };
 
 	friend class ANeuralNetworkDisplayHUD;
 	friend class NeuralNetwork;
@@ -33,6 +36,8 @@ private:
 
 	ActivationFunction activation;
 	std::map<Node*, float> previousNodes;
+	std::map<Node*, float> recursionNodes;
 	bool computed;
 	float value;
+	float oldValue;
 };

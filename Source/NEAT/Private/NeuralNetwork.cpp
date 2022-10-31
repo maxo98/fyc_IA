@@ -60,13 +60,13 @@ void NeuralNetwork::fullyConnect()
 		{
 			for (itPrevious = hiddenNodes.back().begin(); itPrevious != hiddenNodes.back().end(); ++itPrevious)
 			{
-				itOutput->addConnection(&(*itPrevious), 0.5);
+				itOutput->addConnection(&(*itPrevious), 0.5, false);
 			}
 		}
 		else {
 			for (itPrevious = inputNodes.begin(); itPrevious != inputNodes.end(); ++itPrevious)
 			{
-				itOutput->addConnection(&(*itPrevious), 0.5);
+				itOutput->addConnection(&(*itPrevious), 0.5, false);
 			}
 		}
 	}
@@ -85,7 +85,7 @@ void NeuralNetwork::fullyConnect()
 
 			for (itPrevious; itPrevious != itLayer->end(); ++itPrevious)
 			{
-				itNext->addConnection(&(*itPrevious), 0.5);
+				itNext->addConnection(&(*itPrevious), 0.5, false);
 			}
 		}
 
@@ -100,7 +100,7 @@ void NeuralNetwork::fullyConnect()
 		std::list<Node>::iterator it_input;
 		for (it_input = inputNodes.begin(); it_input != inputNodes.end(); ++it_input)
 		{
-			itNext->addConnection(&(*it_input), 0.5);
+			itNext->addConnection(&(*it_input), 0.5, false);
 		}
 	}
 }
@@ -175,9 +175,11 @@ void NeuralNetwork::connectNodes(std::pair<unsigned int, unsigned int> nodeA, st
 
 void NeuralNetwork::connectNodes(unsigned int layerA, unsigned int nodeA, unsigned int layerB, unsigned int nodeB, float weight)
 {
-	if (layerA >= layerB)
+	if (layerA >= layerB && recursive == false)
 	{
-		if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Error connecting nodes, layerA is superior or equal to layerB");
+		if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Error connecting nodes, layerA is superior or equal to layerB, recursion deactivated");
+
+		return;
 	}
 
 	if (layerB >= getLayerSize())
@@ -196,7 +198,7 @@ void NeuralNetwork::connectNodes(unsigned int layerA, unsigned int nodeA, unsign
 		return;
 	}
 
-	nextNode->addConnection(previousNode, weight);
+	nextNode->addConnection(previousNode, weight, layerA >= layerB);
 }
 
 Node* NeuralNetwork::getNode(unsigned int layer, unsigned int node)
@@ -248,7 +250,7 @@ void NeuralNetwork::compute(std::vector<float>& inputs, std::vector<float>& outp
 		{
 			for (std::list<Node>::iterator itNode = it->begin(); itNode != it->end(); ++itNode)
 			{
-				itNode->reset();
+				itNode->next();
 			}
 		}
 
@@ -262,7 +264,7 @@ void NeuralNetwork::compute(std::vector<float>& inputs, std::vector<float>& outp
 		//Compute the result
 		for (std::list<Node>::iterator it = outputNodes.begin(); it != outputNodes.end(); ++it)
 		{
-			it->reset();
+			it->next();
 			outputs.push_back(it->compute());
 
 			if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%.3f"), it->compute()));

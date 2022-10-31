@@ -36,6 +36,9 @@ public:
 
 	void clear();
 
+	inline void setRecursion(bool value) { recursive = value; };
+	inline bool isRecursive() { return recursive; }
+
 private:
 	Node* getNode(unsigned int layer, unsigned int node);
 	Node* getNodeFromLayer(std::list<Node> &layer, unsigned int node);
@@ -43,6 +46,7 @@ private:
 	std::list<std::list<Node>> hiddenNodes;
 	std::list<Node> inputNodes;
 	std::list<Node> outputNodes;
+	bool recursive = false;
 
 	friend class ANeuralNetworkDisplayHUD;
 };

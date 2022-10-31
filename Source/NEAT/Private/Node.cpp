@@ -22,9 +22,16 @@ void Node::removeConnection(Node* node)
 	previousNodes.erase(node);
 }
 
-void Node::addConnection(Node* node, float weight)
+void Node::addConnection(Node* node, float weight, bool recursive)
 {
-	previousNodes.insert(std::pair<Node*, float>(node, weight));
+	if (recursive == false)
+	{
+		previousNodes.insert(std::pair<Node*, float>(node, weight));
+	}
+	else {
+		previousNodes.insert(std::pair<Node*, float>(node, weight));
+	}
+	
 }
 
 void Node::changeWeight(Node* node, float weight)
@@ -41,6 +48,11 @@ float Node::compute()
 		for (std::map<Node*, float>::iterator nodes = previousNodes.begin(); nodes != previousNodes.end(); ++nodes)
 		{
 			value += nodes->first->compute() * nodes->second;
+		}
+
+		for (std::map<Node*, float>::iterator nodes = recursionNodes.begin(); nodes != recursionNodes.end(); ++nodes)
+		{
+			value += nodes->first->getOldValue() * nodes->second;
 		}
 
 		value = activation(value);
