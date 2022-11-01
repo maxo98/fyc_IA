@@ -28,7 +28,7 @@ NeatAlgoGen::NeatAlgoGen()
 {
 	Activation* test = new sigmoidActivation();
 
-	GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%f"), test->activate(1)));
+	if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%f"), test->activate(1)));
 
 	delete test;
 
