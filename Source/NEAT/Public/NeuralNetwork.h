@@ -22,9 +22,9 @@ public:
 	inline unsigned int getNInputNode() { return inputNodes.size(); }
 	inline unsigned int getNOutputNode() { return outputNodes.size(); }
 
-	std::pair<unsigned int, unsigned int> addHiddenNode(unsigned int layer, ActivationFunction activation);
+	std::pair<unsigned int, unsigned int> addHiddenNode(unsigned int layer, Activation* activation);
 	std::pair<unsigned int, unsigned int> addInputNode();
-	std::pair<unsigned int, unsigned int> addOutputNode(ActivationFunction activation);
+	std::pair<unsigned int, unsigned int> addOutputNode(Activation* activation);
 	void removeHiddenNode(unsigned int layer);
 	inline void removeInputNode() { inputNodes.pop_back(); };
 	inline void removeOutputNode() { outputNodes.pop_back(); };
@@ -47,6 +47,8 @@ private:
 	std::list<Node> inputNodes;
 	std::list<Node> outputNodes;
 	bool recursive = false;
+
+	Activation dummyActivation;
 
 	friend class ANeuralNetworkDisplayHUD;
 };

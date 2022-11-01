@@ -26,7 +26,13 @@ NeatAlgoGen::NeatAlgoGen(unsigned int _populationSize, unsigned int _input, unsi
 
 NeatAlgoGen::NeatAlgoGen()
 {
-	neatParam.activationFunctions.push_back(sigmoidActivation);
+	Activation* test = new sigmoidActivation();
+
+	GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%f"), test->activate(1)));
+
+	delete test;
+
+	/*neatParam.activationFunctions.push_back(sigmoidActivation());
 
 	populationSize = 3;
 	input = 3;
@@ -42,7 +48,7 @@ NeatAlgoGen::NeatAlgoGen()
 		Genome* genome = &genomes.back();
 		genome->mutateLink(allConnections);
 		genome->mutateNode(allConnections, neatParam.activationFunctions[0]);
-		/*genome->mutateLink(allConnections);
+		genome->mutateLink(allConnections);
 		genome->mutateNode(allConnections, neatParam.activationFunctions[0]);
 		genome->mutateLink(allConnections);
 		genome->mutateNode(allConnections, neatParam.activationFunctions[0]);
@@ -57,7 +63,7 @@ NeatAlgoGen::NeatAlgoGen()
 		genome->mutateWeightRandom(2);
 		genome->mutateWeightShift(0.5);
 		genome->mutateLinkToggle();
-		genome->mutateLinkToggle();*/
+		genome->mutateLinkToggle();
 	}
 
 	genomes[2].crossover(genomes[0], genomes[1]);
@@ -76,7 +82,7 @@ NeatAlgoGen::NeatAlgoGen()
 	outputNet.push_back(0);
 	outputNet.push_back(0);
 
-	networks[0].compute(inputNet, outputNet);
+	networks[0].compute(inputNet, outputNet);*/
 }
 
 NeatAlgoGen::~NeatAlgoGen()

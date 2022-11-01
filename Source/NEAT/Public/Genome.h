@@ -27,15 +27,15 @@ class CPPN_Neat;
 class NEAT_API Genome
 {
 public:
-	Genome(unsigned int input, unsigned int output, std::vector<ActivationFunction> activationFunctions);
+	Genome(unsigned int input, unsigned int output, std::vector<Activation*> activationFunctions);
 	~Genome();
 
 	bool mutateLink(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections);
-	bool mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, ActivationFunction activationFunction);
+	bool mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, Activation* activationFunction);
 	void mutateWeightShift(float weightShiftStrength);
 	void mutateWeightRandom(float weightRandomStrength);
 	void mutateLinkToggle();
-	void mutateActivation(ActivationFunction activationFunction);
+	void mutateActivation(Activation* activationFunction);
 
 	inline std::unordered_map<unsigned int, GeneConnection>* const getConnections() { return &connections; };
 	inline std::deque<GeneNode>* const getNodes() { return &nodes; };

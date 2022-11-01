@@ -12,7 +12,7 @@
 class NEAT_API Node
 {
 public:
-	Node(ActivationFunction activation);
+	Node(Activation* activation);
 	~Node();
 
 	void wipeConnections();
@@ -34,7 +34,7 @@ public:
 
 private:
 
-	ActivationFunction activation;
+	Activation* activation;
 	std::map<Node*, float> previousNodes;
 	std::map<Node*, float> recursionNodes;
 	bool computed;

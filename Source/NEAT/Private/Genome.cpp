@@ -4,13 +4,13 @@
 #include "Genome.h"
 #include <stack>
 
-Genome::Genome(unsigned int _input, unsigned int output, std::vector<ActivationFunction> activationFunctions)
+Genome::Genome(unsigned int _input, unsigned int output, std::vector<Activation*> activationFunctions)
 {
     input = _input;
 
     for (unsigned int i = 0; i < input; i++)
     {
-        nodes.push_back(GeneNode(NODE_TYPE::INPUT, 0));
+        nodes.push_back(GeneNode(NODE_TYPE::INPUT, activationFunctions[0]));
     }
  
     for (unsigned int i = 0; i < output; i++)
@@ -94,7 +94,7 @@ bool Genome::mutateLink(std::unordered_map<std::pair<unsigned int, unsigned int>
     return false;
 }
 
-bool Genome::mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, ActivationFunction activationFunction)
+bool Genome::mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, Activation* activationFunction)
 {
     unsigned int i = 0;
     bool foundMutation = false;
@@ -203,7 +203,7 @@ void Genome::mutateLinkToggle()
     connection->enabled = !connection->enabled;
 }
 
-void Genome::mutateActivation(ActivationFunction activationFunction)
+void Genome::mutateActivation(Activation* activationFunction)
 {
     unsigned int nodeIndex = (rand() % (nodes.size() - input)) + input;
     nodes[nodeIndex].setActivation(activationFunction);

@@ -22,7 +22,7 @@ typedef struct {
 	unsigned int cppnInput;
 	unsigned int cppnOutput;
 
-	ActivationFunction activationFunction;
+	Activation* activationFunction;
 	ThresholdFunction thresholdFunction; 
 	CppnInputFunction cppnInputFunction; 
 	WeightModifierFunction weightModifierFunction;

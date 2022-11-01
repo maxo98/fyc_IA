@@ -3,7 +3,7 @@
 
 #include "Node.h"
 
-Node::Node(ActivationFunction _activation)
+Node::Node(Activation* _activation)
 {
 	activation = _activation;
 }
@@ -55,7 +55,7 @@ float Node::compute()
 			value += nodes->first->getOldValue() * nodes->second;
 		}
 
-		value = activation(value);
+		value = activation->activate(value);
 	}
 
 	return value;

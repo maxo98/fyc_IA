@@ -17,7 +17,7 @@ typedef struct {
 	float weightShiftStrength;//Max values for weight shift and new random one 
 	float weightRandomStrength;
 	float pbMutateActivation;
-	std::vector<ActivationFunction> activationFunctions;
+	std::vector<Activation*> activationFunctions;
 
 } NeatParameters;
 

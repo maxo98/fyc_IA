@@ -3,7 +3,7 @@
 
 #include "GeneNode.h"
 
-GeneNode::GeneNode(NODE_TYPE _type, ActivationFunction _activationFunction, unsigned int _layer)
+GeneNode::GeneNode(NODE_TYPE _type, Activation* _activationFunction, unsigned int _layer)
 {
 	type = _type;
 	layer = _layer;
