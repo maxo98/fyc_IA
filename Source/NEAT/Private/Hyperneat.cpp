@@ -125,15 +125,15 @@ void Hyperneat::addLayerAndConnect(unsigned int layer, unsigned int networkIndex
 		{
 			std::vector<float> output, input;
 			std::vector<float> p1 = std::vector<float>(prevLayer->begin(), prevLayer->end());
-			input = hyperParam.cppnInputFunction(hyperParam.inputConstants, p1, p2);
+			input = hyperParam.cppnInputFunction(hyperParam.inputVariables, p1, p2);
 
 			output.resize(hyperParam.cppnOutput);
 			networks[networkIndex].compute(input, output);
 
 			//Check if we should create a connection
-			if (hyperParam.thresholdFunction(hyperParam.thresholdConstants, output, p1, p2) == true)
+			if (hyperParam.thresholdFunction(hyperParam.thresholdVariables, output, p1, p2) == true)
 			{
-				float weight = hyperParam.weightModifierFunction(hyperParam.weightConstants, output[0], p1, p2);
+				float weight = hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], p1, p2);
 				networks[networkIndex].connectNodes(layer - 1, nodeA, layer, nodeB, weight);
 			}
 
@@ -144,13 +144,13 @@ void Hyperneat::addLayerAndConnect(unsigned int layer, unsigned int networkIndex
 	}
 }
 
-std::vector<float> basicCppnInput(std::vector<float> constants, std::vector<float> p1, std::vector<float> p2)
+std::vector<float> basicCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2)
 {
 	p1.insert(p1.end(), p2.begin(), p2.end());
 	return p1;
 }
 
-std::vector<float> sqrDistCppnInput(std::vector<float> constants, std::vector<float> p1, std::vector<float> p2)
+std::vector<float> sqrDistCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2)
 {
 	p1.insert(p1.end(), p2.begin(), p2.end());
 	p1.push_back(0);
@@ -163,7 +163,7 @@ std::vector<float> sqrDistCppnInput(std::vector<float> constants, std::vector<fl
 	return p1;
 }
 
-std::vector<float> deltaDistCppnInput(std::vector<float> constants, std::vector<float> p1, std::vector<float> p2)
+std::vector<float> deltaDistCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2)
 {
 	p1.insert(p1.end(), p1.begin(), p1.end());
 

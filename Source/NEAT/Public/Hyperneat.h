@@ -7,13 +7,13 @@
 #include <deque>
 #include <unordered_set>
 
-typedef bool (*ThresholdFunction) (std::vector<float> constants, std::vector<float> values, const std::vector<float>& p1, const std::vector<float>& p2);
+typedef bool (*ThresholdFunction) (std::vector<void*> variables, std::vector<float> values, const std::vector<float>& p1, const std::vector<float>& p2);
 
 //Returns the values to pass in input of the CPPN
-typedef std::vector<float> (*CppnInputFunction) (std::vector<float> constants, std::vector<float> p1, std::vector<float> p2);
+typedef std::vector<float> (*CppnInputFunction) (std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2);
 
 //Returns the weight to apply to the connection
-typedef float (*WeightModifierFunction) (std::vector<float> constants, float weight, const std::vector<float>& p1, const std::vector<float>& p2);
+typedef float (*WeightModifierFunction) (std::vector<void*> variables, float weight, const std::vector<float>& p1, const std::vector<float>& p2);
 
 //Hyperneat configuration
 typedef struct {
@@ -28,9 +28,9 @@ typedef struct {
 	WeightModifierFunction weightModifierFunction;
 
 	//Optionnal
-	std::vector<float> thresholdConstants;
-	std::vector<float> inputConstants;
-	std::vector<float> weightConstants;
+	std::vector<void*> thresholdVariables;
+	std::vector<void*> inputVariables;
+	std::vector<void*> weightVariables;
 
 } HyperneatParameters;
 
@@ -96,29 +96,29 @@ protected:
 };
 
 //CPPN Input Functions
-std::vector<float> basicCppnInput(std::vector<float> constants, std::vector<float> p1, std::vector<float> p2);
-std::vector<float> sqrDistCppnInput(std::vector<float> constants, std::vector<float> p1, std::vector<float> p2);
-std::vector<float> deltaDistCppnInput(std::vector<float> constants, std::vector<float> p1, std::vector<float> p2);
+std::vector<float> basicCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2);
+std::vector<float> sqrDistCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2);
+std::vector<float> deltaDistCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2);
 
 //Threshold functions
-inline bool fixedThreshold(std::vector<float> constants, std::vector<float> values, const std::vector<float>& p1, const std::vector<float>& p2)
+inline bool fixedThreshold(std::vector<void*> variables, std::vector<float> values, const std::vector<float>& p1, const std::vector<float>& p2)
 {
-	return (constants[0] < abs(values[0]));
+	return (*(float*)variables[0] < abs(values[0]));
 }
 
 
-inline bool leoThreshold(std::vector<float> constants, std::vector<float> values, const std::vector<float>& p1, const std::vector<float>& p2)
+inline bool leoThreshold(std::vector<void*> variables, std::vector<float> values, const std::vector<float>& p1, const std::vector<float>& p2)
 {
-	return (constants[0] < abs(values[1]));
+	return (*(float*)variables[0] < abs(values[1]));
 }
 
 //Weight modifiers functions
-inline float noChangeWeight(std::vector<float> constants, float weight, const std::vector<float>& p1, const std::vector<float>& p2)
+inline float noChangeWeight(std::vector<void*> variables, float weight, const std::vector<float>& p1, const std::vector<float>& p2)
 {
 	return weight;
 }
 
-inline float proportionnalWeight (std::vector<float> constants, float weight, const std::vector<float>& p1, const std::vector<float>& p2)
+inline float proportionnalWeight (std::vector<void*> variables, float weight, const std::vector<float>& p1, const std::vector<float>& p2)
 {
-	return constants[0] * weight;
+	return *(float*)variables[0] * weight;
 }

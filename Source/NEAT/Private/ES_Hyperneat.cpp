@@ -92,10 +92,10 @@ void ES_Hyperneat::divAndInit(int index, const std::vector<float>& pos, Substrat
 			//Create input vector
 			if (outgoing == true)
 			{
-				input = hyperParam.cppnInputFunction(hyperParam.inputConstants, pos, point->pos);
+				input = hyperParam.cppnInputFunction(hyperParam.inputVariables, pos, point->pos);
 			}
 			else {
-				input = hyperParam.cppnInputFunction(hyperParam.inputConstants, point->pos, pos);
+				input = hyperParam.cppnInputFunction(hyperParam.inputVariables, point->pos, pos);
 			}
 
 			//Compute
@@ -114,9 +114,9 @@ void ES_Hyperneat::divAndInit(int index, const std::vector<float>& pos, Substrat
 				p2 = &pos;
 			}
 
-			point->weight = hyperParam.weightModifierFunction(hyperParam.weightConstants, output[0], *p1, *p2);
+			point->weight = hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], *p1, *p2);
 
-			if (hyperParam.thresholdFunction(hyperParam.thresholdConstants, output, *p1, *p2) == true)
+			if (hyperParam.thresholdFunction(hyperParam.thresholdVariables, output, *p1, *p2) == true)
 			{
 				nActive++;
 			}
@@ -182,18 +182,18 @@ void ES_Hyperneat::prunAndExtract(int index, const std::vector<float>& pos, Subs
 				}
 				//End Debug critical part
 				
-				input = hyperParam.cppnInputFunction(hyperParam.inputConstants, *p1, *p2);
+				input = hyperParam.cppnInputFunction(hyperParam.inputVariables, *p1, *p2);
 				cppns.getNeuralNetwork(index)->compute(input, output);
 
-				valueA = hyperParam.weightModifierFunction(hyperParam.weightConstants, output[0], *p1, *p2);
+				valueA = hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], *p1, *p2);
 
 				posValue = leaf->pos;
 				posValue[i] += leaf->width;
 
-				input = hyperParam.cppnInputFunction(hyperParam.inputConstants, *p1, *p2);
+				input = hyperParam.cppnInputFunction(hyperParam.inputVariables, *p1, *p2);
 				cppns.getNeuralNetwork(index)->compute(input, output);
 
-				valueB = hyperParam.weightModifierFunction(hyperParam.weightConstants, output[0], *p1, *p2);
+				valueB = hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], *p1, *p2);
 
 				value = std::max(value, std::min(valueA, valueB));
 			}
@@ -203,10 +203,10 @@ void ES_Hyperneat::prunAndExtract(int index, const std::vector<float>& pos, Subs
 				//Create new connection
 				posValue = leaf->pos;
 
-				input = hyperParam.cppnInputFunction(hyperParam.inputConstants, *p1, *p2);
+				input = hyperParam.cppnInputFunction(hyperParam.inputVariables, *p1, *p2);
 				cppns.getNeuralNetwork(index)->compute(input, output);
 
-				connections.emplace(*p1, *p2, hyperParam.weightModifierFunction(hyperParam.weightConstants, output[0], *p1, *p2));
+				connections.emplace(*p1, *p2, hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], *p1, *p2));
 			}
 		}
 	}
@@ -373,9 +373,9 @@ void ES_Hyperneat::generateSubstrate()
 		for (std::unordered_set<Connection, HyperConnectionHash, HyperConnectionEqual>::iterator itConn = connections.begin(); itConn != connections.end(); ++itConn)
 		{
 			std::vector<float> input, output;
-			input = hyperParam.cppnInputFunction(hyperParam.inputConstants, itConn->pos1, itConn->pos2);
+			input = hyperParam.cppnInputFunction(hyperParam.inputVariables, itConn->pos1, itConn->pos2);
 			cppns.getNeuralNetwork(index)->compute(input, output);
-			networks[index].connectNodes(nodesPos[itConn->pos1], nodesPos[itConn->pos2], hyperParam.weightModifierFunction(hyperParam.weightConstants, output[0], itConn->pos1, itConn->pos2));
+			networks[index].connectNodes(nodesPos[itConn->pos1], nodesPos[itConn->pos2], hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], itConn->pos1, itConn->pos2));
 		}
 	}
 }
