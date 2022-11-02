@@ -16,4 +16,6 @@ public:
 	~CPPN_Neat();
 
 	virtual void mutate(Genome& genome);
+
+	virtual float distance(Genome& genomeA, Genome& genomeB);
 };

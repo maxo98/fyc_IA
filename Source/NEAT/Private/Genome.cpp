@@ -4,7 +4,7 @@
 #include "Genome.h"
 #include <stack>
 
-Genome::Genome(unsigned int _input, unsigned int output, std::vector<Activation*> activationFunctions)
+Genome::Genome(unsigned int _input, unsigned int output, std::vector<Activation*> activationFunctions, unsigned int* _score)
 {
     input = _input;
 
@@ -19,6 +19,8 @@ Genome::Genome(unsigned int _input, unsigned int output, std::vector<Activation*
 
         nodes.push_back(GeneNode(NODE_TYPE::OUTPUT, activationFunctions[activationIndex], 999999));
     }
+
+    score = _score;
 }
 
 Genome::~Genome()
@@ -228,13 +230,13 @@ void Genome::crossover(Genome& parentA, Genome& parentB)
     }
 
     //Insert connections of fittest parent (aka parentA)
-    std::unordered_map<unsigned int, GeneConnection>* parentAConnections = parentA.getConnections();
-    std::unordered_map<unsigned int, GeneConnection>* parentBConnections = parentB.getConnections();
+    std::map<unsigned int, GeneConnection>* parentAConnections = parentA.getConnections();
+    std::map<unsigned int, GeneConnection>* parentBConnections = parentB.getConnections();
     
 
-    for (std::unordered_map<unsigned int, GeneConnection>::iterator itA = (*parentAConnections).begin(); itA != (*parentAConnections).end(); ++itA)
+    for (std::map<unsigned int, GeneConnection>::iterator itA = (*parentAConnections).begin(); itA != (*parentAConnections).end(); ++itA)
     {
-        std::unordered_map<unsigned int, GeneConnection>::iterator found = parentBConnections->find(itA->first);
+        std::map<unsigned int, GeneConnection>::iterator found = parentBConnections->find(itA->first);
 
         //If both parent have the same gene pick one randomly
         if (found != parentBConnections->end())

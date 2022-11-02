@@ -19,7 +19,18 @@ typedef struct {
 	float pbMutateActivation;
 	std::vector<Activation*> activationFunctions;
 
+	float C1, C2, C3, C4;//C4 is for CPPN-Neat
+	float speciationDistance;
+	
+	bool bestHigh;
+
+	float survivors;
+
 } NeatParameters;
+
+inline bool inSpeciesSortWeakOrder(Genome* i, Genome* j) { return (i->getScore() < j->getScore()); };
+
+inline bool inSpeciesSortStrongOrder(Genome* i, Genome* j) { return (i->getScore() > j->getScore()); };
 
 /**
  * 
@@ -31,19 +42,31 @@ public:
 	NeatAlgoGen(unsigned int _populationSize, unsigned int _input, unsigned int _output, NeatParameters _neatParam);
 	~NeatAlgoGen();
 
-	virtual void mutate(Genome& genome);
-
-	void generateNetworks();
-
 	inline NeuralNetwork* getNeuralNetwork(int i) { return &networks[i]; };
 	inline int getPopulationSize() { return networks.size(); };
+
+	virtual float distance(Genome& genomeA, Genome& genomeB);
+
+	void evolve();
+	void genSpecies();
+	void kill();
+	void removeExtinctSpecies();
+	void reproduce();
+	virtual void mutate(Genome& genome);
+	void generateNetworks();
+
+	void breed(Genome* child, std::deque<Genome*>* currentSpecies);
+	void pick(std::deque<Genome*>* currentSpecies, Genome* parentA, Genome* parentB);
 
 	friend class ANeuralNetworkDisplayHUD;
 
 protected:
 	std::vector<NeuralNetwork> networks;
-	std::vector<Genome> genomes;
+	std::vector <Genome> genomes;
+	std::vector < unsigned int > scores;
 	std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int> allConnections;//Innovation number starts at 0
 	unsigned int populationSize, input, output;
 	NeatParameters neatParam;
+	std::list<std::deque<Genome*>> species;//First genome of the vector is used as the representative of the species
+	std::list<unsigned int> speciesScore;
 };

@@ -109,3 +109,28 @@ void CPPN_Neat::mutate(Genome& genome)
 		unsigned int index = rand() % neatParam.activationFunctions.size();
 	}
 }
+
+float CPPN_Neat::distance(Genome& genomeA, Genome& genomeB)
+{
+	const std::deque<GeneNode>* nodesA = genomeA.getNodes();
+	const std::deque<GeneNode>* nodesB = genomeB.getNodes();
+
+	int count = 0;
+
+	for (int i = 0; i < nodesA->size() && i < nodesB->size(); i++)
+	{
+		if ((*nodesA)[0].getActivation()->getId() != (*nodesA)[0].getActivation()->getId())
+		{
+			count++;
+		}
+	}
+
+	int N = std::min(nodesA->size(), nodesB->size());
+
+	if (N < 20)
+	{
+		N = 1;
+	}
+
+	return NeatAlgoGen::distance(genomeA, genomeB) + neatParam.C4 * count / N;
+}

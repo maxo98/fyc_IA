@@ -120,6 +120,6 @@ class jigsawActivation : public Activation {
 public:
 	virtual float activate(float x) const { return x - floor(x); };
 
-	inline virtual std::string getId() { return "jigsaw"; };
+	inline virtual std::string getId() const { return "jigsaw"; };
 };
 

@@ -6,6 +6,7 @@
 #include "GeneConnection.h"
 #include "GeneNode.h"
 #include <deque>
+#include <map>
 #include <unordered_map>
 
 //Needed for unordered map
@@ -27,7 +28,7 @@ class CPPN_Neat;
 class NEAT_API Genome
 {
 public:
-	Genome(unsigned int input, unsigned int output, std::vector<Activation*> activationFunctions);
+	Genome(unsigned int input, unsigned int output, std::vector<Activation*> activationFunctions, unsigned int* _score);
 	~Genome();
 
 	bool mutateLink(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections);
@@ -37,8 +38,12 @@ public:
 	void mutateLinkToggle();
 	void mutateActivation(Activation* activationFunction);
 
-	inline std::unordered_map<unsigned int, GeneConnection>* const getConnections() { return &connections; };
+	inline std::map<unsigned int, GeneConnection>* const getConnections() { return &connections; };
 	inline std::deque<GeneNode>* const getNodes() { return &nodes; };
+	inline unsigned int getScore() { return *score; };
+	inline void setInSpecies(bool value) { inSpecies = value; };
+	inline bool getInSpecies() { return inSpecies; };
+
 
 	//Parent A should be the fittest
 	void crossover(Genome& parentA, Genome& parentB);
@@ -52,7 +57,9 @@ private:
 
 	unsigned int input;
 
-	std::unordered_map<unsigned int, GeneConnection> connections;
+	std::map<unsigned int, GeneConnection> connections;
 	std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int> nodesToConnection;//From a pair of nodes to innovation number of connection
 	std::deque<GeneNode> nodes;
+	unsigned int* score;
+	bool inSpecies = false;
 };

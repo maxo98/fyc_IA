@@ -24,7 +24,7 @@ public:
 	inline NODE_TYPE getType() { return type; };
 	inline unsigned int getLayer() { return layer; };
 	inline void setActivation(Activation* _activationFunction) { activationFunction = _activationFunction; };
-	inline Activation* getActivation() { return activationFunction; };
+	inline Activation* const getActivation() const { return activationFunction; };
 
 	friend class Genome;
 

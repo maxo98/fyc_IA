@@ -17,10 +17,10 @@ public:
 	GeneConnection(unsigned int _innovation, unsigned int _nodeA, unsigned int _nodeB);
 	~GeneConnection();
 
-	inline unsigned int getNodeA() { return nodeA; };
-	inline unsigned int getNodeB() { return nodeB; };
-	inline float getWeight() { return weight; };
-	inline bool isEnabled() { return enabled; };
+	inline unsigned int getNodeA() const { return nodeA; };
+	inline unsigned int getNodeB() const { return nodeB; };
+	inline float getWeight() const { return weight; };
+	inline bool isEnabled() const { return enabled; };
 
 	friend class Genome;
 	friend class CPPN_Neat;
