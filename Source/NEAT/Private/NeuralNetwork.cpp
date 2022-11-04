@@ -232,6 +232,8 @@ Node* NeuralNetwork::getNodeFromLayer(std::list<Node>& layer, unsigned int node)
 		std::list<Node>::iterator it;
 		for (it = layer.begin(); it != layer.end() && i != node; ++it, ++i);
 
+		if (it == layer.end()) return nullptr;
+
 		return &*it;
 	}
 	else {
@@ -243,7 +245,7 @@ Node* NeuralNetwork::getNodeFromLayer(std::list<Node>& layer, unsigned int node)
 
 void NeuralNetwork::compute(std::vector<float>& inputs, std::vector<float>& outputs)
 {
-	if (inputs.size() >= inputNodes.size())
+	/*if (inputs.size() >= inputNodes.size())
 	{
 		//Reset the hidden nodes
 		for (std::list<std::list<Node>>::iterator it = hiddenNodes.begin(); it != hiddenNodes.end(); ++it)
@@ -270,12 +272,14 @@ void NeuralNetwork::compute(std::vector<float>& inputs, std::vector<float>& outp
 			if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%.3f"), it->compute()));
 			
 		}
-	}
+	}*/
 }
 
 void NeuralNetwork::clear()
 {
+	if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("Start clear")));
 	hiddenNodes.clear();
 	inputNodes.clear();
 	outputNodes.clear();
+	if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("End clear")));
 }

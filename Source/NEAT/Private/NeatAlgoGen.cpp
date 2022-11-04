@@ -3,9 +3,12 @@
 
 #include "NeatAlgoGen.h"
 #include <algorithm>
+#include <fstream>
 
 NeatAlgoGen::NeatAlgoGen(unsigned int _populationSize, unsigned int _input, unsigned int _output, NeatParameters _neatParam)
 {
+	if (_neatParam.activationFunctions.size() == 0) return;//Avoid Unreal crash, should probably put a debug message
+
 	populationSize = _populationSize;
 	input = _input;
 	output = _output;
@@ -24,16 +27,12 @@ NeatAlgoGen::NeatAlgoGen(unsigned int _populationSize, unsigned int _input, unsi
 		genome->mutateLink(allConnections);//Minimum structure
 		genome->mutateWeightRandom(neatParam.pbWeightRandom);
 	}
+
+	generateNetworks();
 }
 
 NeatAlgoGen::NeatAlgoGen()
 {
-	Activation* test = new sigmoidActivation();
-
-	if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%f"), test->activate(1)));
-
-	delete test;
-
 	//Outdated
 	/*neatParam.activationFunctions.push_back(sigmoidActivation());
 
@@ -90,6 +89,10 @@ NeatAlgoGen::NeatAlgoGen()
 
 NeatAlgoGen::~NeatAlgoGen()
 {
+	for (int i = 0; i < neatParam.activationFunctions.size(); i++)
+	{
+		delete neatParam.activationFunctions[i];
+	}
 }
 
 void NeatAlgoGen::mutate(Genome& genome)
@@ -236,7 +239,7 @@ void NeatAlgoGen::genSpecies()
 	}
 
 	std::list<std::deque<Genome*>>::iterator itSpe = species.begin();
-	std::list<unsigned int>::iterator itScore = speciesScore.begin();
+	std::list<float>::iterator itScore = speciesScore.begin();
 
 	for (; itSpe != species.end(); ++itSpe, ++itScore)
 	{
@@ -277,7 +280,7 @@ void NeatAlgoGen::kill()
 void NeatAlgoGen::removeExtinctSpecies() 
 {
 	std::list<std::deque<Genome*>>::iterator itSpe = species.begin();
-	std::list<unsigned int>::iterator itScore = speciesScore.begin();
+	std::list<float>::iterator itScore = speciesScore.begin();
 
 	for (; itSpe != species.end(); ++itSpe, ++itScore)
 	{
@@ -294,9 +297,9 @@ void NeatAlgoGen::removeExtinctSpecies()
 void NeatAlgoGen::reproduce()
 {
 	float totalScore = 0;
-	std::list<unsigned int> inverseScores;
+	std::list<float> inverseScores;
 
-	for (std::list<unsigned int>::iterator itScore = speciesScore.begin(); itScore != speciesScore.end(); ++itScore)
+	for (std::list<float>::iterator itScore = speciesScore.begin(); itScore != speciesScore.end(); ++itScore)
 	{
 		totalScore += *itScore;
 	}
@@ -305,7 +308,7 @@ void NeatAlgoGen::reproduce()
 	{
 		float tmp = 0;
 		
-		for (std::list<unsigned int>::iterator itScore = speciesScore.begin(); itScore != speciesScore.end(); ++itScore)
+		for (std::list<float>::iterator itScore = speciesScore.begin(); itScore != speciesScore.end(); ++itScore)
 		{
 			inverseScores.push_back(totalScore - *itScore);
 			tmp += (totalScore - *itScore);
@@ -321,7 +324,7 @@ void NeatAlgoGen::reproduce()
 			float r = rand() % (int)totalScore;
 			float score = 0;
 
-			std::list<unsigned int>::iterator itScore;
+			std::list<float>::iterator itScore;
 
 			if (neatParam.bestHigh == true)
 			{
@@ -507,3 +510,80 @@ float NeatAlgoGen::distance(Genome& genomeA, Genome& genomeB)
 
 	return neatParam.C1 * disjoint / N + neatParam.C2 * excess / N + neatParam.C3 * weight_diff;
 }
+
+void NeatAlgoGen::setScore(std::vector < float > newScores)
+{
+	if (newScores.size() != scores.size())
+	{
+		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "New score size different from current score size, aborting.");
+
+		return;
+	}
+
+	unsigned int bestIndex = 0;
+	unsigned int bestScore = newScores[0];
+
+	for (int i = 1; i < newScores.size(); i++)
+	{
+		scores[i] = newScores[i];
+
+		if ((neatParam.bestHigh == true && newScores[i] > bestScore) || (neatParam.bestHigh == false && newScores[i] < bestScore))
+		{
+			bestScore = newScores[i];
+			bestIndex = i;
+		}
+	}
+
+	if(neatParam.saveHistory == true) history.push_back(bestScore);
+
+	goat = genomes[bestIndex];
+}
+
+bool NeatAlgoGen::saveHistory()
+{
+	if (neatParam.saveHistory == false)
+	{
+		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "History not saved, aborting.");
+
+		return false;
+	}
+
+	int n = 1;
+	std::ifstream f;
+
+	do {
+		if (f.is_open() == true) f.close();
+
+		f = std::ifstream(neatParam.fileSave + "_" + std::to_string(n) + ".csv");
+		n++;
+	}while(f.good() && n < 100);
+
+	f.close();
+
+	if (n >= 100)
+	{
+		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Could not find path, or files already exist.");
+
+		return false;
+	}
+
+	n--;
+
+	std::fstream csvFile(neatParam.fileSave + "_" + std::to_string(n) + ".csv");
+
+	if (csvFile.is_open() == false)
+	{
+		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Fstream failed to create file.");
+
+		return false;
+	}
+
+	for (std::list<float>::iterator it = history.begin(); it != history.end(); ++it)
+	{
+		csvFile << *it << std::endl;
+	}
+
+	csvFile.close();
+	return true;
+}
+

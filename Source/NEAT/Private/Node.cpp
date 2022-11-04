@@ -55,7 +55,15 @@ float Node::compute()
 			value += nodes->first->getOldValue() * nodes->second;
 		}
 
-		value = activation->activate(value);
+		if (activation == nullptr)
+		{
+			if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "Activation function is nullptr.");
+
+			return 0;
+		}
+
+		//value = activation->activate(value);
+		computed = true;
 	}
 
 	return value;

@@ -76,6 +76,10 @@ CPPN_Neat::CPPN_Neat(unsigned int _populationSize, unsigned int _input, unsigned
 
 CPPN_Neat::~CPPN_Neat()
 {
+	for (int i = 0; i < neatParam.activationFunctions.size(); i++)
+	{
+		delete neatParam.activationFunctions[i];
+	}
 }
 
 void CPPN_Neat::mutate(Genome& genome)

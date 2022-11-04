@@ -17,6 +17,8 @@ typedef struct {
 	float weightShiftStrength;//Max values for weight shift and new random one 
 	float weightRandomStrength;
 	float pbMutateActivation;
+	float survivors;
+
 	std::vector<Activation*> activationFunctions;
 
 	float C1, C2, C3, C4;//C4 is for CPPN-Neat
@@ -24,7 +26,8 @@ typedef struct {
 	
 	bool bestHigh;
 
-	float survivors;
+	std::string fileSave;//Without extension type file
+	bool saveHistory;
 
 } NeatParameters;
 
@@ -38,14 +41,12 @@ inline bool inSpeciesSortStrongOrder(Genome* i, Genome* j) { return (i->getScore
 class NEAT_API NeatAlgoGen
 {
 public:
-	NeatAlgoGen();//Just for testing purposes
+	NeatAlgoGen();
 	NeatAlgoGen(unsigned int _populationSize, unsigned int _input, unsigned int _output, NeatParameters _neatParam);
 	~NeatAlgoGen();
 
 	inline NeuralNetwork* getNeuralNetwork(int i) { return &networks[i]; };
 	inline int getPopulationSize() { return networks.size(); };
-
-	virtual float distance(Genome& genomeA, Genome& genomeB);
 
 	void evolve();
 	void genSpecies();
@@ -57,16 +58,23 @@ public:
 
 	void breed(Genome* child, std::deque<Genome*>* currentSpecies);
 	void pick(std::deque<Genome*>* currentSpecies, Genome* parentA, Genome* parentB);
+	virtual float distance(Genome& genomeA, Genome& genomeB);
+
+	void setScore(std::vector < float > newScores);
+	bool saveHistory();
 
 	friend class ANeuralNetworkDisplayHUD;
 
 protected:
 	std::vector<NeuralNetwork> networks;
 	std::vector <Genome> genomes;
-	std::vector < unsigned int > scores;
+	std::vector < float > scores;
 	std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int> allConnections;//Innovation number starts at 0
 	unsigned int populationSize, input, output;
 	NeatParameters neatParam;
 	std::list<std::deque<Genome*>> species;//First genome of the vector is used as the representative of the species
-	std::list<unsigned int> speciesScore;
+	std::list<float> speciesScore;
+
+	std::list<float> history;
+	Genome goat;
 };

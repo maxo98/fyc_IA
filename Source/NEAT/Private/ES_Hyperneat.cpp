@@ -13,6 +13,7 @@ ES_Hyperneat::ES_Hyperneat(unsigned int _populationSize, NeatParameters _neatPar
 
 ES_Hyperneat::~ES_Hyperneat()
 {
+	delete hyperParam.activationFunction;
 }
 
 ES_Hyperneat::SubstrateTree::SubstrateTree(std::vector<float> _pos, float _width, float _level)

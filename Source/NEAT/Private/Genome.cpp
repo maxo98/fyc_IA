@@ -4,7 +4,12 @@
 #include "Genome.h"
 #include <stack>
 
-Genome::Genome(unsigned int _input, unsigned int output, std::vector<Activation*> activationFunctions, unsigned int* _score)
+Genome::Genome()
+{
+
+}
+
+Genome::Genome(unsigned int _input, unsigned int output, std::vector<Activation*> activationFunctions, float* _score)
 {
     input = _input;
 

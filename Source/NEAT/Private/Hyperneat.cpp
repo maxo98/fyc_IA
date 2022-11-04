@@ -14,6 +14,7 @@ Hyperneat::Hyperneat(unsigned int _populationSize, NeatParameters _neatParam, Hy
 
 Hyperneat::~Hyperneat()
 {
+	delete hyperParam.activationFunction;
 }
 
 void Hyperneat::addInput(std::vector<float> node)

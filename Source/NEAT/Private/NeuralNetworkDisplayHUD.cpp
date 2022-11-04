@@ -5,9 +5,9 @@
 
 void ANeuralNetworkDisplayHUD::drawHUD()
 {
-	drawNetwork(&neat.networks[0], 0, 0); 
-	drawNetwork(&neat.networks[1], 0, 200);
-	drawNetwork(&neat.networks[2], 500, 0);
+	//drawNetwork(&neat.networks[0], 0, 0); 
+	//drawNetwork(&neat.networks[1], 0, 200);
+	//drawNetwork(&neat.networks[2], 500, 0);
 }
 
 void ANeuralNetworkDisplayHUD::drawNetwork(NeuralNetwork* network, float xOffset, float yOffset)

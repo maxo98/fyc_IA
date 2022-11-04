@@ -1,0 +1,36 @@
+﻿  NeuroEvolution.cpp
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\NeuroEvolution.cpp(1,1): warning C4819: Le fichier contient un caractère qui ne peut pas être représenté dans la page de codes actuelle (932). Enregistrez le fichier au format Unicode pour éviter de perdre des données
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\Activation.h(49,52): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\Activation.h(106,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(21,37): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(23,38): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(24,39): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\NeatAlgoGen.h(51,33): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\NeuroEvolution.cpp(9,12): warning C4244: 'argument' : conversion de 'time_t' en 'unsigned int', perte possible de données
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\NeuroEvolution.cpp(15,31): warning C4305: '=' : troncation de 'double' à 'float'
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\NeuroEvolution.cpp(16,30): warning C4305: '=' : troncation de 'double' à 'float'
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\NeuroEvolution.cpp(17,32): warning C4305: '=' : troncation de 'double' à 'float'
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\NeuroEvolution.cpp(18,33): warning C4305: '=' : troncation de 'double' à 'float'
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\NeuroEvolution.cpp(19,31): warning C4305: '=' : troncation de 'double' à 'float'
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\NeuroEvolution.cpp(27,27): warning C4305: '=' : troncation de 'double' à 'float'
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\NeuroEvolution.cpp(58,20): warning C4244: '=' : conversion de 'double' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\NeuroEvolution.cpp(59,20): warning C4244: '=' : conversion de 'double' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\NeuroEvolution.cpp(74,47): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+E:\Cedric\ESGI\NeuroEvolution\NeuroEvolution\NeuroEvolution.cpp(79,52): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+  NeuroEvolution.vcxproj -> E:\Cedric\ESGI\NeuroEvolution\x64\Debug\NeuroEvolution.exe
