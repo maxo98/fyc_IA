@@ -347,35 +347,29 @@ void NeatAlgoGen::evolve()
 	}
 
 	int currentWorkload = floor(workload);
-	float restworkload = fmod(workload, 1.0f);
-
-	int counter = 0;
+	float workloadFrac = fmod(workload, 1.0f);
+	float restWorkload = workloadFrac;
 
 	while (cpus > threads.size()+1)
 	{
 
-		threads.push_back(std::thread(&NeatAlgoGen::reproduce, this, currentWorkload + floor(restworkload), itSortedSpecies, newBornIndex, std::ref(sortedSpecies), newPop));
+		threads.push_back(std::thread(&NeatAlgoGen::reproduce, this, currentWorkload + floor(restWorkload), itSortedSpecies, newBornIndex, std::ref(sortedSpecies), newPop));
 
-		counter += currentWorkload + floor(restworkload);
-
-		for (int i = 0; i < currentWorkload + floor(restworkload); i++)
+		for (int i = 0; i < currentWorkload + floor(restWorkload); i++)
 		{
 			newBornIndex += (*itSortedSpecies)->getExpectedOffspring();
 			++itSortedSpecies;
 		}
 
-		restworkload -= floor(restworkload);
+		restWorkload -= floor(restWorkload);
+		restWorkload += workloadFrac;
 	}
 
-	while (restworkload > 0)
+	while (restWorkload > 0)
 	{
-		restworkload--;
+		restWorkload--;
 		currentWorkload++;
 	}
-
-	counter += currentWorkload;
-
-	std::cout << counter << " = " << totalWorkload << std::endl;
 
 	reproduce(currentWorkload, itSortedSpecies, newBornIndex, sortedSpecies, newPop);
 

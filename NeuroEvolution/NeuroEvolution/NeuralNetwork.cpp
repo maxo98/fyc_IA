@@ -3,6 +3,7 @@
 
 #include "NeuralNetwork.h"
 #include <limits>
+#include <thread>
 
 NeuralNetwork::NeuralNetwork()
 {
@@ -266,14 +267,16 @@ void NeuralNetwork::compute(std::vector<float>& inputs, std::vector<float>& outp
 			it->setValue(inputs[i]);
 		}
 
-		//Compute the result
-		for (std::list<Node>::iterator it = outputNodes.begin(); it != outputNodes.end(); ++it)
+		//Parallel computing hidden nodes value
+		for (std::list<std::list<Node>>::iterator it = hiddenNodes.begin(); it != hiddenNodes.end(); ++it)
 		{
-			it->next();
-			outputs.push_back(it->compute());
+			std::list<Node>::iterator itNode = it->begin();
 
-			//std::cout << it->compute() << std::endl;	
+			splitLayerComputing(itNode, it->size());
 		}
+
+		//Compute the result
+		splitLayerComputing(outputNodes.begin(), outputNodes.size(), true, &outputs);
 	}
 }
 
@@ -282,4 +285,63 @@ void NeuralNetwork::clear()
 	hiddenNodes.clear();
 	inputNodes.clear();
 	outputNodes.clear();
+}
+
+void NeuralNetwork::splitLayerComputing(std::list<Node>::iterator it, int size, bool output, std::vector<float>* outputs)
+{
+	std::vector<std::thread> threads;
+	unsigned int cpus = std::thread::hardware_concurrency();
+
+	float totalWorkload = size;
+	float workload = totalWorkload / cpus;
+	float restWorkload = 0;
+	int currentWorkload = totalWorkload;
+
+	if (totalWorkload > 10)
+	{
+		while (workload < 1)
+		{
+			cpus--;
+			workload = totalWorkload / cpus;
+		}
+
+		int currentWorkload = floor(workload);
+		float workloadFrac = fmod(workload, 1.0f);
+		restWorkload = workloadFrac;
+
+		while (cpus > threads.size() + 1)
+		{
+			threads.push_back(std::thread(&NeuralNetwork::concurrentComputing, this, currentWorkload + floor(restWorkload), it, output, outputs));
+
+			for (int i = 0; i < currentWorkload + floor(restWorkload); i++)
+			{
+				++it;
+			}
+
+			restWorkload -= floor(restWorkload);
+			restWorkload += workloadFrac;
+		}
+
+		while (restWorkload > 0)
+		{
+			restWorkload--;
+			currentWorkload++;
+		}
+	}
+
+	concurrentComputing(currentWorkload + floor(restWorkload), it, output, outputs);
+}
+
+void NeuralNetwork::concurrentComputing(int workload, std::list<Node>::iterator it, bool output, std::vector<float>* outputs)
+{
+	for (int i = 0; i < workload; ++i, ++it)
+	{
+		if (output == false)
+		{
+			it->compute();
+		}else{
+			it->next();
+			outputs->push_back(it->compute());
+		}
+	}
 }

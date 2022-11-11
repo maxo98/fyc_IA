@@ -140,7 +140,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Activation.cpp" />
-    <ClCompile Include="ConcurrentTask.cpp" />
     <ClCompile Include="CPPN_Neat.cpp" />
     <ClCompile Include="ES_Hyperneat.cpp" />
     <ClCompile Include="GeneConnection.cpp" />
@@ -155,7 +154,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Activation.h" />
-    <ClInclude Include="ConcurrentTask.h" />
     <ClInclude Include="CPPN_Neat.h" />
     <ClInclude Include="ES_Hyperneat.h" />
     <ClInclude Include="GeneConnection.h" />

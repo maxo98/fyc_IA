@@ -7,7 +7,6 @@
 #include "NeuralNetwork.h"
 #include "Species.h"
 #include "Activation.h"
-#include <mutex>
 
 typedef struct {
 	float pbMutateOnly;
