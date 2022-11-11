@@ -8,7 +8,7 @@
 
 CPPN_Neat::CPPN_Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, NeatParameters _neatParam): NeatAlgoGen(_populationSize, _input, _output, _neatParam)
 {
-	for (int i = 0; i < genomes.size(); i++)
+	for (int i = 0; i < populationSize; i++)
 	{
 		genomes[i].nodesToConnection.clear();
 		genomes[i].connections.clear();
@@ -76,6 +76,8 @@ CPPN_Neat::CPPN_Neat(unsigned int _populationSize, unsigned int _input, unsigned
 
 CPPN_Neat::~CPPN_Neat()
 {
+	delete[] genomes;
+
 	for (int i = 0; i < neatParam.activationFunctions.size(); i++)
 	{
 		delete neatParam.activationFunctions[i];
@@ -129,12 +131,5 @@ float CPPN_Neat::distance(Genome& genomeA, Genome& genomeB)
 		}
 	}
 
-	int N = std::min(nodesA->size(), nodesB->size());
-
-	if (N < 20)
-	{
-		N = 1;
-	}
-
-	return NeatAlgoGen::distance(genomeA, genomeB) + neatParam.C4 * count / N;
+	return NeatAlgoGen::distance(genomeA, genomeB) + neatParam.activationDiffCoeff * count;
 }

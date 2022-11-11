@@ -5,10 +5,12 @@
 
 #include <vector>
 #include "NeuralNetwork.h"
-#include "Genome.h"
+#include "Species.h"
 #include "Activation.h"
+#include <mutex>
 
 typedef struct {
+	float pbMutateOnly;
 	float pbMutateLink;//Probability of each mutation
 	float pbMutateNode;
 	float pbWeightShift;
@@ -17,14 +19,26 @@ typedef struct {
 	float weightShiftStrength;//Max values for weight shift and new random one 
 	float weightRandomStrength;
 	float pbMutateActivation;
-	float survivors;
+
+	float pbMateMultipoint;
+	float pbMateMultipointAvg;
+	float interspeciesMateRate;
+	float pbMateOnly;
+	
+	float killRate;
+	int dropOffAge;
+	float ageSignificance;
+	
 
 	std::vector<Activation*> activationFunctions;
 
-	float C1, C2, C3, C4;//C4 is for CPPN-Neat
+	float disjointCoeff, excessCoeff, mutDiffCoeff, activationDiffCoeff;
 	float speciationDistance;
+	float speciationDistanceMod;
+	int numSpeciesTarget;
+	bool adaptSpeciation;
 	
-	bool bestHigh;
+	bool bestHigh;//False doesn't currently work
 
 	std::string fileSave;//Without extension type file
 	bool saveHistory;
@@ -33,9 +47,27 @@ typedef struct {
 
 } NeatParameters;
 
-inline bool inSpeciesSortWeakOrder(Genome* i, Genome* j) { return (i->getScore() < j->getScore()); };
 
-inline bool inSpeciesSortStrongOrder(Genome* i, Genome* j) { return (i->getScore() > j->getScore()); };
+struct speciesSortDesc
+{
+	bool operator ()(const Species* i, const Species* j)
+	{
+		return (i->getMaxFitness() > j->getMaxFitness());
+	}
+};
+
+struct speciesSortAsc
+{
+	bool operator ()(const Species* i, const Species* j)
+	{
+		return (i->getMaxFitness() < j->getMaxFitness());
+	}
+};
+
+inline bool genomeSortDesc(Genome* i, Genome* j) { return (i->getScore() > j->getScore()); };
+
+inline bool genomeSortAsc(Genome* i, Genome* j) { return (i->getScore() < j->getScore()); };
+
 
 /**
  * 
@@ -51,15 +83,15 @@ public:
 	inline int getPopulationSize() { return networks.size(); };
 
 	void evolve();
-	void genSpecies();
+	void adjustFitness();
+	void addToSpecies(Genome* gen);
+	void reproduce(std::list<Species*>::iterator& it, std::mutex& lock, int& sharedNewBornIndex, std::list<Species*>& sortedSpecies, Genome* newPop);
+	
 	void kill();
 	void removeExtinctSpecies();
-	void reproduce();
 	virtual void mutate(Genome& genome);
 	void generateNetworks();
 
-	void breed(Genome* child, std::deque<Genome*>* currentSpecies);
-	void pick(std::deque<Genome*>* currentSpecies, int& parentA, int& parentB);
 	virtual float distance(Genome& genomeA, Genome& genomeB);
 
 	void setScore(std::vector < float > newScores);
@@ -67,16 +99,25 @@ public:
 
 	friend class ANeuralNetworkDisplayHUD;
 
+	inline float randfloat() { return rand() / RAND_MAX; }
+
+	inline int randint(int x, int y) { return rand() % (y - x + 1) + x; };
+
+	//Taken from official implementation, no idea how it works
+	float gaussRand();
+
 protected:
 	std::vector<NeuralNetwork> networks;
-	std::vector <Genome> genomes;
-	std::vector < float > scores;
+	Genome* genomes;
 	std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int> allConnections;//Innovation number starts at 0
 	unsigned int populationSize, input, output;
 	NeatParameters neatParam;
-	std::list<std::deque<Genome*>> species;//First genome of the vector is used as the representative of the species
-	std::list<float> speciesScore;
+	unsigned int highestLastChanged;
+	float lastBestScore = 0;
 
-	std::list<float> history;
+	std::vector<Species> species;
+	int generation = 0;
+
+	std::vector<float> history;
 	Genome goat;
 };

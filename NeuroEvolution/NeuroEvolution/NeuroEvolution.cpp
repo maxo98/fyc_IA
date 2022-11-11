@@ -13,18 +13,18 @@ int main()
 	neatparam.activationFunctions.push_back(new sigmoidActivation());
 
 	neatparam.pbMutateLink = 0.05;
-	neatparam.pbMutateNode = 0.1;
-	neatparam.pbWeightShift = 0.15;
-	neatparam.pbWeightRandom = 0.05;
+	neatparam.pbMutateNode = 0.03;
+	neatparam.pbWeightShift = 0.7;
+	neatparam.pbWeightRandom = 0.2;
 	neatparam.pbToggleLink = 0.05;
 	neatparam.weightShiftStrength = 2.5;
 	neatparam.weightRandomStrength = 2.5;
 
-	neatparam.C1 = 2.0;
-	neatparam.C2 = 2.0;
-	neatparam.C3 = 1.0;
-	neatparam.speciationDistance = 6.0;
-	neatparam.survivors = 0.8;
+	neatparam.disjointCoeff = 1.0;
+	neatparam.excessCoeff = 1.0;
+	neatparam.mutDiffCoeff = 0.4;
+	
+	neatparam.killRate = 0.2;
 
 	neatparam.bestHigh = true;
 
@@ -33,9 +33,24 @@ int main()
 
 	neatparam.scoreMultiplier = 1000;
 
-	int n = 3;
+	neatparam.pbMateMultipoint = 0.6;
+	neatparam.pbMateMultipointAvg = 0.4;
+	neatparam.interspeciesMateRate = 0.001;
+	neatparam.dropOffAge = 15;
+	neatparam.ageSignificance = 1.0;
+	neatparam.pbMutateOnly = 0.25;
+	neatparam.pbMateOnly = 0.2;
 
-	NeatAlgoGen neat(100, n*2+1, n, neatparam);
+	neatparam.speciationDistance = 3.0;
+	neatparam.speciationDistanceMod = 0.3;
+	neatparam.numSpeciesTarget = 4;
+	neatparam.adaptSpeciation = true;
+
+	int n = 1;
+
+	int popSize = 150;
+
+	NeatAlgoGen neat(popSize, n*2+1, n, neatparam);
 
 	std::vector<uint8_t> inputs;
 
@@ -43,20 +58,19 @@ int main()
 	{
 		inputs.push_back(i);
 	}
-
 	
-	std::vector<float> correct(100, 0), mistake(100, 0);
+	std::vector<float> correct(popSize, 0), mistake(popSize, 0);
 
 	std::cout << "start\n";
 
+	float leastMistake = 999999;
+
 	for (int i3 = 0; i3 < 100; i3++)
 	{
-		
-
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < popSize; i++)
 		{
-			correct[i] = pow(n, n);
-			mistake[i] = pow(n, n);
+			correct[i] = 0;
+			mistake[i] = 0;
 		}
 
 		for (int cpt = 0; cpt < inputs.size(); cpt++)
@@ -81,7 +95,7 @@ int main()
 
 				networkInputs[networkInputs.size() - 1] = 1;
 
-				for (int i = 0; i < 100; i++)
+				for (int i = 0; i < popSize; i++)
 				{
 					NeuralNetwork* network = neat.getNeuralNetwork(i);
 
@@ -89,44 +103,55 @@ int main()
 
 					for (int i2 = 0; i2 < networkOutputs.size(); i2++)
 					{
-						float multiplier = 0.5;
+						float multiplier = 1;
 
 						if (((result >> i2) & 1) == 1)
 						{
 							if (networkOutputs[i2] <= 0.5)
 							{
-								mistake[i]--;
+								mistake[i]++;
 								multiplier = 1;
 							}
+							else {
+								//correct[i]+=1;
+							}
 
-							correct[i] -= (1 - networkOutputs[i2]) * multiplier;
+							correct[i] += networkOutputs[i2] * multiplier;
+							//mistake[i] += (1 - networkOutputs[i2]) * multiplier;
 						}
 						else {
 							if (networkOutputs[i2] >= 0.5)
 							{
-								mistake[i]--;
+								mistake[i]++;
 								multiplier = 1;
 							}
+							else {
+								//correct[i] += 1;
+							}
 
-							correct[i] -= networkOutputs[i2] * multiplier;
+							correct[i] += (1 - networkOutputs[i2]) * multiplier;
+							//mistake[i] += (networkOutputs[i2]) * multiplier;
 						}
 					}
 				}
 			}
 		}
 
-		neat.setScore(mistake);
+		for (int i = 0; i < popSize; i++)
+		{
+			//correct[i] = pow(4 - mistake[i], 2);
+		}
 
-		float leastMistake = 0;
+		neat.setScore(correct);
 
 		for (int i = 0; i < 100; i++)
 		{
-			if (mistake[i] > leastMistake)
+			if (mistake[i] < leastMistake)
 			{
 				leastMistake = mistake[i];
 			}
 
-			if (mistake[i] == pow(n, n))
+			if (mistake[i] == 0)
 			{
 				std::cout << "success !\n";
 				neat.saveHistory();
@@ -139,7 +164,7 @@ int main()
 		neat.evolve();
 	}
 
-	//std::cout << leastMistake << std::endl;
+	std::cout << leastMistake << std::endl;
 	neat.saveHistory();
 }
 

@@ -150,6 +150,7 @@
     <ClCompile Include="NeuralNetwork.cpp" />
     <ClCompile Include="NeuroEvolution.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Species.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Activation.h" />
@@ -162,6 +163,7 @@
     <ClInclude Include="NeatAlgoGen.h" />
     <ClInclude Include="NeuralNetwork.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="Species.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

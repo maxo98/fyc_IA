@@ -9,7 +9,7 @@ Genome::Genome()
 
 }
 
-Genome::Genome(unsigned int _input, unsigned int output, std::vector<Activation*> activationFunctions, float* _score)
+Genome::Genome(unsigned int _input, unsigned int output, std::vector<Activation*> activationFunctions)
 {
     input = _input;
 
@@ -24,8 +24,6 @@ Genome::Genome(unsigned int _input, unsigned int output, std::vector<Activation*
 
         nodes.push_back(GeneNode(NODE_TYPE::OUTPUT, activationFunctions[activationIndex], 999999));
     }
-
-    score = _score;
 }
 
 Genome::~Genome()
@@ -217,7 +215,7 @@ void Genome::mutateActivation(Activation* activationFunction)
 }
 
 //Parent A should be the fittest
-void Genome::crossover(Genome& parentA, Genome& parentB)
+void Genome::crossover(Genome& parentA, Genome& parentB, CROSSOVER type)
 {
     nodes.clear();
     connections.clear();
@@ -243,18 +241,29 @@ void Genome::crossover(Genome& parentA, Genome& parentB)
     {
         std::map<unsigned int, GeneConnection>::iterator found = parentBConnections->find(itA->first);
 
-        //If both parent have the same gene pick one randomly
+        //If both parent have the same gene 
         if (found != parentBConnections->end())
         {
-            uint8_t aOrB = rand() % 2;
+            //Pick one randomly
+            if (type == CROSSOVER::RANDOM)
+            {
+                uint8_t aOrB = rand() % 2;
 
-            if (aOrB == 0)
+                if (aOrB == 0)
+                {
+                    connections[itA->first] = itA->second;
+                }
+                else {
+                    connections[found->first] = found->second;
+                }
+            }
+            else if (type == CROSSOVER::AVERAGE)
             {
                 connections[itA->first] = itA->second;
+
+                connections[itA->first].weight = (itA->second.getWeight() + found->second.getWeight()) / 2;
             }
-            else {
-                connections[found->first] = found->second;
-            }
+
         }
         else {
             connections[itA->first] = itA->second;

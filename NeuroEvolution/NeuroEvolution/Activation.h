@@ -25,14 +25,14 @@ private:
 
 class sigmoidActivation : public Activation {
 public:
-	virtual float activate(float x) const { return 1 / (1 + exp(-x)); };
+	virtual float activate(float x) const { return 1.f / (1.f + exp(-x)); };
 
 	inline virtual std::string getId() const  { return "sigmoid"; };
 };
 
 class reluActivation : public Activation {
 public:
-	virtual float activate(float x) const { return (x > 0 ? x : 0); };
+	virtual float activate(float x) const { return (x > 0.f ? x : 0.f); };
 
 	inline virtual std::string getId() const { return "relu"; };
 };
@@ -46,7 +46,7 @@ public:
 
 class thresholdActivation : public Activation {
 public:
-	virtual float activate(float x) const { return (x >= 0 ? 1 : 0); };
+	virtual float activate(float x) const { return (x >= 0.f ? 1.f : 0.f); };
 
 	inline virtual std::string getId() const { return "threshold"; };
 };
@@ -61,7 +61,7 @@ public:
 //Hyperbolic tangent
 class hyperTanActivation : public Activation {
 public:
-	virtual float activate(float x) const { return (1 - exp(-x * 2)) / (1 + exp(-x * 2)); };
+	virtual float activate(float x) const { return (1 - exp(-x * 2.f)) / (1 + exp(-x * 2.f)); };
 
 	inline virtual std::string getId() const { return "hyperTan"; };
 };

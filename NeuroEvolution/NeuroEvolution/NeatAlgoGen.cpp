@@ -4,6 +4,8 @@
 #include "NeatAlgoGen.h"
 #include <algorithm>
 #include <fstream>
+#include <thread>
+
 
 NeatAlgoGen::NeatAlgoGen(unsigned int _populationSize, unsigned int _input, unsigned int _output, NeatParameters _neatParam)
 {
@@ -16,16 +18,17 @@ NeatAlgoGen::NeatAlgoGen(unsigned int _populationSize, unsigned int _input, unsi
 	neatParam = _neatParam;
 
 	networks.resize(populationSize);
-	scores.resize(populationSize);
-	genomes.reserve(populationSize);
+	genomes = new Genome[populationSize];
 
 
 	for (unsigned int i = 0; i < populationSize; i++)
 	{
-		genomes.push_back(Genome(input, output, neatParam.activationFunctions, &scores[i]));
-		Genome* genome = &genomes.back();
+		genomes[i] = (Genome(input, output, neatParam.activationFunctions));
+		Genome* genome = &genomes[i];
 		genome->mutateLink(allConnections);//Minimum structure
 		genome->mutateWeightRandom(neatParam.pbWeightRandom);
+
+		addToSpecies(genome);
 	}
 
 	generateNetworks();
@@ -89,6 +92,8 @@ NeatAlgoGen::NeatAlgoGen()
 
 NeatAlgoGen::~NeatAlgoGen()
 {
+	delete[] genomes;
+
 	for (int i = 0; i < neatParam.activationFunctions.size(); i++)
 	{
 		delete neatParam.activationFunctions[i];
@@ -100,33 +105,35 @@ void NeatAlgoGen::mutate(Genome& genome)
 	if (neatParam.activationFunctions.size() == 0)
 		return;
 
-	if (neatParam.pbMutateLink > rand() % 1) {
+	if (neatParam.pbMutateLink > randfloat()) {
 		genome.mutateLink(allConnections);
 	}
-	
-	if (neatParam.pbMutateNode > rand() % 1) {
+	//Official implementation says that a link can't be added after a node
+	//Don't understand why
+	else if (neatParam.pbMutateNode > randfloat()) {
 
 		unsigned int index = rand() % neatParam.activationFunctions.size();
 		genome.mutateNode(allConnections, neatParam.activationFunctions[index]);
 	}
-	
-	if (neatParam.pbWeightShift > rand() % 1) {
-		genome.mutateWeightShift(neatParam.pbWeightShift);
-	}
-	
-	if (neatParam.pbWeightRandom > rand() % 1) {
-		genome.mutateWeightRandom(neatParam.pbWeightRandom);
-	}
-	
-	if (neatParam.pbToggleLink > rand() % 1) {
-		genome.mutateLinkToggle();
+	else {
+		if (neatParam.pbWeightShift > randfloat()) {
+			genome.mutateWeightShift(neatParam.pbWeightShift);
+		}
+
+		if (neatParam.pbWeightRandom > randfloat()) {
+			genome.mutateWeightRandom(neatParam.pbWeightRandom);
+		}
+
+		if (neatParam.pbToggleLink > randfloat()) {
+			genome.mutateLinkToggle();
+		}
 	}
 }
 
 void NeatAlgoGen::generateNetworks()
 {
 
-	for (unsigned int cpt = 0; cpt < genomes.size(); cpt++)
+	for (unsigned int cpt = 0; cpt < populationSize; cpt++)
 	{
 		networks[cpt].clear();
 
@@ -186,279 +193,499 @@ void NeatAlgoGen::generateNetworks()
 
 void NeatAlgoGen::evolve()
 {
-	genSpecies();
-	kill();
-	removeExtinctSpecies();
-	reproduce();
-	
-	for (int i = 0; i < genomes.size(); i++)
+	generation++;
+
+	if (neatParam.adaptSpeciation == true && generation > 1)
 	{
-		if (genomes[i].getInSpecies() == true)
+		if (species.size() < neatParam.numSpeciesTarget)
+			neatParam.speciationDistance -= neatParam.speciationDistanceMod;
+		else if (species.size() < neatParam.numSpeciesTarget)
+			neatParam.speciationDistance += neatParam.speciationDistanceMod;
+
+		if (neatParam.speciationDistance < 0.3) neatParam.speciationDistance = 0.3;
+	}
+	
+	std::list<Species*> sortedSpecies;
+
+	for (std::vector<Species>::iterator it = species.begin(); it != species.end(); ++it)
+	{
+		it->computeScore();
+		sortedSpecies.push_back(&*it);
+	}
+
+	if (neatParam.bestHigh == true)
+	{
+		sortedSpecies.sort(speciesSortAsc());
+	}
+	else {
+		sortedSpecies.sort(speciesSortDesc());
+	}
+	
+	//Flag the lowest performing species over age 20 every 30 generations 
+	//NOTE: THIS IS FOR COMPETITIVE COEVOLUTION STAGNATION DETECTION
+	if ((generation % 30) == 0)
+	{
+		std::list<Species*>::reverse_iterator currSpecies = sortedSpecies.rbegin();
+
+		while (currSpecies != sortedSpecies.rend() && (*currSpecies)->age < 20)
 		{
-			mutate(genomes[i]);
+			++currSpecies;
+		}
+
+		if (currSpecies != sortedSpecies.rend())
+		{
+			(*currSpecies)->obliterate = true;
 		}
 	}
 
+	adjustFitness();
+
+	//Go through the organisms and add up their fitnesses to compute the
+	//overall average
+	float avgFitness = 0;
+
+	for (int i = 0; i < populationSize; i++)
+	{
+		avgFitness += genomes[i].getScore();
+	}
+
+	avgFitness /= populationSize;
+
+	if (avgFitness < 1) avgFitness = 1;
+
+	float skim = 0;
+	int totalExpected = 0;
+
+	for (std::vector<Species>::iterator it = species.begin(); it != species.end(); ++it)
+	{
+		it->countOffspring(skim, avgFitness);
+		totalExpected += it->getExpectedOffspring();
+	}
+
+	Species* bestSpecies = nullptr;
+
+	//Need to make up for lost foating point precision in offspring assignment
+	//If we lost precision, give an extra baby to the best Species
+	if (totalExpected < populationSize)
+	{
+		//Find the Species expecting the most
+		int maxExpected = 0;
+		int finalExpected = 0;
+		
+
+		for (std::vector<Species>::iterator it = species.begin(); it != species.end(); ++it)
+		{
+			if (it->getExpectedOffspring() >= maxExpected) {
+				maxExpected = it->getExpectedOffspring();
+				bestSpecies = &(*it);
+			}
+
+			finalExpected += it->getExpectedOffspring();
+		}
+
+		//Give the extra offspring to the best species
+		bestSpecies->incrementExpectedOffspring();
+		finalExpected++;
+
+		//If we still arent at total, there is a problem
+		//Note that this can happen if a stagnant Species
+		//dominates the population and then gets killed off by its age
+		//Then the whole population plummets in fitness
+		//If the average fitness is allowed to hit 0, then we no longer have 
+		//an average we can use to assign offspring.
+		if (finalExpected < populationSize) {
+			//      cout<<"Population died!"<<endl;
+			//cin>>pause;
+			for (std::vector<Species>::iterator it = species.begin(); it != species.end(); ++it)
+			{
+				it->setExpectedOffspring(0);
+			}
+
+			bestSpecies->setExpectedOffspring(populationSize);
+		}
+	}
+
+	//Official implementation re-sorts the species list by their fitness
+	//but the fitness doesn't seem to have changed, maybe I missed something
+	//Seems like the sorting functions are not the same, strange...
+	//It seems that genomes in species were sorted by fitness at some point
+	//but didn't see where
+
+	bestSpecies = (*sortedSpecies.rbegin());
+
+	//Official implementation compute incrment the value of the last time the population as improved or reset it, here
+	//It's more optimal for us to do it in the setScore function
+
+	//Check for stagnation- if there is stagnation, perform delta-coding
+	if (highestLastChanged >= neatParam.dropOffAge + 5) 
+	{
+
+		//    cout<<"PERFORMING DELTA CODING"<<endl;
+
+		highestLastChanged = 0;
+
+		int halfPop = populationSize / 2;
+
+		std::list<Species*>::reverse_iterator it = sortedSpecies.rbegin();
+
+		(*it)->getChamp()->setSuperChampOffspring(halfPop);
+		(*it)->setExpectedOffspring(halfPop);
+		(*it)->lastImprove = (*it)->age;
+
+		++it;
+
+		if (it != sortedSpecies.rend())
+		{
+
+			(*it)->getChamp()->setSuperChampOffspring(populationSize - halfPop);
+			(*it)->setExpectedOffspring(populationSize - halfPop);
+			(*it)->lastImprove = (*it)->age;
+
+			++it;
+
+			//Get rid of all species under the first 2
+			while (it != sortedSpecies.rend())
+			{
+				(*it)->setExpectedOffspring(0);
+				++it;
+			}
+		}
+		else {
+			it = sortedSpecies.rbegin();
+			(*it)->getChamp()->setSuperChampOffspring(populationSize);
+			(*it)->setExpectedOffspring(populationSize);
+		}
+
+	}//else{ Official implementation has stolen babies functionnality here }
+
+	//Remove from species that are meant to die and not reproduce
+	for (int i = 0; i < populationSize; i++)
+	{
+		if (genomes[i].getEliminate() == true)
+		{
+			std::list<Species*>::iterator it = sortedSpecies.begin();
+			while (it != sortedSpecies.end() && (*it)->remove(&genomes[i]) == false)
+			{
+				++it;
+			}
+		}
+	}
+
+
+	Genome* newPop = new Genome[populationSize];
+
+	//Perform reproduction.  Reproduction is done on a per-Species
+	//basis.  (So this could be paralellized potentially.)
+	int newBornIndex = 0;
+	std::vector<std::thread> threads;
+	unsigned int cpus = std::thread::hardware_concurrency();
+
+	std::list<Species*>::iterator itSortedSpecies = sortedSpecies.begin();
+	std::mutex lock;
+
+	lock.lock();
+
+	while (cpus > threads.size()+1)
+	{
+		threads.push_back(std::thread(&NeatAlgoGen::reproduce, this, std::ref(itSortedSpecies), std::ref(lock), std::ref(newBornIndex), std::ref(sortedSpecies), newPop));
+	}
+
+	lock.unlock();
+	reproduce(itSortedSpecies, lock, newBornIndex, sortedSpecies, newPop);
+
+	for (int i = 0; i < threads.size(); i++)
+	{
+		threads[i].join();
+	}
+
+	threads.clear();
+
+	//Adding to species is done using the pointer champ of the species so we can empty the species now
+	for (std::vector<Species>::iterator itSpecies = species.begin(); itSpecies != species.end(); ++itSpecies)
+	{
+		itSpecies->getSpecies()->clear();
+	}
+
+	//Add new born to species
+	for (int i = 0; i < populationSize; i++)
+	{
+		addToSpecies(&newPop[i]);
+	}
+
+	//Remove old generation
+	delete[] genomes;
+	genomes = newPop;
+
+	//Remove extinct species and age those that survive
+	int cpt = 0;
+
+	std::vector<Species>::iterator it = species.end();
+	int count = 0;
+	int check = 0;
+
+	while(cpt < species.size())
+	{
+		if (species[cpt].getSpecies()->size() == 0)
+		{
+			if(it == species.end()) it = species.begin() + cpt;
+			
+			count++;
+		}
+		else {
+			//Try to do erasing by band
+			if (it != species.end())
+			{
+				species.erase(it, species.begin() + cpt);
+				it = species.end();
+				
+				cpt -= count;
+				count = 0;
+			}
+
+			species[cpt].age++;
+			species[cpt].setChamp(nullptr);
+		}
+
+		cpt++;
+		check++;
+	}
+
+	if (it != species.end())
+	{
+		species.erase(it, species.begin() + cpt);
+	}
+
+	std::cout << "size: " << species.size() << std::endl;
+
+	//Official implmentation removes old innovations here not sure if that's really usefull
+	
 	generateNetworks();
 }
 
-void NeatAlgoGen::genSpecies()
+void NeatAlgoGen::reproduce(std::list<Species*>::iterator& it, std::mutex& lock, int& sharedNewBornIndex, std::list<Species*>& sortedSpecies, Genome* newPop)
 {
-	for (unsigned int cpt = 0; cpt < genomes.size(); cpt++)
+	lock.lock();
+
+	while (it != sortedSpecies.end())
 	{
-		genomes[cpt].setInSpecies(false);
-	}
+		Species* curSpecies = *it;
+		++it;
 
-	for (std::list<std::deque<Genome*>>::iterator it = species.begin(); it != species.end(); ++it)
-	{
-		Genome* r = (*it)[rand() % it->size()];
-		it->clear();
-		it->push_back(r);
-		r->setInSpecies(true);
-	}
+		int newBornIndex = sharedNewBornIndex;//Reservation of a group of index
+		sharedNewBornIndex += curSpecies->getExpectedOffspring();
 
-	for (unsigned int cpt = 0; cpt < genomes.size(); cpt++) 
-	{
-		if (genomes[cpt].getInSpecies() == true) continue;
+		lock.unlock();
 
+		bool champDone = false;
 
-		bool found = false;
-		for (std::list<std::deque<Genome*>>::iterator it = species.begin(); it != species.end() && found == false; ++it)
+		for (int count = 0; count < curSpecies->getExpectedOffspring(); count++, newBornIndex++)
 		{
-			if (distance(*(*it)[0], genomes[cpt]) < neatParam.speciationDistance)
+			if(curSpecies->getChamp()->getSuperChampOffspring() > 0)
 			{
-				found = true;
-				it->push_back(&genomes[cpt]);
-			}
-		}
-
-		if (found == false) 
-		{
-			species.push_back(std::deque<Genome*>());
-			speciesScore.push_back(0);
-			species.back().push_back(&genomes[cpt]);
-		}
-
-		genomes[cpt].setInSpecies(true);
-	}
-
-	std::list<std::deque<Genome*>>::iterator itSpe = species.begin();
-	std::list<float>::iterator itScore = speciesScore.begin();
-
-	for (; itSpe != species.end(); ++itSpe, ++itScore)
-	{
-		*itScore = 0;
-
-		for (unsigned int cpt = 0; cpt < itSpe->size(); cpt++)
-		{
-			*itScore += (*itSpe)[cpt]->getScore();
-		}
-
-		*itScore /= itSpe->size();
-	}
-}
-
-void NeatAlgoGen::kill()
-{
-	for (std::list<std::deque<Genome*>>::iterator it = species.begin(); it != species.end(); ++it)
-	{
-		float percentage = 1 - neatParam.survivors;
-
-		if (neatParam.bestHigh == true)
-		{
-			std::sort(it->begin(), it->end(), inSpeciesSortWeakOrder);
-		}
-		else {
-			std::sort(it->begin(), it->end(), inSpeciesSortStrongOrder);
-		}
-
-
-		float amount = percentage * it->size();
-		for (int i = 0; i < amount; i++) {
-			(*it)[i]->setInSpecies(false);
-			it->pop_front();
-		}
-	}
-}
-
-void NeatAlgoGen::removeExtinctSpecies() 
-{
-	std::list<std::deque<Genome*>>::iterator itSpe = species.begin();
-	std::list<float>::iterator itScore = speciesScore.begin();
-
-	while(itSpe != species.end())
-	{
-		if (itSpe->size() <= 1)
-		{
-			if (itSpe->size() == 1) (*itSpe)[0]->setInSpecies(false);
-
-			itSpe = species.erase(itSpe);
-			itScore = speciesScore.erase(itScore);
-		}
-		else {
-			++itSpe;
-			++itScore;
-		}
-	}
-
-	std::cout << species.size() << std::endl;
-}
-
-void NeatAlgoGen::reproduce()
-{
-	float totalScore = 0;
-	std::list<float> inverseScores;
-
-	for (std::list<float>::iterator itScore = speciesScore.begin(); itScore != speciesScore.end(); ++itScore)
-	{
-		totalScore += *itScore;
-	}
-
-	if (neatParam.bestHigh == false)
-	{
-		float tmp = 0;
-		
-		for (std::list<float>::iterator itScore = speciesScore.begin(); itScore != speciesScore.end(); ++itScore)
-		{
-			inverseScores.push_back(totalScore - *itScore);
-			tmp += (totalScore - *itScore);
-		}
-
-		totalScore = tmp;
-	}
-
-	for (unsigned int cpt = 0; cpt < genomes.size(); cpt++)
-	{
-		if (genomes[cpt].getInSpecies() == false)
-		{
-			float r = 0;
-			if((int)(totalScore * neatParam.scoreMultiplier) != 0) r = rand() % (int)(totalScore * neatParam.scoreMultiplier);
-
-			float score = 0;
-
-			std::list<float>::iterator itScore;
-
-			if (neatParam.bestHigh == true)
-			{
-				itScore = speciesScore.begin();
-			}
-			else {
-				itScore = inverseScores.begin();
-			}
-
-			for (std::list<std::deque<Genome*>>::iterator itSpe = species.begin(); itSpe != species.end(); ++itSpe, ++itScore)
-			{
-				score += *itScore;
-
-				if (score >= r)
+				newPop[newBornIndex] = *curSpecies->getChamp();
+				
+				if (curSpecies->getChamp()->getSuperChampOffspring() > 1)
 				{
-					breed(&genomes[cpt], &*itSpe);
-					//genomes[cpt].setInSpecies(true); technically inside a species but maybe don't mutate newborns
-					itSpe->push_back(&genomes[cpt]);
+					if ((randfloat() < 0.8) || (neatParam.pbMutateLink == 0.0))
+					{
+						//ABOVE LINE IS FOR:
+						//Make sure no links get added when the system has link adding disabled
+						//CEDRIC NOTES: why is 0.8 isn't a parameter value ?
+						if (randfloat() > 0.5)
+						{
+							newPop[newBornIndex].mutateWeightRandom(neatParam.weightRandomStrength);
+						}
+						else {
+							newPop[newBornIndex].mutateWeightShift(neatParam.weightShiftStrength);
+						}
+					}
+					else {
+						//Sometimes we add a link to a superchamp
+						newPop[newBornIndex].mutateLink(allConnections);
+					}
+				}//else{ official implementation does some stuff }
+
+				curSpecies->getChamp()->decrementSuperChampOffspring();
+			}
+			//If we have a Species champion, just clone it 
+			else if ((champDone == false) && (curSpecies->getExpectedOffspring() > 5)) 
+			{
+				newPop[newBornIndex] = *curSpecies->getChamp();
+
+				champDone = true;
+			}
+			//First, decide whether to mate or mutate
+			//If there is only one organism in the pool, then always mutate
+			else if ((randfloat() < neatParam.pbMutateOnly) || curSpecies->getSpecies()->size() == 1)
+			{
+				//According to official implementation you don't gain much from roulette selection because of the size of the species
+				//No error here, official implmentation picks a random guy in species of size 1, above comment should probably be moved though
+				newPop[newBornIndex] = *(*curSpecies->getSpecies())[0];
+
+				mutate(newPop[newBornIndex]);
+			}//Otherwise we should mate 
+			else {
+				Genome* gen1 = (*curSpecies->getSpecies())[randint(0, curSpecies->getSpecies()->size() - 1)];
+				Genome* gen2;
+
+				if ((randfloat() > neatParam.interspeciesMateRate))
+				{//Mate within Species
+					
+					do {
+						gen2 = (*curSpecies->getSpecies())[randint(0, curSpecies->getSpecies()->size() - 1)];
+					} while (gen2 == gen1);
+
+				}
+				else {
+					//Mate outside Species  
+
+					//Select a random species
+					int giveUp = 0;  //Give up if you cant find a different Species
+					Species* randspecies = nullptr;
+					
+					
+					do{
+
+						//This old way just chose any old species
+						//randspeciesnum=randint(0,(pop->species).size()-1);
+
+						//Choose a random species tending towards better species
+						float randmult = gaussRand() / 4;
+						if (randmult > 1.0) randmult = 1.0;
+						//This tends to select better species
+						int randSpeciesNum = (int)floor((randmult * (sortedSpecies.size() - 1.0)) + 0.5);
+						std::list<Species*>::iterator randSpecies = (sortedSpecies.begin());
+						for (int i = 0; i < randSpeciesNum; i++)
+							++randSpecies;
+
+						randspecies = (*randSpecies);
+
+						++giveUp;
+					} while ((randspecies == curSpecies) && (giveUp < 5));
+
+					gen2 = (*randspecies->getSpecies())[randint(0, randspecies->getSpecies()->size() - 1)];
+				}
+
+				//Perform mating based on probabilities of differrent mating types
+				if (randfloat() < neatParam.pbMateMultipoint) {
+					newPop[newBornIndex].crossover(*gen1, *gen2, Genome::CROSSOVER::RANDOM);
+				}
+				else if (randfloat() < neatParam.pbMateMultipointAvg) {
+					newPop[newBornIndex].crossover(*gen1, *gen2, Genome::CROSSOVER::AVERAGE);
+				}
+
+				//Determine whether to mutate the baby's Genome
+				//This is done randomly or if the mom and dad are the same organism
+				if (randfloat() > neatParam.pbMateOnly || gen1 == gen2 || distance(*gen1, *gen2) == 0.0)
+				{
+					mutate(newPop[newBornIndex]);
 				}
 			}
+
+			newPop[newBornIndex].setScore(0);
+
+			//Add the new born to species later
+			//To not disturb the reproduction
 		}
+
+		lock.lock();
 	}
+
+	lock.unlock();
 }
 
-void NeatAlgoGen::breed(Genome* child, std::deque<Genome*>* currentSpecies)
+float NeatAlgoGen::gaussRand() 
 {
-	Genome* parentA = nullptr, * parentB = nullptr;;
+	static int iset = 0;
+	static float gset;
+	float fac, rsq, v1, v2;
 
-	if (currentSpecies->size() > 2)
-	{
-		int a = -1, b = -1;
-		pick(currentSpecies, a, b);
-
-		parentA = (*currentSpecies)[a];
-		parentB = (*currentSpecies)[b];
+	if (iset == 0) {
+		do {
+			v1 = 2.0f * (randfloat()) - 1.0f;
+			v2 = 2.0f * (randfloat()) - 1.0f;
+			rsq = v1 * v1 + v2 * v2;
+		} while (rsq >= 1.0 || rsq == 0.0f);
+		fac = sqrt(-2.0f * log(rsq) / rsq);
+		gset = v1 * fac;
+		iset = 1;
+		return v2 * fac;
 	}
 	else {
-		parentA = (*currentSpecies)[0];
-		parentB = (*currentSpecies)[1];
+		iset = 0;
+		return gset;
 	}
-
-	if ((neatParam.bestHigh == true && parentA->getScore() < parentB->getScore()) || (neatParam.bestHigh == false && parentA->getScore() > parentB->getScore()))
-	{
-		Genome* tmp = parentA;
-		parentA = parentB;
-		parentB = tmp;
-	}
-
-	child->crossover(*parentA, *parentB);
 }
 
-void NeatAlgoGen::pick(std::deque<Genome*>* currentSpecies, int& parentA, int& parentB)
+void NeatAlgoGen::adjustFitness()
 {
-	float totalScore = 0;
-	std::list<float> listScores;
-	std::list<float> inverseScores;
-
-	for (std::deque<Genome*>::iterator it = currentSpecies->begin(); it != currentSpecies->end(); ++it)
+	for (std::vector<Species>::iterator itSpecies = species.begin(); itSpecies != species.end(); ++itSpecies)
 	{
-		totalScore += (*it)->getScore();
-		listScores.push_back((*it)->getScore());
-	}
+		int ageDebt = (itSpecies->age - itSpecies->lastImprove + 1) - neatParam.dropOffAge;
 
-	if (neatParam.bestHigh == false)
-	{
-		float tmp = 0;
+		if (ageDebt == 0) ageDebt = 1;
 
-		for (std::list<float>::iterator itScore = listScores.begin(); itScore != listScores.end(); ++itScore)
+		for (std::vector<Genome *>::iterator itGen = itSpecies->getSpecies()->begin(); itGen != itSpecies->getSpecies()->end(); ++itGen)
 		{
-			inverseScores.push_back(totalScore - *itScore);
-			tmp += (totalScore - *itScore);
+			if ((ageDebt >= 1) || itSpecies->obliterate) 
+			{
+				(*itGen)->setSpeciesScore(((*itGen)->getScore()) * 0.01);
+			}
+
+			if (itSpecies->age <= 10)
+			{
+				(*itGen)->setSpeciesScore(((*itGen)->getScore()) * neatParam.ageSignificance);
+			}
+
+			//Do not allow negative fitness
+			if ((*itGen)->getSpeciesScore() < 0.0001f) (*itGen)->setSpeciesScore(0.0001f);
+
+			//Share fitness with the species
+			(*itGen)->setSpeciesScore((*itGen)->getSpeciesScore() / itSpecies->getSpecies()->size());
 		}
 
-		totalScore = tmp;
-	}
-
-
-	for (std::deque<Genome*>::iterator it = currentSpecies->begin(); it != currentSpecies->end(); ++it)
-	{
-		if ((*it)->getInSpecies() == false)
+		//Sort the population and mark for death those after survival_thresh*pop_size
+		if (neatParam.bestHigh == true)
 		{
-			float rA = rand() % (int)(totalScore * neatParam.scoreMultiplier);
-			float rB = rand() % (int)(totalScore * neatParam.scoreMultiplier);
-			float score = 0;
+			std::sort(itSpecies->getSpecies()->begin(), itSpecies->getSpecies()->end(), genomeSortAsc);
+		}
+		else {
+			std::sort(itSpecies->getSpecies()->begin(), itSpecies->getSpecies()->end(), genomeSortDesc);
+		}
 
-			std::list<float>::iterator itScore;
+		//Decide how many get to reproduce based on survival_thresh*pop_size
+		//Adding 1.0 ensures that at least one will survive
+		int numParents = (int)floor(neatParam.killRate * (float)itSpecies->getSpecies()->size() + 1.0);
 
-			if (neatParam.bestHigh == true)
-			{
-				itScore = listScores.begin();
-			}
-			else {
-				itScore = inverseScores.begin();
-			}
+		//Mark for death those who are ranked too low to be parents
+		itSpecies->setChamp(itSpecies->getSpecies()->back());  //Mark the champ as such
 
-			int i = 0;
+		int i = 0;
 
-			for (std::deque<Genome*>::iterator itGen = currentSpecies->begin(); itGen != currentSpecies->end() && (parentA == -1 || parentB == -1);
-				++itGen, ++itScore, ++i)
-			{
-				score += *itScore;
+		for (std::vector<Genome*>::iterator itGen = itSpecies->getSpecies()->begin(); itGen != itSpecies->getSpecies()->end() && numParents > i; ++itGen, ++i)
+		{
+			(*itGen)->setEliminate(true);//Mark for elimination
+		}
+	}
+}
 
-				if (score >= rA && parentA == -1)
-				{
-					parentA = i;
-				}else if (score >= rB && parentB == -1)
-				{
-					parentB = i;
-				}
-			}
+void NeatAlgoGen::addToSpecies(Genome* gen)
+{
+	bool found = false;
+	for (std::vector<Species>::iterator it = species.begin(); it != species.end() && found == false; ++it)
+	{
+		if (distance(*it->getChamp(), *gen) < neatParam.speciationDistance)
+		{
+			found = true;
+			it->Add(gen);
 		}
 	}
 
-	if (parentA == -1)
+	if (found == false)
 	{
-		parentA = currentSpecies->size() - 1;
+		species.push_back(Species(gen));
 	}
 
-	if (parentB == -1)
-	{
-		parentB = currentSpecies->size()-2;
-	}
 }
 
 float NeatAlgoGen::distance(Genome& genomeA, Genome& genomeB)
@@ -493,7 +720,6 @@ float NeatAlgoGen::distance(Genome& genomeA, Genome& genomeB)
 
 	float disjoint = 0;
 	float excess = 0;
-	double weight_diff = 0;
 	float similar = 0;
 
 
@@ -504,7 +730,6 @@ float NeatAlgoGen::distance(Genome& genomeA, Genome& genomeB)
 		{
 			//similargene
 			similar++;
-			weight_diff += fabs(it1->second.getWeight() - it2->second.getWeight());
 			++it1; count++;
 			++it2;
 		}
@@ -522,23 +747,19 @@ float NeatAlgoGen::distance(Genome& genomeA, Genome& genomeB)
 		}
 	}
 
-	weight_diff /= std::max(1, (int)similar);
 	excess = genome1->getConnections()->size() - count;
 
-	float N = std::max(genome1->getConnections()->size(), genome2->getConnections()->size());
-	if (N < 20) 
-	{
-		N = 1;
-	}
+	if (similar == 0) similar = 1;
 
-	return neatParam.C1 * disjoint / N + neatParam.C2 * excess / N + neatParam.C3 * weight_diff;
+	//Official implmentation does some division by 1.0 here...
+	return neatParam.disjointCoeff * disjoint + neatParam.excessCoeff * excess + neatParam.mutDiffCoeff * ((disjoint + excess) / similar);
 }
 
 void NeatAlgoGen::setScore(std::vector < float > newScores)
 {
-	if (newScores.size() != scores.size())
+	if (newScores.size() != populationSize)
 	{
-		std::cout << "New score size different from current score size, aborting." << std::endl;
+		std::cout << "New score size different from population size, aborting." << std::endl;
 
 		return;
 	}
@@ -548,13 +769,29 @@ void NeatAlgoGen::setScore(std::vector < float > newScores)
 
 	for (int i = 1; i < newScores.size(); i++)
 	{
-		scores[i] = newScores[i];
-
-		if ((neatParam.bestHigh == true && newScores[i] > bestScore) || (neatParam.bestHigh == false && newScores[i] < bestScore))
+		if (newScores[i] >= 0)
 		{
-			bestScore = newScores[i];
-			bestIndex = i;
+			genomes[i].setScore(newScores[i]);
+
+			if ((neatParam.bestHigh == true && newScores[i] > bestScore) || (neatParam.bestHigh == false && newScores[i] < bestScore))
+			{
+				bestScore = newScores[i];
+				bestIndex = i;
+			}
 		}
+		else {
+			genomes[i].setScore(0);//Don't want to tank the score of scpecies with negative score
+		}
+
+	}
+
+	if (lastBestScore > bestScore)
+	{
+		highestLastChanged++;
+	}
+	else {
+		lastBestScore = bestScore;
+		highestLastChanged = 0;
 	}
 
 	if(neatParam.saveHistory == true) history.push_back(bestScore);
@@ -602,10 +839,10 @@ bool NeatAlgoGen::saveHistory()
 		return false;
 	}
 
-	for (std::list<float>::iterator it = history.begin(); it != history.end(); ++it)
+	for (std::vector<float>::iterator it = history.begin(); it != history.end(); ++it)
 	{
 		std::string str = std::to_string(*it);
-		int pos = str.find(".");
+		size_t pos = str.find(".");
 		
 		if (pos == -1)
 		{

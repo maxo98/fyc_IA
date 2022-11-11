@@ -31,8 +31,10 @@ class Genome
 {
 public:
 	Genome();
-	Genome(unsigned int input, unsigned int output, std::vector<Activation*> activationFunctions, float* _score);
+	Genome(unsigned int input, unsigned int output, std::vector<Activation*> activationFunctions);
 	~Genome();
+
+	enum class CROSSOVER { RANDOM, AVERAGE };
 
 	bool mutateLink(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections);
 	bool mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, Activation* activationFunction);
@@ -43,13 +45,20 @@ public:
 
 	inline std::map<unsigned int, GeneConnection>* const getConnections() { return &connections; };
 	inline std::deque<GeneNode>* const getNodes() { return &nodes; };
-	inline float getScore() { return *score; };
+	inline void setScore(float _score) { score = _score; };
+	inline float getScore() { return score; };
+	inline void setSpeciesScore(float _score) { speciesScore = _score; };
+	inline float getSpeciesScore() { return speciesScore; };
 	inline void setInSpecies(bool value) { inSpecies = value; };
 	inline bool getInSpecies() { return inSpecies; };
-
+	inline void setSuperChampOffspring(int value) { superChampOffspring = value; };
+	inline int getSuperChampOffspring() { return superChampOffspring; };
+	inline void decrementSuperChampOffspring() { superChampOffspring--; };
+	inline void setEliminate(bool value) { eliminate = value; };
+	inline bool getEliminate() { return eliminate; };
 
 	//Parent A should be the fittest
-	void crossover(Genome& parentA, Genome& parentB);
+	void crossover(Genome& parentA, Genome& parentB, CROSSOVER type);
 
 	friend class CPPN_Neat;
 
@@ -63,6 +72,9 @@ private:
 	std::map<unsigned int, GeneConnection> connections;
 	std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int> nodesToConnection;//From a pair of nodes to innovation number of connection
 	std::deque<GeneNode> nodes;
-	float* score;
+	float score = 0;
+	float speciesScore = 0;
 	bool inSpecies = false;
+	int superChampOffspring = 0;
+	bool eliminate = false;
 };
