@@ -21,7 +21,7 @@ typedef struct {
 	float pbMutateActivation;
 
 	float pbMateMultipoint;
-	float pbMateMultipointAvg;
+	float pbMateSinglepoint;
 	float interspeciesMateRate;
 	float pbMateOnly;
 	
@@ -98,10 +98,6 @@ public:
 	bool saveHistory();
 
 	friend class ANeuralNetworkDisplayHUD;
-
-	inline float randfloat() { return rand() / RAND_MAX; }
-
-	inline int randint(int x, int y) { return rand() % (y - x + 1) + x; };
 
 	//Taken from official implementation, no idea how it works
 	float gaussRand();

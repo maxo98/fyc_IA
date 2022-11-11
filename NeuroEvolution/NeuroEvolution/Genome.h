@@ -22,6 +22,10 @@ struct std::hash<std::pair<unsigned int, unsigned int>>
 	}
 };
 
+inline float randFloat() { return ((double)rand()) / RAND_MAX; }
+
+inline int randInt(int x, int y) { return rand() % (y - x + 1) + x; };
+
 class CPPN_Neat;
 
 /**
@@ -34,7 +38,7 @@ public:
 	Genome(unsigned int input, unsigned int output, std::vector<Activation*> activationFunctions);
 	~Genome();
 
-	enum class CROSSOVER { RANDOM, AVERAGE };
+	enum class CROSSOVER { RANDOM, AVERAGE, SINGLE_POINT };
 
 	bool mutateLink(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections);
 	bool mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, Activation* activationFunction);
@@ -44,7 +48,7 @@ public:
 	void mutateActivation(Activation* activationFunction);
 
 	inline std::map<unsigned int, GeneConnection>* const getConnections() { return &connections; };
-	inline std::deque<GeneNode>* const getNodes() { return &nodes; };
+	inline std::vector<GeneNode>* const getNodes() { return &nodes; };
 	inline void setScore(float _score) { score = _score; };
 	inline float getScore() { return score; };
 	inline void setSpeciesScore(float _score) { speciesScore = _score; };
@@ -71,7 +75,7 @@ private:
 
 	std::map<unsigned int, GeneConnection> connections;
 	std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int> nodesToConnection;//From a pair of nodes to innovation number of connection
-	std::deque<GeneNode> nodes;
+	std::vector<GeneNode> nodes;
 	float score = 0;
 	float speciesScore = 0;
 	bool inSpecies = false;

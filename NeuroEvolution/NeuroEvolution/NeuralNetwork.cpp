@@ -207,7 +207,8 @@ Node* NeuralNetwork::getNode(unsigned int layer, unsigned int node)
 	{
 		return getNodeFromLayer(inputNodes, node);
 	}
-	else if ((layer-1) == hiddenNodes.size()) {
+	else if ((layer-1) == hiddenNodes.size()) 
+	{
 		return getNodeFromLayer(outputNodes, node);
 	}
 	else if((layer - 1) < hiddenNodes.size()){

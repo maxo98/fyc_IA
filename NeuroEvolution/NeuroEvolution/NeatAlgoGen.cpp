@@ -36,58 +36,6 @@ NeatAlgoGen::NeatAlgoGen(unsigned int _populationSize, unsigned int _input, unsi
 
 NeatAlgoGen::NeatAlgoGen()
 {
-	//Outdated
-	/*neatParam.activationFunctions.push_back(sigmoidActivation());
-
-	populationSize = 3;
-	input = 3;
-	output = 3;
-
-	networks.resize(populationSize);
-	genomes.reserve(populationSize);
-
-
-	for (unsigned int i = 0; i < populationSize; i++)
-	{
-		genomes.push_back(Genome(input, output, neatParam.activationFunctions));
-		Genome* genome = &genomes.back();
-		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections, neatParam.activationFunctions[0]);
-		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections, neatParam.activationFunctions[0]);
-		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections, neatParam.activationFunctions[0]);
-		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections, neatParam.activationFunctions[0]);
-		genome->mutateLink(allConnections);
-		genome->mutateNode(allConnections, neatParam.activationFunctions[0]);
-		genome->mutateWeightRandom(2);
-		genome->mutateWeightShift(0.5);
-		genome->mutateWeightRandom(2);
-		genome->mutateWeightShift(0.5);
-		genome->mutateWeightRandom(2);
-		genome->mutateWeightShift(0.5);
-		genome->mutateLinkToggle();
-		genome->mutateLinkToggle();
-	}
-
-	genomes[2].crossover(genomes[0], genomes[1]);
-
-	generateNetworks();
-
-	std::vector<float> inputNet;
-
-	inputNet.push_back(0);
-	inputNet.push_back(0);
-	inputNet.push_back(0);
-
-	std::vector<float> outputNet;
-
-	outputNet.push_back(0);
-	outputNet.push_back(0);
-	outputNet.push_back(0);
-
-	networks[0].compute(inputNet, outputNet);*/
 }
 
 NeatAlgoGen::~NeatAlgoGen()
@@ -105,26 +53,31 @@ void NeatAlgoGen::mutate(Genome& genome)
 	if (neatParam.activationFunctions.size() == 0)
 		return;
 
-	if (neatParam.pbMutateLink > randfloat()) {
+	if (neatParam.pbMutateLink > randFloat()) 
+	{
 		genome.mutateLink(allConnections);
 	}
 	//Official implementation says that a link can't be added after a node
 	//Don't understand why
-	else if (neatParam.pbMutateNode > randfloat()) {
+	else if (neatParam.pbMutateNode > randFloat()) 
+	{
 
-		unsigned int index = rand() % neatParam.activationFunctions.size();
+		unsigned int index = randInt(0, neatParam.activationFunctions.size() - 1);
 		genome.mutateNode(allConnections, neatParam.activationFunctions[index]);
 	}
 	else {
-		if (neatParam.pbWeightShift > randfloat()) {
+		if (neatParam.pbWeightShift > randFloat()) 
+		{
 			genome.mutateWeightShift(neatParam.pbWeightShift);
 		}
 
-		if (neatParam.pbWeightRandom > randfloat()) {
+		if (neatParam.pbWeightRandom > randFloat()) 
+		{
 			genome.mutateWeightRandom(neatParam.pbWeightRandom);
 		}
 
-		if (neatParam.pbToggleLink > randfloat()) {
+		if (neatParam.pbToggleLink > randFloat()) 
+		{
 			genome.mutateLinkToggle();
 		}
 	}
@@ -137,12 +90,12 @@ void NeatAlgoGen::generateNetworks()
 	{
 		networks[cpt].clear();
 
-		std::deque<GeneNode>* nodes = genomes[cpt].getNodes();
+		std::vector<GeneNode>* nodes = genomes[cpt].getNodes();
 		std::vector<std::pair<unsigned int, unsigned int>> nodePosition;//Stores postion of the nodes in the network
 		nodePosition.reserve(nodes->size());
 
 		//Add the nodes to the layer
-		for (std::deque<GeneNode>::iterator node = nodes->begin(); node != nodes->end(); ++node)
+		for (std::vector<GeneNode>::iterator node = nodes->begin(); node != nodes->end(); ++node)
 		{
 			unsigned int layer = node->getLayer();
 
@@ -275,7 +228,8 @@ void NeatAlgoGen::evolve()
 
 		for (std::vector<Species>::iterator it = species.begin(); it != species.end(); ++it)
 		{
-			if (it->getExpectedOffspring() >= maxExpected) {
+			if (it->getExpectedOffspring() >= maxExpected) 
+			{
 				maxExpected = it->getExpectedOffspring();
 				bestSpecies = &(*it);
 			}
@@ -293,7 +247,8 @@ void NeatAlgoGen::evolve()
 		//Then the whole population plummets in fitness
 		//If the average fitness is allowed to hit 0, then we no longer have 
 		//an average we can use to assign offspring.
-		if (finalExpected < populationSize) {
+		if (finalExpected < populationSize) 
+		{
 			//      cout<<"Population died!"<<endl;
 			//cin>>pause;
 			for (std::vector<Species>::iterator it = species.begin(); it != species.end(); ++it)
@@ -383,14 +338,14 @@ void NeatAlgoGen::evolve()
 	std::list<Species*>::iterator itSortedSpecies = sortedSpecies.begin();
 	std::mutex lock;
 
-	lock.lock();
+	/*lock.lock();
 
 	while (cpus > threads.size()+1)
 	{
 		threads.push_back(std::thread(&NeatAlgoGen::reproduce, this, std::ref(itSortedSpecies), std::ref(lock), std::ref(newBornIndex), std::ref(sortedSpecies), newPop));
 	}
 
-	lock.unlock();
+	lock.unlock();*/
 	reproduce(itSortedSpecies, lock, newBornIndex, sortedSpecies, newPop);
 
 	for (int i = 0; i < threads.size(); i++)
@@ -486,12 +441,12 @@ void NeatAlgoGen::reproduce(std::list<Species*>::iterator& it, std::mutex& lock,
 				
 				if (curSpecies->getChamp()->getSuperChampOffspring() > 1)
 				{
-					if ((randfloat() < 0.8) || (neatParam.pbMutateLink == 0.0))
+					if ((randFloat() < 0.8) || (neatParam.pbMutateLink == 0.0))
 					{
 						//ABOVE LINE IS FOR:
 						//Make sure no links get added when the system has link adding disabled
 						//CEDRIC NOTES: why is 0.8 isn't a parameter value ?
-						if (randfloat() > 0.5)
+						if (randFloat() > 0.5)
 						{
 							newPop[newBornIndex].mutateWeightRandom(neatParam.weightRandomStrength);
 						}
@@ -516,7 +471,7 @@ void NeatAlgoGen::reproduce(std::list<Species*>::iterator& it, std::mutex& lock,
 			}
 			//First, decide whether to mate or mutate
 			//If there is only one organism in the pool, then always mutate
-			else if ((randfloat() < neatParam.pbMutateOnly) || curSpecies->getSpecies()->size() == 1)
+			else if ((randFloat() < neatParam.pbMutateOnly) || curSpecies->getSpecies()->size() == 1)
 			{
 				//According to official implementation you don't gain much from roulette selection because of the size of the species
 				//No error here, official implmentation picks a random guy in species of size 1, above comment should probably be moved though
@@ -525,14 +480,14 @@ void NeatAlgoGen::reproduce(std::list<Species*>::iterator& it, std::mutex& lock,
 				mutate(newPop[newBornIndex]);
 			}//Otherwise we should mate 
 			else {
-				Genome* gen1 = (*curSpecies->getSpecies())[randint(0, curSpecies->getSpecies()->size() - 1)];
+				Genome* gen1 = (*curSpecies->getSpecies())[randInt(0, curSpecies->getSpecies()->size() - 1)];
 				Genome* gen2;
 
-				if ((randfloat() > neatParam.interspeciesMateRate))
+				if ((randFloat() > neatParam.interspeciesMateRate))
 				{//Mate within Species
 					
 					do {
-						gen2 = (*curSpecies->getSpecies())[randint(0, curSpecies->getSpecies()->size() - 1)];
+						gen2 = (*curSpecies->getSpecies())[randInt(0, curSpecies->getSpecies()->size() - 1)];
 					} while (gen2 == gen1);
 
 				}
@@ -547,7 +502,7 @@ void NeatAlgoGen::reproduce(std::list<Species*>::iterator& it, std::mutex& lock,
 					do{
 
 						//This old way just chose any old species
-						//randspeciesnum=randint(0,(pop->species).size()-1);
+						//randspeciesnum=randInt(0,(pop->species).size()-1);
 
 						//Choose a random species tending towards better species
 						float randmult = gaussRand() / 4;
@@ -563,20 +518,25 @@ void NeatAlgoGen::reproduce(std::list<Species*>::iterator& it, std::mutex& lock,
 						++giveUp;
 					} while ((randspecies == curSpecies) && (giveUp < 5));
 
-					gen2 = (*randspecies->getSpecies())[randint(0, randspecies->getSpecies()->size() - 1)];
+					gen2 = (*randspecies->getSpecies())[randInt(0, randspecies->getSpecies()->size() - 1)];
 				}
 
 				//Perform mating based on probabilities of differrent mating types
-				if (randfloat() < neatParam.pbMateMultipoint) {
+				if (randFloat() < neatParam.pbMateMultipoint) 
+				{
 					newPop[newBornIndex].crossover(*gen1, *gen2, Genome::CROSSOVER::RANDOM);
 				}
-				else if (randfloat() < neatParam.pbMateMultipointAvg) {
+				else if (randFloat() < neatParam.pbMateMultipoint / (neatParam.pbMateMultipoint + neatParam.pbMateSinglepoint))
+				{
 					newPop[newBornIndex].crossover(*gen1, *gen2, Genome::CROSSOVER::AVERAGE);
+				}
+				else {
+					newPop[newBornIndex].crossover(*gen1, *gen2, Genome::CROSSOVER::SINGLE_POINT);
 				}
 
 				//Determine whether to mutate the baby's Genome
 				//This is done randomly or if the mom and dad are the same organism
-				if (randfloat() > neatParam.pbMateOnly || gen1 == gen2 || distance(*gen1, *gen2) == 0.0)
+				if (randFloat() > neatParam.pbMateOnly || gen1 == gen2 || distance(*gen1, *gen2) == 0.0)
 				{
 					mutate(newPop[newBornIndex]);
 				}
@@ -600,10 +560,11 @@ float NeatAlgoGen::gaussRand()
 	static float gset;
 	float fac, rsq, v1, v2;
 
-	if (iset == 0) {
+	if (iset == 0) 
+	{
 		do {
-			v1 = 2.0f * (randfloat()) - 1.0f;
-			v2 = 2.0f * (randfloat()) - 1.0f;
+			v1 = 2.0f * (randFloat()) - 1.0f;
+			v2 = 2.0f * (randFloat()) - 1.0f;
 			rsq = v1 * v1 + v2 * v2;
 		} while (rsq >= 1.0 || rsq == 0.0f);
 		fac = sqrt(-2.0f * log(rsq) / rsq);

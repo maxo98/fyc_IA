@@ -89,37 +89,43 @@ void CPPN_Neat::mutate(Genome& genome)
 	if (neatParam.activationFunctions.size() == 0)
 		return;
 
-	if (neatParam.pbMutateLink > rand() % 1) {
+	if (neatParam.pbMutateLink > randFloat()) 
+	{
 		genome.mutateLink(allConnections);
 	}
 
-	if (neatParam.pbMutateNode > rand() % 1) {
+	if (neatParam.pbMutateNode > randFloat())
+	{
 
-		unsigned int index = rand() % neatParam.activationFunctions.size();
+		unsigned int index = randInt(0, neatParam.activationFunctions.size()-1);
 		genome.mutateNode(allConnections, neatParam.activationFunctions[index]);
 	}
 
-	if (neatParam.pbWeightShift > rand() % 1) {
+	if (neatParam.pbWeightShift > randFloat())
+	{
 		genome.mutateWeightShift(neatParam.pbWeightShift);
 	}
 
-	if (neatParam.pbWeightRandom > rand() % 1) {
+	if (neatParam.pbWeightRandom > randFloat())
+	{
 		genome.mutateWeightRandom(neatParam.pbWeightRandom);
 	}
 
-	if (neatParam.pbToggleLink > rand() % 1) {
+	if (neatParam.pbToggleLink > randFloat())
+	{
 		genome.mutateLinkToggle();
 	}
 
-	if (neatParam.pbMutateActivation > rand() % 1) {
-		unsigned int index = rand() % neatParam.activationFunctions.size();
+	if (neatParam.pbMutateActivation > randFloat())
+	{
+		unsigned int index = randInt(0, neatParam.activationFunctions.size()-1);
 	}
 }
 
 float CPPN_Neat::distance(Genome& genomeA, Genome& genomeB)
 {
-	const std::deque<GeneNode>* nodesA = genomeA.getNodes();
-	const std::deque<GeneNode>* nodesB = genomeB.getNodes();
+	const std::vector<GeneNode>* nodesA = genomeA.getNodes();
+	const std::vector<GeneNode>* nodesB = genomeB.getNodes();
 
 	int count = 0;
 

@@ -6,7 +6,7 @@
 
 Genome::Genome()
 {
-
+    input = 0;
 }
 
 Genome::Genome(unsigned int _input, unsigned int output, std::vector<Activation*> activationFunctions)
@@ -20,7 +20,7 @@ Genome::Genome(unsigned int _input, unsigned int output, std::vector<Activation*
  
     for (unsigned int i = 0; i < output; i++)
     {
-        unsigned int activationIndex = rand() % activationFunctions.size();
+        unsigned int activationIndex = randInt(0, activationFunctions.size()-1);
 
         nodes.push_back(GeneNode(NODE_TYPE::OUTPUT, activationFunctions[activationIndex], 999999));
     }
@@ -67,8 +67,8 @@ bool Genome::mutateLink(std::unordered_map<std::pair<unsigned int, unsigned int>
         i++;
 
         //Pick two random nodes
-        nodeA = rand() % nodes.size();
-        nodeB = rand() % nodes.size();
+        nodeA = randInt(0, nodes.size() - 1);
+        nodeB = randInt(0, nodes.size() - 1);
 
         if (nodeA == nodeB || nodes[nodeA].layer == nodes[nodeB].layer || (nodes[nodeA].type == NODE_TYPE::OUTPUT && nodes[nodeB].type == NODE_TYPE::OUTPUT))
         {
@@ -109,7 +109,7 @@ bool Genome::mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>
     //Try to find an enabled connection to create a 100 times
     while (i < 100 && foundMutation == false)
     {
-        geneConnectionIndex = rand() % (connections.size());
+        geneConnectionIndex = randInt(0, connections.size() - 1);
 
         connection = &std::next(connections.begin(), geneConnectionIndex)->second;
 
@@ -153,7 +153,7 @@ void Genome::mutateWeightShift(float weightShiftStrength)
     //Try to find an enabled connection to create a 100 times
     while (i < 100 && foundMutation == false)
     {
-        geneConnectionIndex = rand() % connections.size();
+        geneConnectionIndex = randInt(0, connections.size() - 1);
         connection = &std::next(connections.begin(), geneConnectionIndex)->second;
 
         if (connection->enabled == true)
@@ -181,7 +181,7 @@ void Genome::mutateWeightRandom(float weightRandomStrength)
     //Try to find an enabled connection to create a 100 times
     while (i < 100 && foundMutation == false)
     {
-        geneConnectionIndex = rand() % connections.size();
+        geneConnectionIndex = randInt(0, connections.size() - 1);
         connection = &std::next(connections.begin(), geneConnectionIndex)->second;
 
         if (connection->enabled == true)
@@ -201,7 +201,7 @@ void Genome::mutateWeightRandom(float weightRandomStrength)
 
 void Genome::mutateLinkToggle()
 {
-    unsigned int geneConnectionIndex = rand() % connections.size();
+    unsigned int geneConnectionIndex = randInt(0, connections.size() - 1);;
     GeneConnection* connection = &std::next(connections.begin(), geneConnectionIndex)->second;
 
     //Switches the activation of the connection
@@ -210,7 +210,7 @@ void Genome::mutateLinkToggle()
 
 void Genome::mutateActivation(Activation* activationFunction)
 {
-    unsigned int nodeIndex = (rand() % (nodes.size() - input)) + input;
+    unsigned int nodeIndex = randInt(input+1, nodes.size() - 1);
     nodes[nodeIndex].setActivation(activationFunction);
 }
 
@@ -222,8 +222,32 @@ void Genome::crossover(Genome& parentA, Genome& parentB, CROSSOVER type)
     nodesToConnection.clear();
 
     //Insert nodes
-    std::deque<GeneNode>* nodesA = parentA.getNodes();
-    std::deque<GeneNode>* nodesB = parentB.getNodes();
+    std::vector<GeneNode>* nodesA;
+
+    int crossPoint = 999999;
+
+    if (type == CROSSOVER::SINGLE_POINT)
+    {
+        if (parentA.getConnections()->size() < parentB.getConnections()->size())
+        {
+            crossPoint = randInt(0, parentA.getConnections()->size() - 1);
+        }
+        else {
+            crossPoint = randInt(0, parentB.getConnections()->size() - 1);
+        }
+
+        //Take the most nodes to make sure that all the connections are valid
+        if (parentA.getNodes()->size() > parentB.getNodes()->size())
+        {
+            nodesA = parentA.getNodes();
+        }
+        else {
+            nodesA = parentB.getNodes();
+        }
+    }
+    else {
+        nodesA = parentA.getNodes();
+    }
 
     for (unsigned int i = 0; i < nodesA->size(); i++)
     {
@@ -236,8 +260,9 @@ void Genome::crossover(Genome& parentA, Genome& parentB, CROSSOVER type)
     std::map<unsigned int, GeneConnection>* parentAConnections = parentA.getConnections();
     std::map<unsigned int, GeneConnection>* parentBConnections = parentB.getConnections();
     
+    int cross = 0;
 
-    for (std::map<unsigned int, GeneConnection>::iterator itA = (*parentAConnections).begin(); itA != (*parentAConnections).end(); ++itA)
+    for (std::map<unsigned int, GeneConnection>::iterator itA = (*parentAConnections).begin(); itA != (*parentAConnections).end() && cross < crossPoint; ++itA, ++cross)
     {
         std::map<unsigned int, GeneConnection>::iterator found = parentBConnections->find(itA->first);
 
@@ -247,7 +272,7 @@ void Genome::crossover(Genome& parentA, Genome& parentB, CROSSOVER type)
             //Pick one randomly
             if (type == CROSSOVER::RANDOM)
             {
-                uint8_t aOrB = rand() % 2;
+                uint8_t aOrB = randInt(0, 1);
 
                 if (aOrB == 0)
                 {
@@ -257,19 +282,33 @@ void Genome::crossover(Genome& parentA, Genome& parentB, CROSSOVER type)
                     connections[found->first] = found->second;
                 }
             }
-            else if (type == CROSSOVER::AVERAGE)
-            {
+            else {
                 connections[itA->first] = itA->second;
 
-                connections[itA->first].weight = (itA->second.getWeight() + found->second.getWeight()) / 2;
+                if (type == CROSSOVER::AVERAGE)
+                {
+                    connections[itA->first].weight = (itA->second.getWeight() + found->second.getWeight()) / 2;
+                }
             }
-
         }
         else {
             connections[itA->first] = itA->second;
         }
 
         nodesToConnection[std::pair<unsigned int, unsigned int>(connections[itA->first].getNodeA(), connections[itA->first].getNodeB())] = itA->first;
+    }
+
+    if (type == CROSSOVER::SINGLE_POINT)
+    {
+        std::map<unsigned int, GeneConnection>::iterator itB = (*parentBConnections).begin();
+
+        for (int i = 0; i < crossPoint; ++itB, ++i);
+
+        for (itB; itB != (*parentBConnections).end(); ++itB)
+        {
+            connections[itB->first] = itB->second;
+            nodesToConnection[std::pair<unsigned int, unsigned int>(connections[itB->first].getNodeA(), connections[itB->first].getNodeB())] = itB->first;
+        }
     }
 }
 

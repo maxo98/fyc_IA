@@ -34,7 +34,7 @@ int main()
 	neatparam.scoreMultiplier = 1000;
 
 	neatparam.pbMateMultipoint = 0.6;
-	neatparam.pbMateMultipointAvg = 0.4;
+	neatparam.pbMateSinglepoint = 0.0;
 	neatparam.interspeciesMateRate = 0.001;
 	neatparam.dropOffAge = 15;
 	neatparam.ageSignificance = 1.0;
@@ -153,9 +153,9 @@ int main()
 
 			if (mistake[i] == 0)
 			{
-				std::cout << "success !\n";
+				/*std::cout << "success !\n";
 				neat.saveHistory();
-				return 0;
+				return 0;*/
 			}
 		}
 

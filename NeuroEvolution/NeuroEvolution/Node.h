@@ -38,7 +38,7 @@ private:
 	Activation* activation;
 	std::map<Node*, float> previousNodes;
 	std::map<Node*, float> recursionNodes;
-	bool computed;
+	bool computed = false;
 	float value;
 	float oldValue;
 };

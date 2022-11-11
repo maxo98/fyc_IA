@@ -150,7 +150,7 @@ void ES_Hyperneat::prunAndExtract(int index, const std::vector<float>& pos, Subs
 			//Determine if point is in a band by checking neighbor CPPN values
 
 			//Prepare to compute band value
-			float value;
+			float value = 0;
 			std::vector<float> input, output;
 			std::vector<float> const *p1 , *p2;
 			
