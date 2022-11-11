@@ -85,10 +85,8 @@ public:
 	void evolve();
 	void adjustFitness();
 	void addToSpecies(Genome* gen);
-	void reproduce(std::list<Species*>::iterator& it, std::mutex& lock, int& sharedNewBornIndex, std::list<Species*>& sortedSpecies, Genome* newPop);
+	void reproduce(int workload, std::list<Species*>::iterator it, int newBornIndex, std::list<Species*>& sortedSpecies, Genome* newPop);
 	
-	void kill();
-	void removeExtinctSpecies();
 	virtual void mutate(Genome& genome);
 	void generateNetworks();
 

@@ -336,17 +336,48 @@ void NeatAlgoGen::evolve()
 	unsigned int cpus = std::thread::hardware_concurrency();
 
 	std::list<Species*>::iterator itSortedSpecies = sortedSpecies.begin();
-	std::mutex lock;
 
-	/*lock.lock();
+	float totalWorkload = sortedSpecies.size();
+	float workload = totalWorkload / cpus;
+
+	while (workload < 1) 
+	{
+		cpus--;
+		workload = totalWorkload / cpus;
+	}
+
+	int currentWorkload = floor(workload);
+	float restworkload = fmod(workload, 1.0f);
+
+	int counter = 0;
 
 	while (cpus > threads.size()+1)
 	{
-		threads.push_back(std::thread(&NeatAlgoGen::reproduce, this, std::ref(itSortedSpecies), std::ref(lock), std::ref(newBornIndex), std::ref(sortedSpecies), newPop));
+
+		threads.push_back(std::thread(&NeatAlgoGen::reproduce, this, currentWorkload + floor(restworkload), itSortedSpecies, newBornIndex, std::ref(sortedSpecies), newPop));
+
+		counter += currentWorkload + floor(restworkload);
+
+		for (int i = 0; i < currentWorkload + floor(restworkload); i++)
+		{
+			newBornIndex += (*itSortedSpecies)->getExpectedOffspring();
+			++itSortedSpecies;
+		}
+
+		restworkload -= floor(restworkload);
 	}
 
-	lock.unlock();*/
-	reproduce(itSortedSpecies, lock, newBornIndex, sortedSpecies, newPop);
+	while (restworkload > 0)
+	{
+		restworkload--;
+		currentWorkload++;
+	}
+
+	counter += currentWorkload;
+
+	std::cout << counter << " = " << totalWorkload << std::endl;
+
+	reproduce(currentWorkload, itSortedSpecies, newBornIndex, sortedSpecies, newPop);
 
 	for (int i = 0; i < threads.size(); i++)
 	{
@@ -397,7 +428,15 @@ void NeatAlgoGen::evolve()
 				count = 0;
 			}
 
-			species[cpt].age++;
+			if (species[cpt].getNovel() == false)
+			{
+				species[cpt].age++;
+			}
+			else {
+				species[cpt].setNovel(false);
+			}
+
+
 			species[cpt].setChamp(nullptr);
 		}
 
@@ -417,19 +456,11 @@ void NeatAlgoGen::evolve()
 	generateNetworks();
 }
 
-void NeatAlgoGen::reproduce(std::list<Species*>::iterator& it, std::mutex& lock, int& sharedNewBornIndex, std::list<Species*>& sortedSpecies, Genome* newPop)
+void NeatAlgoGen::reproduce(int workload, std::list<Species*>::iterator it, int newBornIndex, std::list<Species*>& sortedSpecies, Genome* newPop)
 {
-	lock.lock();
-
-	while (it != sortedSpecies.end())
+	for(int i = 0; i < workload; ++i, ++it)
 	{
 		Species* curSpecies = *it;
-		++it;
-
-		int newBornIndex = sharedNewBornIndex;//Reservation of a group of index
-		sharedNewBornIndex += curSpecies->getExpectedOffspring();
-
-		lock.unlock();
 
 		bool champDone = false;
 
@@ -547,11 +578,7 @@ void NeatAlgoGen::reproduce(std::list<Species*>::iterator& it, std::mutex& lock,
 			//Add the new born to species later
 			//To not disturb the reproduction
 		}
-
-		lock.lock();
 	}
-
-	lock.unlock();
 }
 
 float NeatAlgoGen::gaussRand() 

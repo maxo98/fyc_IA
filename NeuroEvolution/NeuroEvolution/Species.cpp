@@ -43,7 +43,6 @@ void Species::computeScore()
 
 void Species::Add(Genome* gen)
 {
-	gen->setInSpecies(true);
 	genomes.push_back(gen);
 
 	if (champ == nullptr || champ->getScore() < gen->getScore())

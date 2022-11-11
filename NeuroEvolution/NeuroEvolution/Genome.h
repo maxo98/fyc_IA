@@ -53,8 +53,6 @@ public:
 	inline float getScore() { return score; };
 	inline void setSpeciesScore(float _score) { speciesScore = _score; };
 	inline float getSpeciesScore() { return speciesScore; };
-	inline void setInSpecies(bool value) { inSpecies = value; };
-	inline bool getInSpecies() { return inSpecies; };
 	inline void setSuperChampOffspring(int value) { superChampOffspring = value; };
 	inline int getSuperChampOffspring() { return superChampOffspring; };
 	inline void decrementSuperChampOffspring() { superChampOffspring--; };
@@ -78,7 +76,6 @@ private:
 	std::vector<GeneNode> nodes;
 	float score = 0;
 	float speciesScore = 0;
-	bool inSpecies = false;
 	int superChampOffspring = 0;
 	bool eliminate = false;
 };
