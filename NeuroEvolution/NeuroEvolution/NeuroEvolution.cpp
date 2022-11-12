@@ -2,23 +2,32 @@
 //
 
 #include <iostream>
-#include "NeatAlgoGen.h"
+#include "Neat.h"
+
+bool task(Neat& neat, int n, int popSize, float &leastMistake, std::vector<uint8_t>& inputs);
 
 int main()
 {
-	srand(time(NULL));
+	auto seed = time(NULL);
+
+	std::cout << "seed " << seed << std::endl;
+
+	srand(seed);
 
 	NeatParameters neatparam;
 
+	//neatparam.activationFunctions.push_back(new thresholdActivation());
 	neatparam.activationFunctions.push_back(new sigmoidActivation());
 
 	neatparam.pbMutateLink = 0.05;
 	neatparam.pbMutateNode = 0.03;
-	neatparam.pbWeightShift = 0.7;
-	neatparam.pbWeightRandom = 0.2;
+	//neatparam.pbWeightShift = 0.7;
+	//neatparam.pbWeightRandom = 0.2;
+	neatparam.pbWeight = 0.9;
 	neatparam.pbToggleLink = 0.05;
-	neatparam.weightShiftStrength = 2.5;
-	neatparam.weightRandomStrength = 2.5;
+	//neatparam.weightShiftStrength = 2.5;
+	//neatparam.weightRandomStrength = 2.5;
+	neatparam.weightMuteStrength = 2.5;
 
 	neatparam.disjointCoeff = 1.0;
 	neatparam.excessCoeff = 1.0;
@@ -26,10 +35,12 @@ int main()
 	
 	neatparam.killRate = 0.2;
 
-	neatparam.bestHigh = true;
+	neatparam.bestHigh = true;//Remenber false option doesn't currently work
 
-	neatparam.fileSave = "save";
-	neatparam.saveHistory = true;
+	neatparam.champFileSave = "champ";
+	neatparam.avgFileSave = "avg";//Without extension type file
+	neatparam.saveChampHistory = false;
+	neatparam.saveAvgHistory = false;
 
 	neatparam.scoreMultiplier = 1000;
 
@@ -44,28 +55,80 @@ int main()
 	neatparam.speciationDistance = 3.0;
 	neatparam.speciationDistanceMod = 0.3;
 	neatparam.numSpeciesTarget = 4;
-	neatparam.adaptSpeciation = true;
+	neatparam.adaptSpeciation = false;//Doesn't seem to have a lot of effect, despite being taken from official implementation
 
 	int n = 1;
 
 	int popSize = 150;
 
-	NeatAlgoGen neat(popSize, n*2+1, n, neatparam);
+	Neat neat(popSize, n*2+1, n, neatparam, Neat::INIT::FULL);
 
 	std::vector<uint8_t> inputs;
 
-	for (uint8_t i = 0; i < pow(2, n-1); i++)
+	for (int i = -1; i < n; i++)
 	{
-		inputs.push_back(i);
+		if (i == -1)
+		{
+			inputs.push_back(0);
+		}
+		else {
+			inputs.push_back(1 << i);
+		}
 	}
-	
+
+	float leastMistake = 999999;
+
+	task(neat, n, popSize, leastMistake, inputs);
+
+	//std::cout << neat.getGoat()->getConnections()->size() << " connections\n";
+
+	NeuralNetwork network;
+	neat.genomeToNetwork(*neat.getGoat(), network);
+
+	for (int cpt = 0; cpt < inputs.size(); cpt++)
+	{
+		for (int cpt2 = 0; cpt2 < inputs.size(); cpt2++)
+		{
+			std::vector<float> networkInputs;
+			std::vector<float> networkOutputs;
+			networkInputs.resize(n * 2 + 1);
+
+			uint8_t result = inputs[cpt] ^ inputs[cpt2];
+
+			for (int i2 = 0; i2 < n; i2++)
+			{
+				networkInputs[i2] = ((inputs[cpt] >> i2) & 1);
+			}
+
+			for (int i2 = 0; i2 < n; i2++)
+			{
+				networkInputs[i2 + n] = ((inputs[cpt2] >> i2) & 1);
+			}
+
+			networkInputs[networkInputs.size() - 1] = 1;
+			
+			network.compute(networkInputs, networkOutputs);
+
+			std::cout << (int)inputs[cpt] << (int)inputs[cpt2] << " " << (inputs[cpt] ^ inputs[cpt2]) << networkOutputs[0] << std::endl;
+		}
+	}
+
+	std::cout << leastMistake << std::endl;
+	neat.saveHistory();
+
+	return 0;
+}
+
+bool task(Neat& neat, int n, int popSize, float& leastMistake, std::vector<uint8_t>& inputs)
+{
+
 	std::vector<float> correct(popSize, 0), mistake(popSize, 0);
 
 	std::cout << "start\n";
 
-	float leastMistake = 999999;
+	sigmoidActivation activation;
 
-	for (int i3 = 0; i3 < 100; i3++)
+	for (int i3 = 0; i3 < 200; i3++)
 	{
 		for (int i = 0; i < popSize; i++)
 		{
@@ -75,11 +138,11 @@ int main()
 
 		for (int cpt = 0; cpt < inputs.size(); cpt++)
 		{
-			for (int cpt2 = cpt; cpt2 < inputs.size(); cpt2++)
+			for (int cpt2 = 0; cpt2 < inputs.size(); cpt2++)
 			{
 				std::vector<float> networkInputs;
 				std::vector<float> networkOutputs;
-				networkInputs.resize(n*2+1);
+				networkInputs.resize(n * 2 + 1);
 
 				uint8_t result = inputs[cpt] ^ inputs[cpt2];
 
@@ -110,23 +173,21 @@ int main()
 							if (networkOutputs[i2] <= 0.5)
 							{
 								mistake[i]++;
-								multiplier = 1;
 							}
 							else {
-								//correct[i]+=1;
+								correct[i]+=1;
 							}
 
 							correct[i] += networkOutputs[i2] * multiplier;
 							//mistake[i] += (1 - networkOutputs[i2]) * multiplier;
 						}
 						else {
-							if (networkOutputs[i2] >= 0.5)
+							if (networkOutputs[i2] > 0.5)
 							{
 								mistake[i]++;
-								multiplier = 1;
 							}
 							else {
-								//correct[i] += 1;
+								correct[i] += 1;
 							}
 
 							correct[i] += (1 - networkOutputs[i2]) * multiplier;
@@ -139,12 +200,12 @@ int main()
 
 		for (int i = 0; i < popSize; i++)
 		{
-			//correct[i] = pow(4 - mistake[i], 2);
+			correct[i] = pow(correct[i], 2);
 		}
 
 		neat.setScore(correct);
 
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < popSize; i++)
 		{
 			if (mistake[i] < leastMistake)
 			{
@@ -153,9 +214,9 @@ int main()
 
 			if (mistake[i] == 0)
 			{
-				/*std::cout << "success !\n";
+				std::cout << "success !\n";
 				neat.saveHistory();
-				return 0;*/
+				return true;
 			}
 		}
 
@@ -164,7 +225,5 @@ int main()
 		neat.evolve();
 	}
 
-	std::cout << leastMistake << std::endl;
-	neat.saveHistory();
+	return false;
 }
-

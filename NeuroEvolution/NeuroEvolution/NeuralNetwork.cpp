@@ -305,7 +305,7 @@ void NeuralNetwork::splitLayerComputing(std::list<Node>::iterator it, int size, 
 			workload = totalWorkload / cpus;
 		}
 
-		int currentWorkload = floor(workload);
+		currentWorkload = floor(workload);
 		float workloadFrac = fmod(workload, 1.0f);
 		restWorkload = workloadFrac;
 

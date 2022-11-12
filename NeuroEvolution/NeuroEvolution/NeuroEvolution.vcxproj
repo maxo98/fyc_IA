@@ -146,7 +146,8 @@
     <ClCompile Include="GeneNode.cpp" />
     <ClCompile Include="Genome.cpp" />
     <ClCompile Include="Hyperneat.cpp" />
-    <ClCompile Include="NeatAlgoGen.cpp" />
+    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="Neat.cpp" />
     <ClCompile Include="NeuralNetwork.cpp" />
     <ClCompile Include="NeuroEvolution.cpp" />
     <ClCompile Include="Node.cpp" />
@@ -160,7 +161,8 @@
     <ClInclude Include="GeneNode.h" />
     <ClInclude Include="Genome.h" />
     <ClInclude Include="Hyperneat.h" />
-    <ClInclude Include="NeatAlgoGen.h" />
+    <ClInclude Include="Utils.h" />
+    <ClInclude Include="Neat.h" />
     <ClInclude Include="NeuralNetwork.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Species.h" />

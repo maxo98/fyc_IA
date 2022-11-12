@@ -2,12 +2,12 @@
 
 #pragma once
 
-#include "NeatAlgoGen.h"
+#include "Neat.h"
 
 /**
  * 
  */
-class CPPN_Neat: public NeatAlgoGen
+class CPPN_Neat: public Neat
 {
 public:
 	inline CPPN_Neat() {};

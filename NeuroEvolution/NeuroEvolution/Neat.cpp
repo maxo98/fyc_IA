@@ -1,13 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "NeatAlgoGen.h"
+#include "Neat.h"
 #include <algorithm>
-#include <fstream>
+#include <chrono>
+#include <random>
 #include <thread>
 
 
-NeatAlgoGen::NeatAlgoGen(unsigned int _populationSize, unsigned int _input, unsigned int _output, NeatParameters _neatParam)
+Neat::Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, NeatParameters _neatParam, INIT init)
 {
 	if (_neatParam.activationFunctions.size() == 0) return;//Avoid Unreal crash, should probably put a debug message
 
@@ -20,25 +21,106 @@ NeatAlgoGen::NeatAlgoGen(unsigned int _populationSize, unsigned int _input, unsi
 	networks.resize(populationSize);
 	genomes = new Genome[populationSize];
 
-
-	for (unsigned int i = 0; i < populationSize; i++)
+	if (init != INIT::NONE)
 	{
-		genomes[i] = (Genome(input, output, neatParam.activationFunctions));
-		Genome* genome = &genomes[i];
-		genome->mutateLink(allConnections);//Minimum structure
-		genome->mutateWeightRandom(neatParam.pbWeightRandom);
+		for (unsigned int i = 0; i < populationSize; i++)
+		{
+			genomes[i] = (Genome(input, output, neatParam.activationFunctions));
 
-		addToSpecies(genome);
+			if (init == INIT::ONE)
+			{
+				oneConnectionInit(genomes[i]);
+			}
+			else if (init == INIT::FULL)
+			{
+				fullConnectInit(genomes[i]);
+			}
+		}
+
+
+		generateNetworks();
 	}
-
-	generateNetworks();
 }
 
-NeatAlgoGen::NeatAlgoGen()
+Neat::Neat()
 {
 }
 
-NeatAlgoGen::~NeatAlgoGen()
+void Neat::fullConnectInit(Genome& gen)
+{
+
+	std::vector<int> inputList, outputList;
+
+	for (unsigned int cpt = 0; cpt < input; cpt++)
+	{
+		inputList.push_back(cpt);
+	}
+
+	for (unsigned int cpt = 0; cpt < output; cpt++)
+	{
+		outputList.push_back(cpt + input);
+	}
+
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::shuffle(inputList.begin(), inputList.end(), std::default_random_engine(seed));
+	std::shuffle(outputList.begin(), outputList.end(), std::default_random_engine(seed));
+
+	std::vector<int>::iterator itInput = inputList.begin();
+	std::vector<int>::iterator itOutput = outputList.begin();
+
+	bool inputDone = false, outputDone = false;
+
+	do
+	{
+		int nodeA, nodeB;
+
+		if (itOutput == outputList.end())
+		{
+			nodeA = *itInput;
+			nodeB = outputList.back();
+
+		}
+		else if (itOutput == outputList.end())
+		{
+			nodeA = inputList.back();
+			nodeB = *itOutput;
+		}
+		else {
+			nodeA = *itInput;
+			nodeB = *itOutput;
+		}
+
+		gen.addConnection(nodeA, nodeB, allConnections, (static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 2)) - 1) * neatParam.weightMuteStrength);
+
+
+		++itInput; ++itOutput;
+
+		if (itInput == inputList.end())
+		{
+			inputDone = true;
+			itInput = inputList.begin();
+		}
+
+		if (itOutput == outputList.end())
+		{
+			outputDone = true;
+			itOutput = outputList.begin();
+		}
+
+	} while (outputDone == false || inputDone == false);
+
+	addToSpecies(&gen);
+}
+
+void Neat::oneConnectionInit(Genome& gen)
+{
+	gen.mutateLink(allConnections);//Minimum structure
+	gen.mutateWeights(neatParam.weightMuteStrength, 1.0, Genome::WEIGHT_MUTATOR::COLDGAUSSIAN);
+
+	addToSpecies(&gen);
+}
+
+Neat::~Neat()
 {
 	delete[] genomes;
 
@@ -48,33 +130,38 @@ NeatAlgoGen::~NeatAlgoGen()
 	}
 }
 
-void NeatAlgoGen::mutate(Genome& genome)
+void Neat::mutate(Genome& genome)
 {
 	if (neatParam.activationFunctions.size() == 0)
 		return;
 
-	if (neatParam.pbMutateLink > randFloat()) 
-	{
-		genome.mutateLink(allConnections);
-	}
-	//Official implementation says that a link can't be added after a node
-	//Don't understand why
-	else if (neatParam.pbMutateNode > randFloat()) 
+	if (neatParam.pbMutateNode > randFloat())
 	{
 
 		unsigned int index = randInt(0, neatParam.activationFunctions.size() - 1);
 		genome.mutateNode(allConnections, neatParam.activationFunctions[index]);
 	}
+	else if (neatParam.pbMutateLink > randFloat())
+	{
+		genome.mutateLink(allConnections);
+	}
+	//Official implementation says that a link can't be added after a node
+	//Don't understand why
 	else {
-		if (neatParam.pbWeightShift > randFloat()) 
+		if (neatParam.pbWeight > randFloat())
 		{
-			genome.mutateWeightShift(neatParam.pbWeightShift);
+			genome.mutateWeights(neatParam.weightMuteStrength, 1.0, Genome::WEIGHT_MUTATOR::GAUSSIAN);
 		}
 
-		if (neatParam.pbWeightRandom > randFloat()) 
-		{
-			genome.mutateWeightRandom(neatParam.pbWeightRandom);
-		}
+		//if (neatParam.pbWeightShift > randFloat()) 
+		//{
+		//	genome.mutateWeightShift(neatParam.pbWeightShift);
+		//}
+
+		//if (neatParam.pbWeightRandom > randFloat()) 
+		//{
+		//	genome.mutateWeightRandom(neatParam.pbWeightRandom);
+		//}
 
 		if (neatParam.pbToggleLink > randFloat()) 
 		{
@@ -83,68 +170,72 @@ void NeatAlgoGen::mutate(Genome& genome)
 	}
 }
 
-void NeatAlgoGen::generateNetworks()
+void Neat::generateNetworks()
 {
-
 	for (unsigned int cpt = 0; cpt < populationSize; cpt++)
 	{
-		networks[cpt].clear();
-
-		std::vector<GeneNode>* nodes = genomes[cpt].getNodes();
-		std::vector<std::pair<unsigned int, unsigned int>> nodePosition;//Stores postion of the nodes in the network
-		nodePosition.reserve(nodes->size());
-
-		//Add the nodes to the layer
-		for (std::vector<GeneNode>::iterator node = nodes->begin(); node != nodes->end(); ++node)
-		{
-			unsigned int layer = node->getLayer();
-
-			switch(node->getType())
-			{
-			case NODE_TYPE::HIDDEN:
-				nodePosition.push_back(std::pair<unsigned int, unsigned int>(layer, networks[cpt].getNHiddenNode(layer)));
-				networks[cpt].addHiddenNode(layer, node->getActivation());
-				break;
-
-			case NODE_TYPE::INPUT:
-				nodePosition.push_back(std::pair<unsigned int, unsigned int>(0, networks[cpt].getNInputNode()));
-				networks[cpt].addInputNode();
-				break;
-				
-			case NODE_TYPE::OUTPUT:
-				nodePosition.push_back(std::pair<unsigned int, unsigned int>(-1, networks[cpt].getNOutputNode()));
-				networks[cpt].addOutputNode(node->getActivation());
-				break;
-			}
-		}
-
-		//Need to find on which layer the output nodes really are
-		for (unsigned int i = 0; i < nodePosition.size(); i++)
-		{
-			if (nodePosition[i].first == -1)
-			{
-				nodePosition[i].first = networks[cpt].getLayerSize() - 1;
-			}
-		}
-
-		std::map<unsigned int, GeneConnection>* connections = genomes[cpt].getConnections();
-
-		for (std::map<unsigned int, GeneConnection>::iterator connection = connections->begin(); connection != connections->end(); ++connection)
-		{
-			if (connection->second.isEnabled() == true)
-			{
-				//if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%i %i %i %i"), nodePosition[connection->second.getNodeA()].first, nodePosition[connection->second.getNodeA()].second, nodePosition[connection->second.getNodeB()].first, nodePosition[connection->second.getNodeB()].second));
-				//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%i %i"), connection->second.getNodeA(), nodes->size()));
-
-				networks[cpt].connectNodes(nodePosition[connection->second.getNodeA()], nodePosition[connection->second.getNodeB()], connection->second.getWeight());
-			}
-		}
-
-		//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "End network");
+		genomeToNetwork(genomes[cpt], networks[cpt]);
 	}
 }
 
-void NeatAlgoGen::evolve()
+void Neat::genomeToNetwork(Genome& genome, NeuralNetwork& network)
+{
+	network.clear();
+
+	std::vector<GeneNode>* nodes = genome.getNodes();
+	std::vector<std::pair<unsigned int, unsigned int>> nodePosition;//Stores postion of the nodes in the network
+	nodePosition.reserve(nodes->size());
+
+	//Add the nodes to the layer
+	for (std::vector<GeneNode>::iterator node = nodes->begin(); node != nodes->end(); ++node)
+	{
+		unsigned int layer = node->getLayer();
+
+		switch (node->getType())
+		{
+		case NODE_TYPE::HIDDEN:
+			nodePosition.push_back(std::pair<unsigned int, unsigned int>(layer, network.getNHiddenNode(layer)));
+			network.addHiddenNode(layer, node->getActivation());
+			break;
+
+		case NODE_TYPE::INPUT:
+			nodePosition.push_back(std::pair<unsigned int, unsigned int>(0, network.getNInputNode()));
+			network.addInputNode();
+			break;
+
+		case NODE_TYPE::OUTPUT:
+			nodePosition.push_back(std::pair<unsigned int, unsigned int>(-1, network.getNOutputNode()));
+			network.addOutputNode(node->getActivation());
+			break;
+		}
+	}
+
+	//Need to find on which layer the output nodes really are
+	for (unsigned int i = 0; i < nodePosition.size(); i++)
+	{
+		if (nodePosition[i].first == -1)
+		{
+			nodePosition[i].first = network.getLayerSize() - 1;
+		}
+	}
+
+	std::map<unsigned int, GeneConnection>* connections = genome.getConnections();
+
+	for (std::map<unsigned int, GeneConnection>::iterator connection = connections->begin(); connection != connections->end(); ++connection)
+	{
+		if (connection->second.isEnabled() == true)
+		{
+			//if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%i %i %i %i"), nodePosition[connection->second.getNodeA()].first, nodePosition[connection->second.getNodeA()].second, nodePosition[connection->second.getNodeB()].first, nodePosition[connection->second.getNodeB()].second));
+			//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%i %i"), connection->second.getNodeA(), nodes->size()));
+
+			network.connectNodes(nodePosition[connection->second.getNodeA()], nodePosition[connection->second.getNodeB()], connection->second.getWeight());
+		}
+	}
+
+	//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "End network");
+}
+
+void Neat::evolve()
 {
 	generation++;
 
@@ -203,6 +294,8 @@ void NeatAlgoGen::evolve()
 	}
 
 	avgFitness /= populationSize;
+
+	if (neatParam.saveAvgHistory == true) avgHistory.push_back(avgFitness);
 
 	if (avgFitness < 1) avgFitness = 1;
 
@@ -339,21 +432,22 @@ void NeatAlgoGen::evolve()
 
 	float totalWorkload = sortedSpecies.size();
 	float workload = totalWorkload / cpus;
+	int currentWorkload = 0;
 
-	while (workload < 1) 
+	while (workload < 1)
 	{
 		cpus--;
 		workload = totalWorkload / cpus;
 	}
 
-	int currentWorkload = floor(workload);
+	currentWorkload = floor(workload);
 	float workloadFrac = fmod(workload, 1.0f);
 	float restWorkload = workloadFrac;
 
 	while (cpus > threads.size()+1)
 	{
 
-		threads.push_back(std::thread(&NeatAlgoGen::reproduce, this, currentWorkload + floor(restWorkload), itSortedSpecies, newBornIndex, std::ref(sortedSpecies), newPop));
+		threads.push_back(std::thread(&Neat::reproduce, this, currentWorkload + floor(restWorkload), itSortedSpecies, newBornIndex, std::ref(sortedSpecies), newPop));
 
 		for (int i = 0; i < currentWorkload + floor(restWorkload); i++)
 		{
@@ -443,14 +537,14 @@ void NeatAlgoGen::evolve()
 		species.erase(it, species.begin() + cpt);
 	}
 
-	std::cout << "size: " << species.size() << std::endl;
+	//std::cout << "size: " << species.size() << std::endl;
 
 	//Official implmentation removes old innovations here not sure if that's really usefull
 	
 	generateNetworks();
 }
 
-void NeatAlgoGen::reproduce(int workload, std::list<Species*>::iterator it, int newBornIndex, std::list<Species*>& sortedSpecies, Genome* newPop)
+void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBornIndex, std::list<Species*>& sortedSpecies, Genome* newPop)
 {
 	for(int i = 0; i < workload; ++i, ++it)
 	{
@@ -471,13 +565,7 @@ void NeatAlgoGen::reproduce(int workload, std::list<Species*>::iterator it, int 
 						//ABOVE LINE IS FOR:
 						//Make sure no links get added when the system has link adding disabled
 						//CEDRIC NOTES: why is 0.8 isn't a parameter value ?
-						if (randFloat() > 0.5)
-						{
-							newPop[newBornIndex].mutateWeightRandom(neatParam.weightRandomStrength);
-						}
-						else {
-							newPop[newBornIndex].mutateWeightShift(neatParam.weightShiftStrength);
-						}
+						newPop[newBornIndex].mutateWeights(neatParam.weightMuteStrength, 1, Genome::WEIGHT_MUTATOR::GAUSSIAN);
 					}
 					else {
 						//Sometimes we add a link to a superchamp
@@ -551,7 +639,7 @@ void NeatAlgoGen::reproduce(int workload, std::list<Species*>::iterator it, int 
 				{
 					newPop[newBornIndex].crossover(*gen1, *gen2, Genome::CROSSOVER::RANDOM);
 				}
-				else if (randFloat() < neatParam.pbMateMultipoint / (neatParam.pbMateMultipoint + neatParam.pbMateSinglepoint))
+				else if (randFloat() <= neatParam.pbMateMultipoint / (neatParam.pbMateMultipoint + neatParam.pbMateSinglepoint))
 				{
 					newPop[newBornIndex].crossover(*gen1, *gen2, Genome::CROSSOVER::AVERAGE);
 				}
@@ -575,7 +663,7 @@ void NeatAlgoGen::reproduce(int workload, std::list<Species*>::iterator it, int 
 	}
 }
 
-float NeatAlgoGen::gaussRand() 
+float Neat::gaussRand() 
 {
 	static int iset = 0;
 	static float gset;
@@ -599,7 +687,7 @@ float NeatAlgoGen::gaussRand()
 	}
 }
 
-void NeatAlgoGen::adjustFitness()
+void Neat::adjustFitness()
 {
 	for (std::vector<Species>::iterator itSpecies = species.begin(); itSpecies != species.end(); ++itSpecies)
 	{
@@ -651,7 +739,7 @@ void NeatAlgoGen::adjustFitness()
 	}
 }
 
-void NeatAlgoGen::addToSpecies(Genome* gen)
+void Neat::addToSpecies(Genome* gen)
 {
 	bool found = false;
 	for (std::vector<Species>::iterator it = species.begin(); it != species.end() && found == false; ++it)
@@ -670,7 +758,7 @@ void NeatAlgoGen::addToSpecies(Genome* gen)
 
 }
 
-float NeatAlgoGen::distance(Genome& genomeA, Genome& genomeB)
+float Neat::distance(Genome& genomeA, Genome& genomeB)
 {
 	int highestInnovationGene1 = 0;
 	if (genomeA.getConnections()->size() != 0) 
@@ -737,7 +825,7 @@ float NeatAlgoGen::distance(Genome& genomeA, Genome& genomeB)
 	return neatParam.disjointCoeff * disjoint + neatParam.excessCoeff * excess + neatParam.mutDiffCoeff * ((disjoint + excess) / similar);
 }
 
-void NeatAlgoGen::setScore(std::vector < float > newScores)
+void Neat::setScore(std::vector < float > newScores)
 {
 	if (newScores.size() != populationSize)
 	{
@@ -776,66 +864,31 @@ void NeatAlgoGen::setScore(std::vector < float > newScores)
 		highestLastChanged = 0;
 	}
 
-	if(neatParam.saveHistory == true) history.push_back(bestScore);
+	if(neatParam.saveChampHistory == true) champHistory.push_back(bestScore);
 
 	goat = genomes[bestIndex];
 }
 
-bool NeatAlgoGen::saveHistory()
+bool Neat::saveHistory()
 {
-	if (neatParam.saveHistory == false)
+	bool result = true;
+
+	if (neatParam.saveChampHistory == true)
 	{
-		std::cout << "History not saved, aborting." << std::endl;
-
-		return false;
-	}
-
-	int n = 1;
-	std::ifstream f;
-
-	do {
-		if (f.is_open() == true) f.close();
-
-		f = std::ifstream(neatParam.fileSave + "_" + std::to_string(n) + ".csv");
-		n++;
-	}while(f.good() && n < 100);
-
-	f.close();
-
-	if (n >= 100)
-	{
-		std::cout << "Could not find path, or files already exist." << std::endl;
-
-		return false;
-	}
-
-	n--;
-
-	std::fstream csvFile;
-	csvFile.open(neatParam.fileSave + "_" + std::to_string(n) + ".csv", std::fstream::in | std::fstream::out | std::fstream::trunc);
-
-	if (csvFile.is_open() == false)
-	{
-		std::cout << "Fstream failed to create file." << std::endl;
-
-		return false;
-	}
-
-	for (std::vector<float>::iterator it = history.begin(); it != history.end(); ++it)
-	{
-		std::string str = std::to_string(*it);
-		size_t pos = str.find(".");
-		
-		if (pos == -1)
+		if (saveVectorToCsv(neatParam.champFileSave, champHistory) == false)
 		{
-			csvFile << str << std::endl;
-		}
-		else {
-			csvFile << str.substr(0, pos) << "," << str.substr(pos+1, str.size()) << std::endl;
+			result = false;
 		}
 	}
 
-	csvFile.close();
-	return true;
+	if (neatParam.saveAvgHistory == true)
+	{
+		if (saveVectorToCsv(neatParam.avgFileSave, avgHistory) == false)
+		{
+			result = false;
+		}
+	}
+
+	return result;
 }
 
