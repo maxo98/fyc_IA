@@ -123,11 +123,6 @@ void Neat::oneConnectionInit(Genome& gen)
 Neat::~Neat()
 {
 	delete[] genomes;
-
-	for (int i = 0; i < neatParam.activationFunctions.size(); i++)
-	{
-		delete neatParam.activationFunctions[i];
-	}
 }
 
 void Neat::mutate(Genome& genome)
@@ -141,13 +136,14 @@ void Neat::mutate(Genome& genome)
 		unsigned int index = randInt(0, neatParam.activationFunctions.size() - 1);
 		genome.mutateNode(allConnections, neatParam.activationFunctions[index]);
 	}
-	else if (neatParam.pbMutateLink > randFloat())
+	
+	if (neatParam.pbMutateLink > randFloat())
 	{
 		genome.mutateLink(allConnections);
 	}
 	//Official implementation says that a link can't be added after a node
 	//Don't understand why
-	else {
+	//else {
 		if (neatParam.pbWeight > randFloat())
 		{
 			genome.mutateWeights(neatParam.weightMuteStrength, 1.0, Genome::WEIGHT_MUTATOR::GAUSSIAN);
@@ -167,7 +163,7 @@ void Neat::mutate(Genome& genome)
 		{
 			genome.mutateLinkToggle();
 		}
-	}
+	//}
 }
 
 void Neat::generateNetworks()
@@ -434,7 +430,9 @@ void Neat::evolve()
 	float workload = totalWorkload / cpus;
 	int currentWorkload = 0;
 
-	while (workload < 1)
+	currentWorkload = totalWorkload;//Multithreading is creating problem when we modify when modifying the all connections unordered map
+
+	/*while (workload < 1)
 	{
 		cpus--;
 		workload = totalWorkload / cpus;
@@ -463,7 +461,7 @@ void Neat::evolve()
 	{
 		restWorkload--;
 		currentWorkload++;
-	}
+	}*/
 
 	reproduce(currentWorkload, itSortedSpecies, newBornIndex, sortedSpecies, newPop);
 

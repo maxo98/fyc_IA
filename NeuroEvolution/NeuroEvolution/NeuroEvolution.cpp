@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Neat.h"
 
-bool task(Neat& neat, int n, int popSize, float &leastMistake, std::vector<uint8_t>& inputs);
+bool task(Neat& neat, int n, int popSize, float& leastMistake, std::vector<std::vector<float>>& inputs, std::vector<std::vector<float>>& outputs);
 
 int main()
 {
@@ -19,15 +19,15 @@ int main()
 	//neatparam.activationFunctions.push_back(new thresholdActivation());
 	neatparam.activationFunctions.push_back(new sigmoidActivation());
 
-	neatparam.pbMutateLink = 0.05;
-	neatparam.pbMutateNode = 0.03;
+	neatparam.pbMutateLink = 0.5;// 0.05;
+	neatparam.pbMutateNode = 0.03;//0.03;
 	//neatparam.pbWeightShift = 0.7;
 	//neatparam.pbWeightRandom = 0.2;
-	neatparam.pbWeight = 0.9;
-	neatparam.pbToggleLink = 0.05;
+	neatparam.pbWeight = 1;// 0.9;
+	neatparam.pbToggleLink = 0.05;// 0.05;
 	//neatparam.weightShiftStrength = 2.5;
 	//neatparam.weightRandomStrength = 2.5;
-	neatparam.weightMuteStrength = 2.5;
+	neatparam.weightMuteStrength = 5;// 2.5;
 
 	neatparam.disjointCoeff = 1.0;
 	neatparam.excessCoeff = 1.0;
@@ -61,26 +61,61 @@ int main()
 
 	int popSize = 150;
 
-	Neat neat(popSize, n*2+1, n, neatparam, Neat::INIT::FULL);
+	int result = 0;
 
-	std::vector<uint8_t> inputs;
+	std::vector<std::vector<float>> inputs;
 
-	for (int i = -1; i < n; i++)
+	inputs.push_back(std::vector<float>());
+	inputs[0].push_back(0);
+	inputs[0].push_back(0);
+	inputs[0].push_back(1);
+	inputs.push_back(std::vector<float>());
+	inputs[1].push_back(1);
+	inputs[1].push_back(0);
+	inputs[1].push_back(1);
+	inputs.push_back(std::vector<float>());
+	inputs[2].push_back(0);
+	inputs[2].push_back(1);
+	inputs[2].push_back(1);
+	inputs.push_back(std::vector<float>());
+	inputs[3].push_back(1);
+	inputs[3].push_back(1);
+	inputs[3].push_back(1);
+
+	std::vector<std::vector<float>> outputs;
+
+	outputs.push_back(std::vector<float>());
+	outputs[0].push_back(0);
+	outputs.push_back(std::vector<float>());
+	outputs[1].push_back(1);
+	outputs.push_back(std::vector<float>());
+	outputs[2].push_back(1);
+	outputs.push_back(std::vector<float>());
+	outputs[3].push_back(0);
+
+	for (int i = 0; i < 100; i++)
 	{
-		if (i == -1)
+		Neat neat(popSize, n * 2 + 1, n, neatparam, Neat::INIT::ONE);
+
+
+		float leastMistake = 999999;
+
+		if (task(neat, n, popSize, leastMistake, inputs, outputs) == true)
 		{
-			inputs.push_back(0);
-		}
-		else {
-			inputs.push_back(1 << i);
-		}
+			result++;
+		}	
 	}
 
-	float leastMistake = 999999;
+	std::cout << result << std::endl;
 
-	task(neat, n, popSize, leastMistake, inputs);
+	for (int i = 0; i < neatparam.activationFunctions.size(); i++)
+	{
+		delete neatparam.activationFunctions[i];
+	}
 
-	//std::cout << neat.getGoat()->getConnections()->size() << " connections\n";
+	return 0;
+
+	/*std::cout << neat.getGoat()->getConnections()->size() << " actives/inactives connections " << neat.getGoat()->getNodes()->size() - (n * 3) << " hidden nodes\n";
 
 	NeuralNetwork network;
 	neat.genomeToNetwork(*neat.getGoat(), network);
@@ -116,10 +151,10 @@ int main()
 	std::cout << leastMistake << std::endl;
 	neat.saveHistory();
 
-	return 0;
+	return 0;*/
 }
 
-bool task(Neat& neat, int n, int popSize, float& leastMistake, std::vector<uint8_t>& inputs)
+bool task(Neat& neat, int n, int popSize, float& leastMistake, std::vector<std::vector<float>>& inputs, std::vector<std::vector<float>>& outputs)
 {
 
 	std::vector<float> correct(popSize, 0), mistake(popSize, 0);
@@ -128,8 +163,9 @@ bool task(Neat& neat, int n, int popSize, float& leastMistake, std::vector<uint8
 
 	sigmoidActivation activation;
 
-	for (int i3 = 0; i3 < 200; i3++)
+	for (int i3 = 0; i3 < 100; i3++)
 	{
+
 		for (int i = 0; i < popSize; i++)
 		{
 			correct[i] = 0;
@@ -138,62 +174,40 @@ bool task(Neat& neat, int n, int popSize, float& leastMistake, std::vector<uint8
 
 		for (int cpt = 0; cpt < inputs.size(); cpt++)
 		{
-			for (int cpt2 = 0; cpt2 < inputs.size(); cpt2++)
+			std::vector<float> networkOutputs;
+
+			for (int i = 0; i < popSize; i++)
 			{
-				std::vector<float> networkInputs;
-				std::vector<float> networkOutputs;
-				networkInputs.resize(n * 2 + 1);
+				NeuralNetwork* network = neat.getNeuralNetwork(i);
 
-				uint8_t result = inputs[cpt] ^ inputs[cpt2];
+				network->compute(inputs[cpt], networkOutputs);
 
-				for (int i2 = 0; i2 < n; i2++)
+				float multiplier = 1;
+
+				if (outputs[cpt][0] == 1)
 				{
-					networkInputs[i2] = ((inputs[cpt] >> i2) & 1);
-				}
-
-				for (int i2 = 0; i2 < n; i2++)
-				{
-					networkInputs[i2 + n] = ((inputs[cpt2] >> i2) & 1);
-				}
-
-				networkInputs[networkInputs.size() - 1] = 1;
-
-				for (int i = 0; i < popSize; i++)
-				{
-					NeuralNetwork* network = neat.getNeuralNetwork(i);
-
-					network->compute(networkInputs, networkOutputs);
-
-					for (int i2 = 0; i2 < networkOutputs.size(); i2++)
+					if (networkOutputs[0] <= 0.5)
 					{
-						float multiplier = 1;
-
-						if (((result >> i2) & 1) == 1)
-						{
-							if (networkOutputs[i2] <= 0.5)
-							{
-								mistake[i]++;
-							}
-							else {
-								correct[i]+=1;
-							}
-
-							correct[i] += networkOutputs[i2] * multiplier;
-							//mistake[i] += (1 - networkOutputs[i2]) * multiplier;
-						}
-						else {
-							if (networkOutputs[i2] > 0.5)
-							{
-								mistake[i]++;
-							}
-							else {
-								correct[i] += 1;
-							}
-
-							correct[i] += (1 - networkOutputs[i2]) * multiplier;
-							//mistake[i] += (networkOutputs[i2]) * multiplier;
-						}
+						mistake[i]++;
 					}
+					else {
+						correct[i]+=1;
+					}
+
+					correct[i] += networkOutputs[0] * multiplier;
+					//mistake[i] += (1 - networkOutputs[i2]) * multiplier;
+				}
+				else {
+					if (networkOutputs[0] > 0.5)
+					{
+						mistake[i]++;
+					}
+					else {
+						correct[i] += 1;
+					}
+
+					correct[i] += (1 - networkOutputs[0]) * multiplier;
+					//mistake[i] += (networkOutputs[i2]) * multiplier;
 				}
 			}
 		}
@@ -214,7 +228,7 @@ bool task(Neat& neat, int n, int popSize, float& leastMistake, std::vector<uint8
 
 			if (mistake[i] == 0)
 			{
-				std::cout << "success !\n";
+				std::cout << i3 << " generation success !\n";
 				neat.saveHistory();
 				return true;
 			}

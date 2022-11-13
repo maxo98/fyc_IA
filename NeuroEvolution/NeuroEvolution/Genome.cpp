@@ -80,6 +80,11 @@ bool Genome::mutateLink(std::unordered_map<std::pair<unsigned int, unsigned int>
         nodeA = randInt(0, nodes.size() - 1);
         nodeB = randInt(0, nodes.size() - 1);
 
+        if (nodeA >= nodes.size())
+        {
+            int err;
+        }
+
         if (nodeA == nodeB || nodes[nodeA].layer == nodes[nodeB].layer || (nodes[nodeA].type == NODE_TYPE::OUTPUT && nodes[nodeB].type == NODE_TYPE::OUTPUT))
         {
             continue;
@@ -138,6 +143,17 @@ bool Genome::mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>
     unsigned int nodeB = connection->nodeB;
     float oldWeight = connection->weight;
     connection->enabled = false;
+
+    if (nodeA >= nodes.size())
+    {
+        int err;
+    }
+
+    if ((nodes[connection->getNodeA()].layer + 1) > 100)
+    {
+        int err;
+    }
+
     nodes.push_back(GeneNode(NODE_TYPE::HIDDEN, activationFunction, nodes[connection->getNodeA()].layer + 1));
     unsigned int nodeC = nodes.size()-1;
 
@@ -408,6 +424,11 @@ void Genome::crossover(Genome& parentA, Genome& parentB, CROSSOVER type)
             connections[itA->first] = itA->second;
         }
 
+        if (connections[itA->first].getNodeA() >= nodes.size() || connections[itA->first].getNodeB() >= nodes.size())
+        {
+            int a;
+        }
+
         nodesToConnection[std::pair<unsigned int, unsigned int>(connections[itA->first].getNodeA(), connections[itA->first].getNodeB())] = itA->first;
     }
 
@@ -445,6 +466,11 @@ void Genome::crossover(Genome& parentA, Genome& parentB, CROSSOVER type)
                 connections[itB->first] = gene;
                 nodesToConnection[std::pair<unsigned int, unsigned int>(connections[itB->first].getNodeA(), connections[itB->first].getNodeB())] = itB->first;
             }
+
+            if (connections[itB->first].getNodeA() >= nodes.size() || connections[itB->first].getNodeB() >= nodes.size())
+            {
+                int a;
+            }
         }
 
         //Set the order in which each connection from parentB we're added
@@ -478,6 +504,11 @@ void Genome::shiftNodes(unsigned int node, unsigned int layerMin)
     nodeToShift.push(node);
     nodes[node].layer = layerMin + 1;
 
+    if ((layerMin + 1) > 100)
+    {
+        int err;
+    }
+
     while (nodeToShift.empty() == false)
     {
         unsigned int node = nodeToShift.top();
@@ -494,6 +525,11 @@ void Genome::shiftNodes(unsigned int node, unsigned int layerMin)
             {
                 if (nodes[it->first.second].layer == nodes[node].layer)
                 {
+                    if ((nodes[node].layer + 1) > 100)
+                    {
+                        int err;
+                    }
+
                     nodes[it->first.second].layer = nodes[node].layer + 1;
 
                     if (nodes[it->first.second].type != NODE_TYPE::OUTPUT)

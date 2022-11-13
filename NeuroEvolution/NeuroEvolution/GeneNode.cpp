@@ -8,6 +8,11 @@ GeneNode::GeneNode(NODE_TYPE _type, Activation* _activationFunction, unsigned in
 	type = _type;
 	layer = _layer;
 	activationFunction = _activationFunction;
+
+	if (layer > 100)
+	{
+		int err;
+	}
 }
 
 GeneNode::~GeneNode()

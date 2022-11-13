@@ -114,6 +114,7 @@ public:
 protected:
 	std::vector<NeuralNetwork> networks;
 	Genome* genomes = nullptr;
+	//unordered_map seems bugged
 	std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int> allConnections;//Innovation number starts at 0
 	unsigned int populationSize = 0, input = 0, output = 0;
 	NeatParameters neatParam;

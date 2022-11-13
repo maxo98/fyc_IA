@@ -59,6 +59,7 @@ private:
 	unsigned int input;
 
 	std::map<unsigned int, GeneConnection> connections;
+	//Unordered map seems to bug
 	std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int> nodesToConnection;//From a pair of nodes to innovation number of connection
 	std::vector<unsigned int> orderAddedCon;
 	std::vector<GeneNode> nodes;

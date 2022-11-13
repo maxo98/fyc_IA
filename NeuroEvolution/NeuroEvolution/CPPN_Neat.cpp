@@ -19,11 +19,6 @@ CPPN_Neat::CPPN_Neat(unsigned int _populationSize, unsigned int _input, unsigned
 CPPN_Neat::~CPPN_Neat()
 {
 	delete[] genomes;
-
-	for (int i = 0; i < neatParam.activationFunctions.size(); i++)
-	{
-		delete neatParam.activationFunctions[i];
-	}
 }
 
 void CPPN_Neat::mutate(Genome& genome)
@@ -37,13 +32,14 @@ void CPPN_Neat::mutate(Genome& genome)
 		unsigned int index = randInt(0, neatParam.activationFunctions.size() - 1);
 		genome.mutateNode(allConnections, neatParam.activationFunctions[index]);
 	}
-	else if (neatParam.pbMutateLink > randFloat())
+	
+	if (neatParam.pbMutateLink > randFloat())
 	{
 		genome.mutateLink(allConnections);
 	}
 	//Official implementation says that a link can't be added after a node
 	//Don't understand why
-	else {
+	//else {
 		if (neatParam.pbWeight > randFloat())
 		{
 			genome.mutateWeights(neatParam.weightMuteStrength, 1.0, Genome::WEIGHT_MUTATOR::GAUSSIAN);
@@ -68,7 +64,7 @@ void CPPN_Neat::mutate(Genome& genome)
 		{
 			unsigned int index = randInt(0, neatParam.activationFunctions.size() - 1);
 		}
-	}
+	//}
 
 }
 
