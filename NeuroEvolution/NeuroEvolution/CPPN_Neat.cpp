@@ -12,11 +12,13 @@ CPPN_Neat::CPPN_Neat(unsigned int _populationSize, unsigned int _input, unsigned
 		genomes[i] = Genome(_input, output, neatParam.activationFunctions, true);
 		fullConnectInit(genomes[i]);
 	}
+
+	generateNetworks();
 }
 
 CPPN_Neat::~CPPN_Neat()
 {
-	delete[] genomes;
+	//delete[] genomes;
 }
 
 void CPPN_Neat::mutate(Genome& genome, std::mutex* lock)

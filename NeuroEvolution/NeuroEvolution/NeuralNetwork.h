@@ -33,9 +33,9 @@ public:
 	void connectNodes(unsigned int layerA, unsigned int nodeA, unsigned int layerB, unsigned int nodeB, float weight);
 	void connectNodes(std::pair<unsigned int, unsigned int> nodeA, std::pair<unsigned int, unsigned int> nodeB, float weight);
 
-	void compute(std::vector<float> &inputs , std::vector<float> &outputs);
+	void compute(const std::vector<float> &inputs , std::vector<float> &outputs);
 	void splitLayerComputing(std::list<Node>::iterator it, int size, bool output = false, std::vector<float>* outputs = nullptr);
-	void concurrentComputing(int workload, std::list<Node>::iterator it, bool output, std::vector<float>* outputs);
+	void concurrentComputing(int workload, int startIndex, std::list<Node>::iterator it, bool output, std::vector<float>* outputs);
 
 	void clear();
 

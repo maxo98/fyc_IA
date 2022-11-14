@@ -96,7 +96,7 @@ protected:
 
 	HyperneatParameters hyperParam;
 
-	CPPN_Neat cppns;
+	CPPN_Neat* cppns;
 };
 
 //CPPN Input Functions
@@ -113,7 +113,7 @@ inline bool fixedThreshold(std::vector<void*> variables, std::vector<float> valu
 
 inline bool leoThreshold(std::vector<void*> variables, std::vector<float> values, const std::vector<float>& p1, const std::vector<float>& p2)
 {
-	return (*(float*)variables[0] < abs(values[1]));
+	return (0 < abs(values[1]));
 }
 
 //Weight modifiers functions

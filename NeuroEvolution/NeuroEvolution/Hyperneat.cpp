@@ -7,13 +7,14 @@ Hyperneat::Hyperneat(unsigned int _populationSize, const NeatParameters& _neatPa
 {
 	hyperParam = _hyperParam;
 
-	cppns = CPPN_Neat(_populationSize, hyperParam.cppnInput, hyperParam.cppnOutput, _neatParam);
+	cppns = new CPPN_Neat(_populationSize, hyperParam.cppnInput, hyperParam.cppnOutput, _neatParam);
 
 	networks.resize(_populationSize);
 }
 
 Hyperneat::~Hyperneat()
 {
+	delete cppns;
 	delete hyperParam.activationFunction;
 }
 
@@ -129,7 +130,7 @@ void Hyperneat::addLayerAndConnect(unsigned int layer, unsigned int networkIndex
 			input = hyperParam.cppnInputFunction(hyperParam.inputVariables, p1, p2);
 
 			output.resize(hyperParam.cppnOutput);
-			cppns.getNeuralNetwork(networkIndex)->compute(input, output);
+			cppns->getNeuralNetwork(networkIndex)->compute(input, output);
 
 			//Check if we should create a connection
 			if (hyperParam.thresholdFunction(hyperParam.thresholdVariables, output, p1, p2) == true)
@@ -148,17 +149,19 @@ void Hyperneat::addLayerAndConnect(unsigned int layer, unsigned int networkIndex
 
 void Hyperneat::evolve()
 {
-	cppns.evolve();
+	cppns->evolve();
+
+	generateNetworks();
 }
 
 void Hyperneat::setScore(const std::vector < float >& newScores)
 {
-	cppns.setScore(newScores);
+	cppns->setScore(newScores);
 }
 
 bool Hyperneat::saveHistory()
 {
-	return cppns.saveHistory();
+	return cppns->saveHistory();
 }
 
 std::vector<float> basicCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2)

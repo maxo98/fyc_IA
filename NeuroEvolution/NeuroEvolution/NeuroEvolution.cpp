@@ -11,7 +11,7 @@ int main()
 
 	srand(seed);
 
-	return launchXor();
-	//return launchHypeneatTest();
+	//return launchXor();
+	return launchHypeneatTest();
 }
 

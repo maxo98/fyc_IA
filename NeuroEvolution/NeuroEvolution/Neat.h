@@ -106,6 +106,9 @@ public:
 	void setScore(const std::vector < float >& newScores);
 	bool saveHistory();
 
+	inline Genome* getGenomes() { return genomes; };
+	inline unsigned int getOutput() { return output; };
+
 	friend class ANeuralNetworkDisplayHUD;
 
 	Genome* getGoat() { return &goat; };

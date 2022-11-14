@@ -245,7 +245,7 @@ Node* NeuralNetwork::getNodeFromLayer(std::list<Node>& layer, unsigned int node)
 	}
 }
 
-void NeuralNetwork::compute(std::vector<float>& inputs, std::vector<float>& outputs)
+void NeuralNetwork::compute(const std::vector<float>& inputs, std::vector<float>& outputs)
 {
 	outputs.clear();
 
@@ -275,8 +275,17 @@ void NeuralNetwork::compute(std::vector<float>& inputs, std::vector<float>& outp
 			splitLayerComputing(itNode, it->size());
 		}
 
+		outputs.resize(outputNodes.size(), 0);
+
 		//Compute the result
 		splitLayerComputing(outputNodes.begin(), outputNodes.size(), true, &outputs);
+
+		if (outputs.size() == 99)
+		{
+			std::cout << "L281 " << outputNodes.size() << std::endl;
+			int err = 0;
+			err++;
+		}
 	}
 }
 
@@ -296,6 +305,9 @@ void NeuralNetwork::splitLayerComputing(std::list<Node>::iterator it, int size, 
 	float workload = totalWorkload / cpus;
 	float restWorkload = 0;
 	int currentWorkload = totalWorkload;
+	int startIndex = 0;
+
+	int count = 0;
 
 	if (totalWorkload > 10)
 	{
@@ -311,12 +323,16 @@ void NeuralNetwork::splitLayerComputing(std::list<Node>::iterator it, int size, 
 
 		while (cpus > threads.size() + 1)
 		{
-			threads.push_back(std::thread(&NeuralNetwork::concurrentComputing, this, currentWorkload + floor(restWorkload), it, output, outputs));
+			threads.push_back(std::thread(&NeuralNetwork::concurrentComputing, this, currentWorkload + floor(restWorkload), startIndex, it, output, outputs));
 
 			for (int i = 0; i < currentWorkload + floor(restWorkload); i++)
 			{
 				++it;
 			}
+
+			startIndex += currentWorkload + floor(restWorkload);
+
+			count += currentWorkload + floor(restWorkload);
 
 			restWorkload -= floor(restWorkload);
 			restWorkload += workloadFrac;
@@ -329,7 +345,14 @@ void NeuralNetwork::splitLayerComputing(std::list<Node>::iterator it, int size, 
 		}
 	}
 
-	concurrentComputing(currentWorkload + floor(restWorkload), it, output, outputs);
+	count += currentWorkload;
+
+	if (count > 2)
+	{
+		//std::cout << "L345  " << count << std::endl;
+	}
+
+	concurrentComputing(currentWorkload, startIndex, it, output, outputs);
 
 	for (int i = 0; i < threads.size(); i++)
 	{
@@ -337,16 +360,27 @@ void NeuralNetwork::splitLayerComputing(std::list<Node>::iterator it, int size, 
 	}
 }
 
-void NeuralNetwork::concurrentComputing(int workload, std::list<Node>::iterator it, bool output, std::vector<float>* outputs)
+void NeuralNetwork::concurrentComputing(int workload, int startIndex, std::list<Node>::iterator it, bool output, std::vector<float>* outputs)
 {
-	for (int i = 0; i < workload; ++i, ++it)
+	if (workload > 2)
+	{
+		//std::cout << "L360  " << workload << std::endl;
+	}
+	
+	int i = 0;
+	for (i = 0; i < workload; ++i, ++it)
 	{
 		if (output == false)
 		{
 			it->compute();
 		}else{
 			it->next();
-			outputs->push_back(it->compute());
+			(*outputs)[startIndex] = it->compute();
 		}
+	}
+
+	if (workload > 2)
+	{
+		//std::cout << "L373  " << i<< std::endl;
 	}
 }

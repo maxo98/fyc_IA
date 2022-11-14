@@ -5,7 +5,7 @@ int launchHypeneatTest()
 	int test = 20;
 	int n = 10;
 
-	std::vector<std::vector<std::vector<float>>> grid;
+	std::vector<std::vector<float>> grid;
 	std::vector<std::vector<float>> centers;
 
 	grid.resize(test);
@@ -13,15 +13,10 @@ int launchHypeneatTest()
 
 	for (int cpt = 0; cpt < test; cpt++)
 	{
-		grid[cpt].resize(n);
+		grid[cpt].resize(n*n, 0);
 		centers[cpt].resize(2);
 
-		for (int i = 0; i < n; i++)
-		{
-			grid[cpt][i].resize(n, false);
-		}
-
-		writeSquares(grid[cpt], centers[cpt]);
+		writeSquares(grid[cpt], centers[cpt], n);
 	}
 
 	NeatParameters neatparam;
@@ -52,7 +47,7 @@ int launchHypeneatTest()
 
 	neatparam.champFileSave = "champ";
 	neatparam.avgFileSave = "avg";//Without extension type file
-	neatparam.saveChampHistory = false;
+	neatparam.saveChampHistory = true;
 	neatparam.saveAvgHistory = false;
 
 	neatparam.scoreMultiplier = 1000;
@@ -80,16 +75,19 @@ int launchHypeneatTest()
 	hyperneatParam.thresholdFunction = leoThreshold;
 	hyperneatParam.weightModifierFunction = noChangeWeight;
 
-	int popSize = 150;
+	int popSize = 50;
 
 	int result = 0;
 
 	std::vector<float> pos, output;
 	pos.resize(2);
+	output.resize(n * n);
 
-	for (int i = 0; i < 100; i++)
+	int count = 0;
+
+	//for (int i = 0; i < 100; i++)
 	{
-		Hyperneat hyper(150, neatparam, hyperneatParam);
+		Hyperneat hyper(50, neatparam, hyperneatParam);
 
 		for (int i = 0; i < n; i++)
 		{
@@ -101,8 +99,18 @@ int launchHypeneatTest()
 
 				hyper.addInput(pos);
 				hyper.addOutput(pos);
+				count++;
 			}
 		}
+
+		hyper.generateNetworks();
+
+		if (hypeneatTest(grid, output, centers, hyper) == true)
+		{
+			result++;
+		}
+
+		hyper.saveHistory();
 	}
 
 	for (int i = 0; i < neatparam.activationFunctions.size(); i++)
@@ -115,17 +123,60 @@ int launchHypeneatTest()
 	return 0;
 }
 
-void hypeneatTest(const std::vector<std::vector<std::vector<float>>>& grid, std::vector<float>& output, std::vector<std::vector<float>>& centers, Hyperneat& hyper)
+bool hypeneatTest(const std::vector<std::vector<float>>& grid, std::vector<float>& output, const std::vector<std::vector<float>>& centers, Hyperneat& hyper)
 {
+	std::vector<float> fitness;
 
+	fitness.resize(50);
+
+	for (int i3 = 0; i3 < 100; i3++)
+	{
+		for (int i = 0; i < 50; i++)
+		{
+			fitness[i] = 4000;//(10*10 + 10*10)*20
+		}
+
+		for (int i = 0; i < 50; i++)
+		{
+			for (int cpt = 0; cpt < 20; cpt++)
+			{
+				hyper.getNeuralNetwork(i)->compute(grid[cpt], output);
+
+				float max = output[0];
+				int maxIndex = 0;
+
+				for (int cpt2 = 1; cpt2 < 100; cpt2++)
+				{
+					if (max < output[cpt2])
+					{
+						max = output[cpt2];
+						maxIndex = cpt2;
+					}
+				}
+
+				int x, y;
+
+				x = maxIndex % 10;
+				y = floor(maxIndex / 10);
+
+				fitness[i] -= ((centers[cpt][0] - x) * (centers[cpt][0] - x) + (centers[cpt][1] - y) * (centers[cpt][1] - y));
+			}
+		}
+
+		hyper.setScore(fitness);
+
+		hyper.evolve();
+	}
+
+	return false;
 }
 
-void writeSquares(std::vector<std::vector<float>>& grid, std::vector<float>& center)
+void writeSquares(std::vector<float>& grid, std::vector<float>& center, int n)
 {
 	int squareSize = 4;
 
-	int x1 = randInt(0, grid.size() - squareSize);
-	int y1 = randInt(0, grid[0].size() - squareSize);
+	int x1 = randInt(0, n - squareSize);
+	int y1 = randInt(0, n - squareSize);
 
 	center[0] = x1 + squareSize / 2;
 	center[1] = y1 + squareSize / 2;
@@ -134,7 +185,7 @@ void writeSquares(std::vector<std::vector<float>>& grid, std::vector<float>& cen
 	{
 		for (int cpt = 0; cpt < squareSize; cpt++)
 		{
-			grid[x1 + i][y1 + cpt] = 1;
+			grid[x1 + i + (y1 + cpt) * n] = 1;
 		}
 	}
 
@@ -145,8 +196,8 @@ void writeSquares(std::vector<std::vector<float>>& grid, std::vector<float>& cen
 	int y2;
 
 	do {
-		x2 = randInt(0, grid.size() - squareSize2);
-		y2 = randInt(0, grid[0].size() - squareSize2);
+		x2 = randInt(0, n - squareSize2);
+		y2 = randInt(0, n - squareSize2);
 
 		if (((x2 + squareSize2) < x1) || (x2 > (x1 + squareSize)) || ((y2 + squareSize2) < y1) || (y2 > (y1 + squareSize)))
 		{
@@ -159,7 +210,7 @@ void writeSquares(std::vector<std::vector<float>>& grid, std::vector<float>& cen
 	{
 		for (int cpt = 0; cpt < squareSize2; cpt++)
 		{
-			grid[x2 + i][y2 + cpt] = 1;
+			grid[x2 + i + (y2 + cpt) * n] = 1;
 		}
 	}
 }
