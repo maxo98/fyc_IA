@@ -116,6 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -146,12 +147,14 @@
     <ClCompile Include="GeneNode.cpp" />
     <ClCompile Include="Genome.cpp" />
     <ClCompile Include="Hyperneat.cpp" />
+    <ClCompile Include="TestHyperneat.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Neat.cpp" />
     <ClCompile Include="NeuralNetwork.cpp" />
     <ClCompile Include="NeuroEvolution.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Species.cpp" />
+    <ClCompile Include="XorTask.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Activation.h" />
@@ -161,11 +164,13 @@
     <ClInclude Include="GeneNode.h" />
     <ClInclude Include="Genome.h" />
     <ClInclude Include="Hyperneat.h" />
+    <ClInclude Include="TestHyperneat.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Neat.h" />
     <ClInclude Include="NeuralNetwork.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Species.h" />
+    <ClInclude Include="XorTask.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

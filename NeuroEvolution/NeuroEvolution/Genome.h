@@ -6,6 +6,7 @@
 #include "GeneNode.h"
 #include <map>
 #include <unordered_map>
+#include <mutex>
 #include "Utils.h"
 
 class CPPN_Neat;
@@ -28,8 +29,8 @@ public:
 
 	enum class CROSSOVER { RANDOM, AVERAGE, SINGLE_POINT };
 
-	bool mutateLink(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections);
-	bool mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, Activation* activationFunction);
+	bool mutateLink(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, std::mutex* lock = nullptr);
+	bool mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, Activation* activationFunction, std::mutex* lock = nullptr);
 	//void mutateWeightShift(float weightShiftStrength);
 	//void mutateWeightRandom(float weightRandomStrength);
 	void mutateLinkToggle();
@@ -51,7 +52,7 @@ public:
 	//Parent A should be the fittest
 	void crossover(Genome& parentA, Genome& parentB, CROSSOVER type);
 
-	void addConnection(unsigned int nodeA, unsigned int nodeB, std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, float weight = 1);
+	void addConnection(unsigned int nodeA, unsigned int nodeB, std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, float weight = 1, std::mutex* lock = nullptr);
 
 private:
 	void shiftNodes(unsigned int node, unsigned int layerMin);

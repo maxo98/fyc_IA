@@ -42,8 +42,13 @@ Genome::~Genome()
 *Check if the connection already exist, if so use it's innovation number
 * otherwise add it to the register
 */
-void Genome::addConnection(unsigned int nodeA, unsigned int nodeB, std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, float weight)
+void Genome::addConnection(unsigned int nodeA, unsigned int nodeB, std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, float weight, std::mutex* lock)
 {
+    if (lock != nullptr)
+    {
+        lock->lock();
+    }
+
     std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>::iterator found = allConnections.find(std::pair<unsigned int, unsigned int>(nodeA, nodeB));
 
     unsigned int innovationNumber = -1;
@@ -61,9 +66,14 @@ void Genome::addConnection(unsigned int nodeA, unsigned int nodeB, std::unordere
     connections[innovationNumber].weight = weight;
     nodesToConnection[std::pair<unsigned int, unsigned int>(nodeA, nodeB)] = innovationNumber;
     orderAddedCon.push_back(innovationNumber);
+
+    if (lock != nullptr)
+    {
+        lock->unlock();
+    }
 }
 
-bool Genome::mutateLink(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections)
+bool Genome::mutateLink(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, std::mutex* lock)
 {
     unsigned int i = 0;
     bool foundMutation = false;
@@ -107,14 +117,14 @@ bool Genome::mutateLink(std::unordered_map<std::pair<unsigned int, unsigned int>
 
     if (foundMutation == true)
     {
-        addConnection(nodeA, nodeB, allConnections);
+        addConnection(nodeA, nodeB, allConnections, 1, lock);
         return true;
     }
 
     return false;
 }
 
-bool Genome::mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, Activation* activationFunction)
+bool Genome::mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, Activation* activationFunction, std::mutex* lock)
 {
     unsigned int i = 0;
     bool foundMutation = false;
@@ -144,16 +154,6 @@ bool Genome::mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>
     float oldWeight = connection->weight;
     connection->enabled = false;
 
-    if (nodeA >= nodes.size())
-    {
-        int err;
-    }
-
-    if ((nodes[connection->getNodeA()].layer + 1) > 100)
-    {
-        int err;
-    }
-
     nodes.push_back(GeneNode(NODE_TYPE::HIDDEN, activationFunction, nodes[connection->getNodeA()].layer + 1));
     unsigned int nodeC = nodes.size()-1;
 
@@ -164,8 +164,8 @@ bool Genome::mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>
     }
 
     //Create the new connections
-    addConnection(nodeA, nodeC, allConnections);
-    addConnection(nodeC, nodeB, allConnections);
+    addConnection(nodeA, nodeC, allConnections, 1, lock);
+    addConnection(nodeC, nodeB, allConnections, 1, lock);
     return true;
 }
 
@@ -424,11 +424,6 @@ void Genome::crossover(Genome& parentA, Genome& parentB, CROSSOVER type)
             connections[itA->first] = itA->second;
         }
 
-        if (connections[itA->first].getNodeA() >= nodes.size() || connections[itA->first].getNodeB() >= nodes.size())
-        {
-            int a;
-        }
-
         nodesToConnection[std::pair<unsigned int, unsigned int>(connections[itA->first].getNodeA(), connections[itA->first].getNodeB())] = itA->first;
     }
 
@@ -466,11 +461,6 @@ void Genome::crossover(Genome& parentA, Genome& parentB, CROSSOVER type)
                 connections[itB->first] = gene;
                 nodesToConnection[std::pair<unsigned int, unsigned int>(connections[itB->first].getNodeA(), connections[itB->first].getNodeB())] = itB->first;
             }
-
-            if (connections[itB->first].getNodeA() >= nodes.size() || connections[itB->first].getNodeB() >= nodes.size())
-            {
-                int a;
-            }
         }
 
         //Set the order in which each connection from parentB we're added
@@ -504,11 +494,6 @@ void Genome::shiftNodes(unsigned int node, unsigned int layerMin)
     nodeToShift.push(node);
     nodes[node].layer = layerMin + 1;
 
-    if ((layerMin + 1) > 100)
-    {
-        int err;
-    }
-
     while (nodeToShift.empty() == false)
     {
         unsigned int node = nodeToShift.top();
@@ -525,10 +510,6 @@ void Genome::shiftNodes(unsigned int node, unsigned int layerMin)
             {
                 if (nodes[it->first.second].layer == nodes[node].layer)
                 {
-                    if ((nodes[node].layer + 1) > 100)
-                    {
-                        int err;
-                    }
 
                     nodes[it->first.second].layer = nodes[node].layer + 1;
 

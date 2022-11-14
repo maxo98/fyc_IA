@@ -8,7 +8,7 @@
 #include <thread>
 
 
-Neat::Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, NeatParameters _neatParam, INIT init)
+Neat::Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam, INIT init)
 {
 	if (_neatParam.activationFunctions.size() == 0) return;//Avoid Unreal crash, should probably put a debug message
 
@@ -90,7 +90,7 @@ void Neat::fullConnectInit(Genome& gen)
 			nodeB = *itOutput;
 		}
 
-		gen.addConnection(nodeA, nodeB, allConnections, (static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 2)) - 1) * neatParam.weightMuteStrength);
+		gen.addConnection(nodeA, nodeB, allConnections, randFloat() * randPosNeg() * neatParam.weightMuteStrength);
 
 
 		++itInput; ++itOutput;
@@ -125,7 +125,7 @@ Neat::~Neat()
 	delete[] genomes;
 }
 
-void Neat::mutate(Genome& genome)
+void Neat::mutate(Genome& genome, std::mutex* lock)
 {
 	if (neatParam.activationFunctions.size() == 0)
 		return;
@@ -134,12 +134,12 @@ void Neat::mutate(Genome& genome)
 	{
 
 		unsigned int index = randInt(0, neatParam.activationFunctions.size() - 1);
-		genome.mutateNode(allConnections, neatParam.activationFunctions[index]);
+		genome.mutateNode(allConnections, neatParam.activationFunctions[index], lock);
 	}
 	
 	if (neatParam.pbMutateLink > randFloat())
 	{
-		genome.mutateLink(allConnections);
+		genome.mutateLink(allConnections, lock);
 	}
 	//Official implementation says that a link can't be added after a node
 	//Don't understand why
@@ -423,6 +423,7 @@ void Neat::evolve()
 	int newBornIndex = 0;
 	std::vector<std::thread> threads;
 	unsigned int cpus = std::thread::hardware_concurrency();
+	std::mutex lock;
 
 	std::list<Species*>::iterator itSortedSpecies = sortedSpecies.begin();
 
@@ -430,9 +431,10 @@ void Neat::evolve()
 	float workload = totalWorkload / cpus;
 	int currentWorkload = 0;
 
-	currentWorkload = totalWorkload;//Multithreading is creating problem when we modify when modifying the all connections unordered map
-
-	/*while (workload < 1)
+//#ifndef REPRO_MULTITHREAD
+//	currentWorkload = totalWorkload;//Multithreading is creating problem when we modify when modifying the all connections unordered map
+//#else
+	while (workload < 1)
 	{
 		cpus--;
 		workload = totalWorkload / cpus;
@@ -445,7 +447,7 @@ void Neat::evolve()
 	while (cpus > threads.size()+1)
 	{
 
-		threads.push_back(std::thread(&Neat::reproduce, this, currentWorkload + floor(restWorkload), itSortedSpecies, newBornIndex, std::ref(sortedSpecies), newPop));
+		threads.push_back(std::thread(&Neat::reproduce, this, currentWorkload + floor(restWorkload), itSortedSpecies, newBornIndex, std::ref(sortedSpecies), newPop, &lock));
 
 		for (int i = 0; i < currentWorkload + floor(restWorkload); i++)
 		{
@@ -461,9 +463,9 @@ void Neat::evolve()
 	{
 		restWorkload--;
 		currentWorkload++;
-	}*/
-
-	reproduce(currentWorkload, itSortedSpecies, newBornIndex, sortedSpecies, newPop);
+	}
+//#endif
+	reproduce(currentWorkload, itSortedSpecies, newBornIndex, sortedSpecies, newPop, &lock);
 
 	for (int i = 0; i < threads.size(); i++)
 	{
@@ -542,7 +544,7 @@ void Neat::evolve()
 	generateNetworks();
 }
 
-void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBornIndex, std::list<Species*>& sortedSpecies, Genome* newPop)
+void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBornIndex, std::list<Species*>& sortedSpecies, Genome* newPop, std::mutex* lock)
 {
 	for(int i = 0; i < workload; ++i, ++it)
 	{
@@ -588,7 +590,7 @@ void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBorn
 				//No error here, official implmentation picks a random guy in species of size 1, above comment should probably be moved though
 				newPop[newBornIndex] = *(*curSpecies->getSpecies())[0];
 
-				mutate(newPop[newBornIndex]);
+				mutate(newPop[newBornIndex], lock);
 			}//Otherwise we should mate 
 			else {
 				Genome* gen1 = (*curSpecies->getSpecies())[randInt(0, curSpecies->getSpecies()->size() - 1)];
@@ -649,7 +651,7 @@ void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBorn
 				//This is done randomly or if the mom and dad are the same organism
 				if (randFloat() > neatParam.pbMateOnly || gen1 == gen2 || distance(*gen1, *gen2) == 0.0)
 				{
-					mutate(newPop[newBornIndex]);
+					mutate(newPop[newBornIndex], lock);
 				}
 			}
 
@@ -823,7 +825,7 @@ float Neat::distance(Genome& genomeA, Genome& genomeB)
 	return neatParam.disjointCoeff * disjoint + neatParam.excessCoeff * excess + neatParam.mutDiffCoeff * ((disjoint + excess) / similar);
 }
 
-void Neat::setScore(std::vector < float > newScores)
+void Neat::setScore(const std::vector < float >& newScores)
 {
 	if (newScores.size() != populationSize)
 	{

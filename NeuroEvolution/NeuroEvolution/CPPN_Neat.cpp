@@ -5,15 +5,13 @@
 #include <algorithm>
 
 
-CPPN_Neat::CPPN_Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, NeatParameters _neatParam): Neat(_populationSize, _input, _output, _neatParam, INIT::NONE)
+CPPN_Neat::CPPN_Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam): Neat(_populationSize, _input, _output, _neatParam, INIT::NONE)
 {
 	for (int i = 0; i < populationSize; i++)
 	{
 		genomes[i] = Genome(_input, output, neatParam.activationFunctions, true);
 		fullConnectInit(genomes[i]);
 	}
-
-	
 }
 
 CPPN_Neat::~CPPN_Neat()
@@ -21,7 +19,7 @@ CPPN_Neat::~CPPN_Neat()
 	delete[] genomes;
 }
 
-void CPPN_Neat::mutate(Genome& genome)
+void CPPN_Neat::mutate(Genome& genome, std::mutex* lock)
 {
 	if (neatParam.activationFunctions.size() == 0)
 		return;
@@ -30,12 +28,12 @@ void CPPN_Neat::mutate(Genome& genome)
 	{
 
 		unsigned int index = randInt(0, neatParam.activationFunctions.size() - 1);
-		genome.mutateNode(allConnections, neatParam.activationFunctions[index]);
+		genome.mutateNode(allConnections, neatParam.activationFunctions[index], lock);
 	}
 	
 	if (neatParam.pbMutateLink > randFloat())
 	{
-		genome.mutateLink(allConnections);
+		genome.mutateLink(allConnections, lock);
 	}
 	//Official implementation says that a link can't be added after a node
 	//Don't understand why

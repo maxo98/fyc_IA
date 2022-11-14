@@ -3,7 +3,7 @@
 
 #include "Hyperneat.h"
 
-Hyperneat::Hyperneat(unsigned int _populationSize, NeatParameters _neatParam, HyperneatParameters _hyperParam)
+Hyperneat::Hyperneat(unsigned int _populationSize, const NeatParameters& _neatParam, const HyperneatParameters& _hyperParam)
 {
 	hyperParam = _hyperParam;
 
@@ -17,7 +17,7 @@ Hyperneat::~Hyperneat()
 	delete hyperParam.activationFunction;
 }
 
-void Hyperneat::addInput(std::vector<float> node)
+void Hyperneat::addInput(const std::vector<float>& node)
 { 
 	if (node.size() != hyperParam.nDimensions)
 	{
@@ -29,7 +29,7 @@ void Hyperneat::addInput(std::vector<float> node)
 	inputSubstrate.emplace(node); 
 }
 
-void Hyperneat::addOutput(std::vector<float> node)
+void Hyperneat::addOutput(const std::vector<float>& node)
 { 
 	if (node.size() != hyperParam.nDimensions)
 	{
@@ -41,7 +41,7 @@ void Hyperneat::addOutput(std::vector<float> node)
 	outputSubstrate.emplace(node);
 }
 
-void Hyperneat::addHiddenNode(unsigned int layer, std::vector<float> node)
+void Hyperneat::addHiddenNode(unsigned int layer, const std::vector<float>& node)
 { 
 	if (node.size() != hyperParam.nDimensions)
 	{
@@ -129,7 +129,7 @@ void Hyperneat::addLayerAndConnect(unsigned int layer, unsigned int networkIndex
 			input = hyperParam.cppnInputFunction(hyperParam.inputVariables, p1, p2);
 
 			output.resize(hyperParam.cppnOutput);
-			networks[networkIndex].compute(input, output);
+			cppns.getNeuralNetwork(networkIndex)->compute(input, output);
 
 			//Check if we should create a connection
 			if (hyperParam.thresholdFunction(hyperParam.thresholdVariables, output, p1, p2) == true)
@@ -143,6 +143,22 @@ void Hyperneat::addLayerAndConnect(unsigned int layer, unsigned int networkIndex
 
 		nodeB++;
 	}
+}
+
+
+void Hyperneat::evolve()
+{
+	cppns.evolve();
+}
+
+void Hyperneat::setScore(const std::vector < float >& newScores)
+{
+	cppns.setScore(newScores);
+}
+
+bool Hyperneat::saveHistory()
+{
+	return cppns.saveHistory();
 }
 
 std::vector<float> basicCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2)

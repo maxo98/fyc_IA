@@ -60,13 +60,17 @@ public:
 class Hyperneat
 {
 public:
-	Hyperneat(unsigned int _populationSize, NeatParameters _neatParamters, HyperneatParameters _hyperParam);
+	Hyperneat(unsigned int _populationSize, const NeatParameters& _neatParamters, const HyperneatParameters& _hyperParam);
 
 	~Hyperneat();
 
-	void addInput(std::vector<float> node);
-	void addOutput(std::vector<float> node);
-	void addHiddenNode(unsigned int layer, std::vector<float> node);
+	void addInput(const std::vector<float>& node);
+	void addOutput(const std::vector<float>& node);
+	void addHiddenNode(unsigned int layer, const std::vector<float>& node);
+
+	void evolve();
+	void setScore(const std::vector < float >& newScores);
+	bool saveHistory();
 
 	void clear();
 

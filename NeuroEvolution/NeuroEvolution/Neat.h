@@ -8,6 +8,8 @@
 #include "Species.h"
 #include "Activation.h"
 
+//#define REPRO_MULTITHREAD
+
 typedef struct {
 	float pbMutateOnly;
 	float pbMutateLink;//Probability of each mutation
@@ -81,7 +83,7 @@ public:
 	enum class INIT{NONE, ONE, FULL};
 
 	Neat();
-	Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, NeatParameters _neatParam, INIT init = INIT::ONE);
+	Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam, INIT init = INIT::ONE);
 	~Neat();
 
 	void fullConnectInit(Genome& gen);
@@ -93,15 +95,15 @@ public:
 	void evolve();
 	void adjustFitness();
 	void addToSpecies(Genome* gen);
-	void reproduce(int workload, std::list<Species*>::iterator it, int newBornIndex, std::list<Species*>& sortedSpecies, Genome* newPop);
+	void reproduce(int workload, std::list<Species*>::iterator it, int newBornIndex, std::list<Species*>& sortedSpecies, Genome* newPop, std::mutex* lock);
 	
-	virtual void mutate(Genome& genome);
+	virtual void mutate(Genome& genome, std::mutex* lock = nullptr);
 	void generateNetworks();
 	void genomeToNetwork(Genome& genome, NeuralNetwork& network);
 
 	virtual float distance(Genome& genomeA, Genome& genomeB);
 
-	void setScore(std::vector < float > newScores);
+	void setScore(const std::vector < float >& newScores);
 	bool saveHistory();
 
 	friend class ANeuralNetworkDisplayHUD;

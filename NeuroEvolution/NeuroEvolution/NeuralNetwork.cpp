@@ -330,6 +330,11 @@ void NeuralNetwork::splitLayerComputing(std::list<Node>::iterator it, int size, 
 	}
 
 	concurrentComputing(currentWorkload + floor(restWorkload), it, output, outputs);
+
+	for (int i = 0; i < threads.size(); i++)
+	{
+		threads[i].join();
+	}
 }
 
 void NeuralNetwork::concurrentComputing(int workload, std::list<Node>::iterator it, bool output, std::vector<float>* outputs)
