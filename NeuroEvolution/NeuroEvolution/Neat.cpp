@@ -285,8 +285,6 @@ void Neat::evolve()
 
 	if (neatParam.saveAvgHistory == true) avgHistory.push_back(totalFitness/populationSize);
 
-	std::cout << "totalFitness " << totalFitness << std::endl;
-
 	float skim = 0;
 	int totalExpected = 0;
 
@@ -297,8 +295,6 @@ void Neat::evolve()
 	}
 
 	Species* bestSpecies = nullptr;
-
-	std::cout << "expected " << totalExpected << std::endl;
 
 	//Need to make up for lost foating point precision in offspring assignment
 	//If we lost precision, give an extra baby to the best Species

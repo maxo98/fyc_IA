@@ -382,9 +382,8 @@ void ES_Hyperneat::generateSubstrate()
 }
 
 //Searches for all the nodes and connections reachable from a set of node
-void ES_Hyperneat::reachableConnections(
-	const std::unordered_multimap<std::vector<float>, const Connection*, HyperNodeHash>& connections, std::unordered_set<std::vector<float>, HyperNodeHash> nodes,
-	std::unordered_set<Connection, HyperConnectionHash, HyperConnectionEqual>& reachableConn)
+void ES_Hyperneat::reachableConnections(const std::unordered_multimap<std::vector<float>, const Connection*, HyperNodeHash>& connections, 
+	std::unordered_set<std::vector<float>, HyperNodeHash> nodes, std::unordered_set<Connection, HyperConnectionHash, HyperConnectionEqual>& reachableConn)
 {
 	std::queue<std::vector<float>> unexploredNodes;
 
