@@ -1,9 +1,11 @@
 #include "TestHyperneat.h"
 
+#define MAXIME
+
 int launchHypeneatTest()
 {
 	int test = 10;
-	int n = 20;
+	int n = 10;
 
 	std::vector<std::vector<float>> grid;
 	std::vector<std::vector<float>> centers;
@@ -62,7 +64,13 @@ int launchHypeneatTest()
 	neatparam.pbMutateOnly = 0.25;
 	neatparam.pbMateOnly = 0.2;
 
-	neatparam.speciationDistance = 2.0;
+#ifdef CEDRIC
+	neatparam.speciationDistance = 5.0;
+#endif CEDRIC
+
+#ifdef MAXIME
+	neatparam.speciationDistance = 7.0;
+#endif MAXIME
 	neatparam.speciationDistanceMod = 0.3;
 	neatparam.numSpeciesTarget = 4;
 	neatparam.adaptSpeciation = false;//Doesn't seem to have a lot of effect, despite being taken from official implementation
@@ -77,7 +85,7 @@ int launchHypeneatTest()
 	hyperneatParam.thresholdFunction = leoThreshold;
 	hyperneatParam.weightModifierFunction = noChangeWeight;
 
-	int popSize = 50;
+	int popSize = 150;
 
 	int result = 0;
 
@@ -212,7 +220,7 @@ bool hypeneatTest(int popSize, int test, int n, const std::vector<std::vector<fl
 			currentWorkload++;
 		}*/
 
-		evaluate(test, startIndex, currentWorkload, n, grid, centers, hyper, fitness);
+		evaluate(test, startIndex, n, currentWorkload, grid, centers, hyper, fitness);
 
 		for (int i = 0; i < threads.size(); i++)
 		{
@@ -231,6 +239,7 @@ bool hypeneatTest(int popSize, int test, int n, const std::vector<std::vector<fl
 
 void evaluate(int test, int startIndex, int n, int workload, const std::vector<std::vector<float>>& grid, const std::vector<std::vector<float>>& centers, Hyperneat& hyper, std::vector<float>& fitness)
 {
+
 	for (int i = startIndex; i < workload; i++)
 	{
 		std::vector<float> output;
