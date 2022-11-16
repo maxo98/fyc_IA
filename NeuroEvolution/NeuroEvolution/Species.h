@@ -9,7 +9,7 @@ public:
 
 	void Add(Genome*);
 	void computeScore();
-	void countOffspring(float& skim, const float& avgFitness);
+	void countOffspring(float& skim, const float& totalFitness, const int& popSize);
 	bool remove(Genome* gen);
 
 	inline std::vector<Genome*>* getSpecies() { return &genomes; };

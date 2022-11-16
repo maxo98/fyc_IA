@@ -51,11 +51,11 @@ NeuralNetwork::~NeuralNetwork()
 void NeuralNetwork::fullyConnect()
 {
 	//Connect ouput nodes to previous layer
-	std::list<Node>::iterator itOutput;
+	std::deque<Node>::iterator itOutput;
 
 	for (itOutput = outputNodes.begin(); itOutput != outputNodes.end(); ++itOutput)
 	{
-		std::list<Node>::iterator itPrevious;
+		std::deque<Node>::iterator itPrevious;
 
 		if (hiddenNodes.size() > 0)
 		{
@@ -73,16 +73,16 @@ void NeuralNetwork::fullyConnect()
 	}
 
 	//Connect hidden layers to previous hidden layers
-	std::list <std::list<Node>>::reverse_iterator itLayer = hiddenNodes.rbegin();
-	std::list<Node>::iterator itNext = itLayer->begin();
-	std::list<Node>::iterator itNextEnd = itLayer->end();
+	std::deque <std::deque<Node>>::reverse_iterator itLayer = hiddenNodes.rbegin();
+	std::deque<Node>::iterator itNext = itLayer->begin();
+	std::deque<Node>::iterator itNextEnd = itLayer->end();
 	
 	while ((++itLayer) != hiddenNodes.rend())
 	{
 		for (itNext; itNext != itNextEnd; ++itNext)
 		{
-			std::list<Node>::iterator itPrevious = itLayer->begin();
-			std::list<Node>::iterator itPreviousEnd = itLayer->end();
+			std::deque<Node>::iterator itPrevious = itLayer->begin();
+			std::deque<Node>::iterator itPreviousEnd = itLayer->end();
 
 			for (itPrevious; itPrevious != itLayer->end(); ++itPrevious)
 			{
@@ -98,7 +98,7 @@ void NeuralNetwork::fullyConnect()
 	//std::list<Node>::iterator itNext;
 	for (itNext = hiddenNodes.front().begin(); itNext != hiddenNodes.front().end(); ++itNext)
 	{
-		std::list<Node>::iterator it_input;
+		std::deque<Node>::iterator it_input;
 		for (it_input = inputNodes.begin(); it_input != inputNodes.end(); ++it_input)
 		{
 			itNext->addConnection(&(*it_input), 0.5, false);
@@ -116,10 +116,33 @@ unsigned int NeuralNetwork::getNHiddenNode(unsigned int layer)
 	}
 
 	int i = 0;
-	std::list<std::list<Node>>::iterator it;
+	std::deque<std::deque<Node>>::iterator it;
 	for(it = hiddenNodes.begin(); it != hiddenNodes.end() && i != layer; ++it, ++i);
 
 	return it->size();
+}
+
+void NeuralNetwork::addHiddenNode(int n, unsigned int layer, Activation* activation)
+{
+	if (layer > hiddenNodes.size())
+	{
+		while (layer > hiddenNodes.size())
+		{
+			hiddenNodes.push_back(std::deque<Node>());
+		}
+
+		hiddenNodes.back().resize(n + hiddenNodes.size(), Node(activation));
+	}
+	else {
+
+		layer--;
+
+		int i = 0;
+		std::deque<std::deque<Node>>::iterator it;
+		for (it = hiddenNodes.begin(); it != hiddenNodes.end() && i != layer; ++it, ++i);
+
+		it->resize(n + hiddenNodes.size(), Node(activation));
+	}
 }
 
 std::pair<unsigned int, unsigned int> NeuralNetwork::addHiddenNode(unsigned int layer, Activation* activation)
@@ -128,7 +151,7 @@ std::pair<unsigned int, unsigned int> NeuralNetwork::addHiddenNode(unsigned int 
 	{
 		while (layer > hiddenNodes.size())
 		{
-			hiddenNodes.push_back(std::list<Node>());
+			hiddenNodes.push_back(std::deque<Node>());
 		}
 		
 		hiddenNodes.back().push_back(Node(activation));
@@ -139,7 +162,7 @@ std::pair<unsigned int, unsigned int> NeuralNetwork::addHiddenNode(unsigned int 
 	layer--;
 
 	int i = 0;
-	std::list<std::list<Node>>::iterator it;
+	std::deque<std::deque<Node>>::iterator it;
 	for (it = hiddenNodes.begin(); it != hiddenNodes.end() && i != layer; ++it, ++i);
 
 	it->push_back(Node(activation));
@@ -153,17 +176,27 @@ std::pair<unsigned int, unsigned int> NeuralNetwork::addInputNode()
 	return std::pair<unsigned int, unsigned int>(0, inputNodes.size() - 1);
 }
 
+void NeuralNetwork::addInputNode(int n)
+{
+	inputNodes.resize(inputNodes.size() + n, Node(&dummyActivation));
+}
+
 std::pair<unsigned int, unsigned int> NeuralNetwork::addOutputNode(Activation* activation)
 { 
 	outputNodes.push_back(Node(activation)); 
 	return std::pair<unsigned int, unsigned int>(std::numeric_limits<int>::max(), outputNodes.size() - 1);
 }
 
+void NeuralNetwork::addOutputNode(int n, Activation* activation)
+{
+	outputNodes.resize(n + outputNodes.size(), Node(activation));
+}
+
 void NeuralNetwork::removeHiddenNode(unsigned int layer)
 {
 	layer--;
 	int i = 0;
-	std::list<std::list<Node>>::iterator it;
+	std::deque<std::deque<Node>>::iterator it;
 	for (it = hiddenNodes.begin(); it != hiddenNodes.end() && i != layer; ++it, ++i);
 
 	it->pop_back();
@@ -214,11 +247,8 @@ Node* NeuralNetwork::getNode(unsigned int layer, unsigned int node)
 	}
 	else if((layer - 1) < hiddenNodes.size()){
 		layer--;
-		int i = 0;
-		std::list<std::list<Node>>::iterator it;
-		for (it = hiddenNodes.begin(); it != hiddenNodes.end() && i != layer; ++it, ++i);
 
-		return getNodeFromLayer(*it, node);
+		return getNodeFromLayer(hiddenNodes[layer], node);
 	}
 	else {
 		std::cout << "Trying to get a node layer " << layer << " while max layer is " << getLayerSize() << std::endl;
@@ -226,17 +256,11 @@ Node* NeuralNetwork::getNode(unsigned int layer, unsigned int node)
 	}
 }
 
-Node* NeuralNetwork::getNodeFromLayer(std::list<Node>& layer, unsigned int node)
+Node* NeuralNetwork::getNodeFromLayer(std::deque<Node>& layer, unsigned int node)
 {
 	if (node < layer.size())
 	{
-		unsigned int i = 0;
-		std::list<Node>::iterator it;
-		for (it = layer.begin(); it != layer.end() && i != node; ++it, ++i);
-
-		if (it == layer.end()) return nullptr;
-
-		return &*it;
+		return &layer[node];
 	}
 	else {
 		std::cout << "Trying to get a node that doesn't exist" << std::endl;
@@ -252,9 +276,9 @@ void NeuralNetwork::compute(const std::vector<float>& inputs, std::vector<float>
 	if (inputs.size() >= inputNodes.size())
 	{
 		//Reset the hidden nodes
-		for (std::list<std::list<Node>>::iterator it = hiddenNodes.begin(); it != hiddenNodes.end(); ++it)
+		for (std::deque<std::deque<Node>>::iterator it = hiddenNodes.begin(); it != hiddenNodes.end(); ++it)
 		{
-			for (std::list<Node>::iterator itNode = it->begin(); itNode != it->end(); ++itNode)
+			for (std::deque<Node>::iterator itNode = it->begin(); itNode != it->end(); ++itNode)
 			{
 				itNode->next();
 			}
@@ -262,15 +286,15 @@ void NeuralNetwork::compute(const std::vector<float>& inputs, std::vector<float>
 
 		//Set the input values
 		unsigned int i = 0;
-		for (std::list<Node>::iterator it = inputNodes.begin(); it != inputNodes.end(); ++it, ++i)
+		for (std::deque<Node>::iterator it = inputNodes.begin(); it != inputNodes.end(); ++it, ++i)
 		{
 			it->setValue(inputs[i]);
 		}
 
 		//Parallel computing hidden nodes value
-		for (std::list<std::list<Node>>::iterator it = hiddenNodes.begin(); it != hiddenNodes.end(); ++it)
+		for (std::deque<std::deque<Node>>::iterator it = hiddenNodes.begin(); it != hiddenNodes.end(); ++it)
 		{
-			std::list<Node>::iterator itNode = it->begin();
+			std::deque<Node>::iterator itNode = it->begin();
 
 			splitLayerComputing(itNode, it->size());
 		}
@@ -279,13 +303,6 @@ void NeuralNetwork::compute(const std::vector<float>& inputs, std::vector<float>
 
 		//Compute the result
 		splitLayerComputing(outputNodes.begin(), outputNodes.size(), true, &outputs);
-
-		if (outputs.size() == 99)
-		{
-			std::cout << "L281 " << outputNodes.size() << std::endl;
-			int err = 0;
-			err++;
-		}
 	}
 }
 
@@ -296,7 +313,7 @@ void NeuralNetwork::clear()
 	outputNodes.clear();
 }
 
-void NeuralNetwork::splitLayerComputing(std::list<Node>::iterator it, int size, bool output, std::vector<float>* outputs)
+void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size, bool output, std::vector<float>* outputs)
 {
 	std::vector<std::thread> threads;
 	unsigned int cpus = std::thread::hardware_concurrency();
@@ -307,9 +324,7 @@ void NeuralNetwork::splitLayerComputing(std::list<Node>::iterator it, int size, 
 	int currentWorkload = totalWorkload;
 	int startIndex = 0;
 
-	int count = 0;
-
-	if (totalWorkload > 10)
+	if (totalWorkload >= 20)
 	{
 		while (workload < 1)
 		{
@@ -332,8 +347,6 @@ void NeuralNetwork::splitLayerComputing(std::list<Node>::iterator it, int size, 
 
 			startIndex += currentWorkload + floor(restWorkload);
 
-			count += currentWorkload + floor(restWorkload);
-
 			restWorkload -= floor(restWorkload);
 			restWorkload += workloadFrac;
 		}
@@ -345,13 +358,6 @@ void NeuralNetwork::splitLayerComputing(std::list<Node>::iterator it, int size, 
 		}
 	}
 
-	count += currentWorkload;
-
-	if (count > 2)
-	{
-		//std::cout << "L345  " << count << std::endl;
-	}
-
 	concurrentComputing(currentWorkload, startIndex, it, output, outputs);
 
 	for (int i = 0; i < threads.size(); i++)
@@ -360,27 +366,16 @@ void NeuralNetwork::splitLayerComputing(std::list<Node>::iterator it, int size, 
 	}
 }
 
-void NeuralNetwork::concurrentComputing(int workload, int startIndex, std::list<Node>::iterator it, bool output, std::vector<float>* outputs)
+void NeuralNetwork::concurrentComputing(int workload, int startIndex, std::deque<Node>::iterator it, bool output, std::vector<float>* outputs)
 {
-	if (workload > 2)
-	{
-		//std::cout << "L360  " << workload << std::endl;
-	}
-	
-	int i = 0;
-	for (i = 0; i < workload; ++i, ++it)
+	for (int i = startIndex; i < (workload + startIndex); ++i, ++it)
 	{
 		if (output == false)
 		{
 			it->compute();
 		}else{
 			it->next();
-			(*outputs)[startIndex] = it->compute();
+			(*outputs)[i] = it->compute();
 		}
-	}
-
-	if (workload > 2)
-	{
-		//std::cout << "L373  " << i<< std::endl;
 	}
 }

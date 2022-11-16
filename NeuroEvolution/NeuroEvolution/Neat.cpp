@@ -253,13 +253,7 @@ void Neat::evolve()
 		sortedSpecies.push_back(&*it);
 	}
 
-	if (neatParam.bestHigh == true)
-	{
-		sortedSpecies.sort(speciesSortAsc());
-	}
-	else {
-		sortedSpecies.sort(speciesSortDesc());
-	}
+	sortedSpecies.sort(speciesSortAsc());
 	
 	//Flag the lowest performing species over age 20 every 30 generations 
 	//NOTE: THIS IS FOR COMPETITIVE COEVOLUTION STAGNATION DETECTION
@@ -282,29 +276,29 @@ void Neat::evolve()
 
 	//Go through the organisms and add up their fitnesses to compute the
 	//overall average
-	float avgFitness = 0;
+	float totalFitness = 0;
 
 	for (int i = 0; i < populationSize; i++)
 	{
-		avgFitness += genomes[i].getScore();
+		totalFitness += genomes[i].getScore();
 	}
 
-	avgFitness /= populationSize;
+	if (neatParam.saveAvgHistory == true) avgHistory.push_back(totalFitness/populationSize);
 
-	if (neatParam.saveAvgHistory == true) avgHistory.push_back(avgFitness);
-
-	if (avgFitness < 1) avgFitness = 1;
+	std::cout << "totalFitness " << totalFitness << std::endl;
 
 	float skim = 0;
 	int totalExpected = 0;
 
 	for (std::vector<Species>::iterator it = species.begin(); it != species.end(); ++it)
 	{
-		it->countOffspring(skim, avgFitness);
+		it->countOffspring(skim, totalFitness, populationSize);
 		totalExpected += it->getExpectedOffspring();
 	}
 
 	Species* bestSpecies = nullptr;
+
+	std::cout << "expected " << totalExpected << std::endl;
 
 	//Need to make up for lost foating point precision in offspring assignment
 	//If we lost precision, give an extra baby to the best Species
@@ -537,7 +531,7 @@ void Neat::evolve()
 		species.erase(it, species.begin() + cpt);
 	}
 
-	//std::cout << "size: " << species.size() << std::endl;
+	std::cout << "species: " << species.size() << std::endl;
 
 	//Official implmentation removes old innovations here not sure if that's really usefull
 	
@@ -715,13 +709,8 @@ void Neat::adjustFitness()
 		}
 
 		//Sort the population and mark for death those after survival_thresh*pop_size
-		if (neatParam.bestHigh == true)
-		{
-			std::sort(itSpecies->getSpecies()->begin(), itSpecies->getSpecies()->end(), genomeSortAsc);
-		}
-		else {
-			std::sort(itSpecies->getSpecies()->begin(), itSpecies->getSpecies()->end(), genomeSortDesc);
-		}
+		std::sort(itSpecies->getSpecies()->begin(), itSpecies->getSpecies()->end(), genomeSortAsc);
+
 
 		//Decide how many get to reproduce based on survival_thresh*pop_size
 		//Adding 1.0 ensures that at least one will survive
@@ -835,15 +824,15 @@ void Neat::setScore(const std::vector < float >& newScores)
 	}
 
 	unsigned int bestIndex = 0;
-	float bestScore = newScores[0];
+	float bestScore = -1;
 
-	for (int i = 1; i < newScores.size(); i++)
+	for (int i = 0; i < newScores.size(); i++)
 	{
 		if (newScores[i] >= 0)
 		{
 			genomes[i].setScore(newScores[i]);
 
-			if ((neatParam.bestHigh == true && newScores[i] > bestScore) || (neatParam.bestHigh == false && newScores[i] < bestScore))
+			if (newScores[i] > bestScore)
 			{
 				bestScore = newScores[i];
 				bestIndex = i;
@@ -852,7 +841,6 @@ void Neat::setScore(const std::vector < float >& newScores)
 		else {
 			genomes[i].setScore(0);//Don't want to tank the score of scpecies with negative score
 		}
-
 	}
 
 	if (lastBestScore > bestScore)
@@ -862,11 +850,10 @@ void Neat::setScore(const std::vector < float >& newScores)
 	else {
 		lastBestScore = bestScore;
 		highestLastChanged = 0;
+		goat = genomes[bestIndex];
 	}
 
 	if(neatParam.saveChampHistory == true) champHistory.push_back(bestScore);
-
-	goat = genomes[bestIndex];
 }
 
 bool Neat::saveHistory()

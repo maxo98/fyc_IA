@@ -6,6 +6,7 @@
 #include <list>
 #include "Node.h"
 #include <utility>
+#include <deque>
 
 /**
  * Refer to the nodes by there index starting from 0
@@ -24,8 +25,11 @@ public:
 	inline unsigned int getNOutputNode() { return outputNodes.size(); }
 
 	std::pair<unsigned int, unsigned int> addHiddenNode(unsigned int layer, Activation* activation);
+	void addHiddenNode(int n, unsigned int layer, Activation* activation);
 	std::pair<unsigned int, unsigned int> addInputNode();
+	void addInputNode(int n);
 	std::pair<unsigned int, unsigned int> addOutputNode(Activation* activation);
+	void addOutputNode(int n, Activation* activation);
 	void removeHiddenNode(unsigned int layer);
 	inline void removeInputNode() { inputNodes.pop_back(); };
 	inline void removeOutputNode() { outputNodes.pop_back(); };
@@ -34,21 +38,23 @@ public:
 	void connectNodes(std::pair<unsigned int, unsigned int> nodeA, std::pair<unsigned int, unsigned int> nodeB, float weight);
 
 	void compute(const std::vector<float> &inputs , std::vector<float> &outputs);
-	void splitLayerComputing(std::list<Node>::iterator it, int size, bool output = false, std::vector<float>* outputs = nullptr);
-	void concurrentComputing(int workload, int startIndex, std::list<Node>::iterator it, bool output, std::vector<float>* outputs);
+	void splitLayerComputing(std::deque<Node>::iterator it, int size, bool output = false, std::vector<float>* outputs = nullptr);
+	void concurrentComputing(int workload, int startIndex, std::deque<Node>::iterator it, bool output, std::vector<float>* outputs);
 
 	void clear();
 
 	inline void setRecursion(bool value) { recursive = value; };
 	inline bool isRecursive() { return recursive; }
 
-private:
 	Node* getNode(unsigned int layer, unsigned int node);
-	Node* getNodeFromLayer(std::list<Node> &layer, unsigned int node);
+	Node* getNodeFromLayer(std::deque<Node>& layer, unsigned int node);
+	inline Node* getOutputNode(unsigned int node) { return &outputNodes[node]; };
 
-	std::list<std::list<Node>> hiddenNodes;
-	std::list<Node> inputNodes;
-	std::list<Node> outputNodes;
+private:
+
+	std::deque<std::deque<Node>> hiddenNodes;
+	std::deque<Node> inputNodes;
+	std::deque<Node> outputNodes;
 	bool recursive = false;
 
 	Activation dummyActivation;

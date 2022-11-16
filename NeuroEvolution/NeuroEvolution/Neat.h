@@ -40,8 +40,6 @@ typedef struct {
 	float speciationDistanceMod;
 	int numSpeciesTarget;
 	bool adaptSpeciation;
-	
-	bool bestHigh;//False doesn't currently work
 
 	std::string champFileSave, avgFileSave;//Without extension type file
 	bool saveChampHistory;

@@ -17,27 +17,27 @@ void Node::wipeConnections()
 	previousNodes.clear();
 }
 
-void Node::removeConnection(Node* node)
+/*void Node::removeConnection(Node* node)
 {
 	previousNodes.erase(node);
-}
+}*/
 
 void Node::addConnection(Node* node, float weight, bool recursive)
 {
 	if (recursive == false)
 	{
-		previousNodes.insert(std::pair<Node*, float>(node, weight));
+		previousNodes.push_back(std::pair<Node*, float>(node, weight));
 	}
 	else {
-		previousNodes.insert(std::pair<Node*, float>(node, weight));
+		previousNodes.push_back(std::pair<Node*, float>(node, weight));
 	}
 	
 }
 
-void Node::changeWeight(Node* node, float weight)
+/*void Node::changeWeight(Node* node, float weight)
 {
 	previousNodes.at(node) = weight;
-}
+}*/
 
 float Node::compute()
 {
@@ -45,12 +45,12 @@ float Node::compute()
 	{
 		value = 0;
 
-		for (std::map<Node*, float>::iterator nodes = previousNodes.begin(); nodes != previousNodes.end(); ++nodes)
+		for (std::vector<std::pair<Node*, float>>::iterator nodes = previousNodes.begin(); nodes != previousNodes.end(); ++nodes)
 		{
 			value += nodes->first->compute() * nodes->second;
 		}
 
-		for (std::map<Node*, float>::iterator nodes = recursionNodes.begin(); nodes != recursionNodes.end(); ++nodes)
+		for (std::vector<std::pair<Node*, float>>::iterator nodes = recursionNodes.begin(); nodes != recursionNodes.end(); ++nodes)
 		{
 			value += nodes->first->getOldValue() * nodes->second;
 		}

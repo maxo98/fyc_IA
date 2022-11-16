@@ -15,7 +15,7 @@ Hyperneat::Hyperneat(unsigned int _populationSize, const NeatParameters& _neatPa
 Hyperneat::~Hyperneat()
 {
 	delete cppns;
-	delete hyperParam.activationFunction;
+//	delete hyperParam.activationFunction;
 }
 
 void Hyperneat::addInput(const std::vector<float>& node)
@@ -63,59 +63,107 @@ void Hyperneat::clear()
 
 void Hyperneat::generateNetworks()
 {
-	for (unsigned int cpt = 0; cpt < networks.size(); cpt++)
+	std::vector<std::thread> threads;
+	unsigned int cpus = std::thread::hardware_concurrency();
+
+	float totalWorkload = networks.size();
+	float workload = totalWorkload / cpus;
+	float restWorkload = 0;
+	int currentWorkload = totalWorkload;
+	int startIndex = 0;
+
+	while (workload < 1)
 	{
-		networks[cpt].clear();
+		cpus--;
+		workload = totalWorkload / cpus;
+	}
 
-		//Add the input layer
-		for (int i = 0; i < inputSubstrate.size(); i++)
-		{
-			networks[cpt].addInputNode();
-		}
+	currentWorkload = floor(workload);
+	float workloadFrac = fmod(workload, 1.0f);
+	restWorkload = workloadFrac;
 
-		std::unordered_set<std::vector<float>, HyperNodeHash>::iterator beginPreviousLayer = inputSubstrate.begin();
-		std::unordered_set<std::vector<float>, HyperNodeHash>::iterator endPreviousLayer = inputSubstrate.end();
+	while (cpus > threads.size() + 1)
+	{
+		threads.push_back(std::thread(&Hyperneat::generateNetworksThread, this, startIndex, currentWorkload + floor(restWorkload)));
 
-		int layer = 1;
-		
-		//Add and connect the hidden layers
-		for (std::deque<std::unordered_set<std::vector<float>, HyperNodeHash>>::iterator itLayer = hiddenSubstrates.begin(); itLayer != hiddenSubstrates.end(); ++itLayer)
-		{
-			addLayerAndConnect(layer, cpt, itLayer->begin(), itLayer->end(), beginPreviousLayer, endPreviousLayer, false);
+		startIndex += currentWorkload + floor(restWorkload);
 
-			beginPreviousLayer = itLayer->begin();
-			endPreviousLayer = itLayer->end();
+		restWorkload -= floor(restWorkload);
+		restWorkload += workloadFrac;
+	}
 
-			layer++;
-		}
+	while (restWorkload > 0)
+	{
+		restWorkload--;
+		currentWorkload++;
+	}
 
-		//Add and connect the output layer
-		addLayerAndConnect(layer, cpt, outputSubstrate.begin(), outputSubstrate.end(), beginPreviousLayer, endPreviousLayer, true);
+	generateNetworksThread(startIndex, currentWorkload);
+
+	for (int i = 0; i < threads.size(); i++)
+	{
+		threads[i].join();
 	}
 }
 
+void Hyperneat::generateNetworksThread(int startIndex, int worlkload)
+{
+	for (unsigned int cpt = startIndex; cpt < (startIndex + worlkload); cpt++)
+	{
+		createNetwork(*cppns->getNeuralNetwork(cpt), networks[cpt]);
+	}
+}
+
+void Hyperneat::genomeToNetwork(Genome& gen, NeuralNetwork& net)
+{
+	NeuralNetwork hyperNet;
+	cppns->genomeToNetwork(gen, hyperNet);
+	createNetwork(hyperNet, net);
+}
+
+void Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
+{
+	net.clear();
+
+	//Add the input layer
+	net.addInputNode(inputSubstrate.size());
+
+	std::unordered_set<std::vector<float>, HyperNodeHash>::iterator beginPreviousLayer = inputSubstrate.begin();
+	std::unordered_set<std::vector<float>, HyperNodeHash>::iterator endPreviousLayer = inputSubstrate.end();
+
+	int layer = 1;
+
+	//Add and connect the hidden layers
+	for (std::deque<std::unordered_set<std::vector<float>, HyperNodeHash>>::iterator itLayer = hiddenSubstrates.begin(); itLayer != hiddenSubstrates.end(); ++itLayer)
+	{
+		net.addOutputNode(itLayer->size(), hyperParam.activationFunction);
+
+		connectLayer(layer, hypernet, net, itLayer->begin(), itLayer->end(), beginPreviousLayer, endPreviousLayer);
+
+		beginPreviousLayer = itLayer->begin();
+		endPreviousLayer = itLayer->end();
+
+		layer++;
+	}
+
+	//Add and connect the output layer
+	net.addOutputNode(outputSubstrate.size(), hyperParam.activationFunction);
+
+	connectLayer(layer, hypernet, net, outputSubstrate.begin(), outputSubstrate.end(), beginPreviousLayer, endPreviousLayer);
+}
+
 /**
-* Add nodes of a layer to the neuralnetwork
-* and connect it to the previous layer
+* Connect layer to the previous layer
 */
-void Hyperneat::addLayerAndConnect(unsigned int layer, unsigned int networkIndex, std::unordered_set<std::vector<float>, HyperNodeHash>::iterator itNode,
+void Hyperneat::connectLayer(unsigned int layer, NeuralNetwork& hypernet, NeuralNetwork& net, std::unordered_set<std::vector<float>, HyperNodeHash>::iterator itNode,
 	std::unordered_set<std::vector<float>, HyperNodeHash>::iterator itNodeEnd,
-	std::unordered_set<std::vector<float>, HyperNodeHash>::iterator beginPreviousLayer, const std::unordered_set<std::vector<float>, HyperNodeHash>::iterator endPreviousLayer,
-	bool outputLayer)
+	std::unordered_set<std::vector<float>, HyperNodeHash>::iterator beginPreviousLayer, const std::unordered_set<std::vector<float>, HyperNodeHash>::iterator endPreviousLayer)
 {
 	int nodeB = 0;
 
 	//For each node in the layer to add
 	for (itNode; itNode != itNodeEnd; ++itNode)
 	{
-		if (outputLayer == false)
-		{
-			networks[networkIndex].addHiddenNode(layer, hyperParam.activationFunction);
-		}
-		else {
-			networks[networkIndex].addOutputNode(hyperParam.activationFunction);
-		}
-		
 		std::unordered_set<std::vector<float>, HyperNodeHash>::iterator prevLayer = beginPreviousLayer;
 
 		int nodeA = 0;
@@ -129,14 +177,13 @@ void Hyperneat::addLayerAndConnect(unsigned int layer, unsigned int networkIndex
 			std::vector<float> p1 = std::vector<float>(prevLayer->begin(), prevLayer->end());
 			input = hyperParam.cppnInputFunction(hyperParam.inputVariables, p1, p2);
 
-			output.resize(hyperParam.cppnOutput);
-			cppns->getNeuralNetwork(networkIndex)->compute(input, output);
+			hypernet.compute(input, output);
 
 			//Check if we should create a connection
 			if (hyperParam.thresholdFunction(hyperParam.thresholdVariables, output, p1, p2) == true)
 			{
 				float weight = hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], p1, p2);
-				networks[networkIndex].connectNodes(layer - 1, nodeA, layer, nodeB, weight);
+				net.connectNodes(layer - 1, nodeA, layer, nodeB, weight);
 			}
 
 			nodeA++;
@@ -144,24 +191,6 @@ void Hyperneat::addLayerAndConnect(unsigned int layer, unsigned int networkIndex
 
 		nodeB++;
 	}
-}
-
-
-void Hyperneat::evolve()
-{
-	cppns->evolve();
-
-	generateNetworks();
-}
-
-void Hyperneat::setScore(const std::vector < float >& newScores)
-{
-	cppns->setScore(newScores);
-}
-
-bool Hyperneat::saveHistory()
-{
-	return cppns->saveHistory();
 }
 
 std::vector<float> basicCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2)

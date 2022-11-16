@@ -2,8 +2,8 @@
 
 int launchHypeneatTest()
 {
-	int test = 20;
-	int n = 10;
+	int test = 10;
+	int n = 20;
 
 	std::vector<std::vector<float>> grid;
 	std::vector<std::vector<float>> centers;
@@ -24,8 +24,11 @@ int launchHypeneatTest()
 	//neatparam.activationFunctions.push_back(new thresholdActivation());
 	neatparam.activationFunctions.push_back(new sigmoidActivation());
 	neatparam.activationFunctions.push_back(new sinActivation());
-	neatparam.activationFunctions.push_back(new hyperTanActivation());
+	neatparam.activationFunctions.push_back(new tanhActivation());
 	neatparam.activationFunctions.push_back(new gaussianActivation());
+	neatparam.activationFunctions.push_back(new absActivation());
+	neatparam.activationFunctions.push_back(new reluActivation());
+	neatparam.activationFunctions.push_back(new linearActivation());
 
 	neatparam.pbMutateLink = 0.5;// 0.05;
 	neatparam.pbMutateNode = 0.3;//0.03;
@@ -36,6 +39,7 @@ int launchHypeneatTest()
 	//neatparam.weightShiftStrength = 2.5;
 	//neatparam.weightRandomStrength = 2.5;
 	neatparam.weightMuteStrength = 5;// 2.5;
+	neatparam.pbMutateActivation = 0.3;
 
 	neatparam.disjointCoeff = 1.0;
 	neatparam.excessCoeff = 1.0;
@@ -43,12 +47,10 @@ int launchHypeneatTest()
 
 	neatparam.killRate = 0.2;
 
-	neatparam.bestHigh = true;//Remenber false option doesn't currently work
-
 	neatparam.champFileSave = "champ";
 	neatparam.avgFileSave = "avg";//Without extension type file
 	neatparam.saveChampHistory = true;
-	neatparam.saveAvgHistory = false;
+	neatparam.saveAvgHistory = true;
 
 	neatparam.scoreMultiplier = 1000;
 
@@ -79,15 +81,14 @@ int launchHypeneatTest()
 
 	int result = 0;
 
-	std::vector<float> pos, output;
+	std::vector<float> pos;
 	pos.resize(2);
-	output.resize(n * n);
 
 	int count = 0;
 
 	//for (int i = 0; i < 100; i++)
 	{
-		Hyperneat hyper(50, neatparam, hyperneatParam);
+		Hyperneat hyper(popSize, neatparam, hyperneatParam);
 
 		for (int i = 0; i < n; i++)
 		{
@@ -105,12 +106,50 @@ int launchHypeneatTest()
 
 		hyper.generateNetworks();
 
-		if (hypeneatTest(grid, output, centers, hyper) == true)
+		if (hypeneatTest(popSize, test, n, grid, centers, hyper) == true)
 		{
 			result++;
 		}
 
 		hyper.saveHistory();
+		
+		std::vector<float> output;
+
+		Neat neat;
+		NeuralNetwork network;
+		hyper.genomeToNetwork(*hyper.getGoat(), network);
+
+		Genome* gen = hyper.getGoat();
+
+		std::vector<float> gridTest;
+		std::vector<float> centerTest;
+
+		gridTest.resize(n * n);
+		centerTest.resize(2);
+
+		writeSquares(gridTest, centerTest, n);
+
+		network.compute(gridTest, output);
+
+		float max = output[0];
+		int maxIndex = 0;
+
+		for (int cpt2 = 1; cpt2 < 100; cpt2++)
+		{
+			if (max < output[cpt2])
+			{
+				max = output[cpt2];
+				maxIndex = cpt2;
+			}
+		}
+
+		int x, y;
+
+		x = maxIndex % 10;
+		y = floor(maxIndex / 10);
+
+		std::cout << centerTest[0] << ", " << centerTest[1] << std::endl;
+		std::cout << x << ", " << y << std::endl;
 	}
 
 	for (int i = 0; i < neatparam.activationFunctions.size(); i++)
@@ -123,44 +162,61 @@ int launchHypeneatTest()
 	return 0;
 }
 
-bool hypeneatTest(const std::vector<std::vector<float>>& grid, std::vector<float>& output, const std::vector<std::vector<float>>& centers, Hyperneat& hyper)
+bool hypeneatTest(int popSize, int test, int n, const std::vector<std::vector<float>>& grid, const std::vector<std::vector<float>>& centers, Hyperneat& hyper)
 {
 	std::vector<float> fitness;
 
-	fitness.resize(50);
+	fitness.resize(popSize);
 
 	for (int i3 = 0; i3 < 100; i3++)
 	{
-		for (int i = 0; i < 50; i++)
+		std::cout << "gen " << i3 << std::endl;
+
+		for (int i = 0; i < popSize; i++)
 		{
-			fitness[i] = 4000;//(10*10 + 10*10)*20
+			fitness[i] = n*10;// 4000;//(10*10 + 10*10)*20
 		}
 
-		for (int i = 0; i < 50; i++)
+		std::vector<std::thread> threads;
+		unsigned int cpus = std::thread::hardware_concurrency();
+
+		float totalWorkload = popSize;
+		float workload = totalWorkload / cpus;
+		float restWorkload = 0;
+		int currentWorkload = totalWorkload;
+		int startIndex = 0;
+
+		/*while (workload < 1)
 		{
-			for (int cpt = 0; cpt < 20; cpt++)
-			{
-				hyper.getNeuralNetwork(i)->compute(grid[cpt], output);
+			cpus--;
+			workload = totalWorkload / cpus;
+		}
 
-				float max = output[0];
-				int maxIndex = 0;
+		currentWorkload = floor(workload);
+		float workloadFrac = fmod(workload, 1.0f);
+		restWorkload = workloadFrac;
 
-				for (int cpt2 = 1; cpt2 < 100; cpt2++)
-				{
-					if (max < output[cpt2])
-					{
-						max = output[cpt2];
-						maxIndex = cpt2;
-					}
-				}
+		while (cpus > threads.size() + 1)
+		{
+			threads.push_back(std::thread(evaluate, test, startIndex, n, currentWorkload + floor(restWorkload), std::ref(grid), std::ref(centers), std::ref(hyper), std::ref(fitness)));
 
-				int x, y;
+			startIndex += currentWorkload + floor(restWorkload);
 
-				x = maxIndex % 10;
-				y = floor(maxIndex / 10);
+			restWorkload -= floor(restWorkload);
+			restWorkload += workloadFrac;
+		}
 
-				fitness[i] -= ((centers[cpt][0] - x) * (centers[cpt][0] - x) + (centers[cpt][1] - y) * (centers[cpt][1] - y));
-			}
+		while (restWorkload > 0)
+		{
+			restWorkload--;
+			currentWorkload++;
+		}*/
+
+		evaluate(test, startIndex, currentWorkload, n, grid, centers, hyper, fitness);
+
+		for (int i = 0; i < threads.size(); i++)
+		{
+			threads[i].join();
 		}
 
 		hyper.setScore(fitness);
@@ -168,7 +224,43 @@ bool hypeneatTest(const std::vector<std::vector<float>>& grid, std::vector<float
 		hyper.evolve();
 	}
 
+	std::cout << "done" << std::endl;
+
 	return false;
+}
+
+void evaluate(int test, int startIndex, int n, int workload, const std::vector<std::vector<float>>& grid, const std::vector<std::vector<float>>& centers, Hyperneat& hyper, std::vector<float>& fitness)
+{
+	for (int i = startIndex; i < workload; i++)
+	{
+		std::vector<float> output;
+
+		for (int cpt = 0; cpt < test; cpt++)
+		{
+			hyper.getNeuralNetwork(i)->compute(grid[cpt], output);
+
+			float max = output[0];
+			int maxIndex = 0;
+
+			for (int cpt2 = 1; cpt2 < (n*n)-1; cpt2++)
+			{
+				if (max < output[cpt2])
+				{
+					max = output[cpt2];
+					maxIndex = cpt2;
+				}
+			}
+
+			int x, y;
+
+			x = maxIndex % n;
+			y = floor(maxIndex / n);
+
+			//std::cout << centers[cpt][0] << " " << centers[cpt][1] << " " << x << " " << y << std::endl;
+
+			fitness[i] -= sqrtf((centers[cpt][0] - x) * (centers[cpt][0] - x) + (centers[cpt][1] - y) * (centers[cpt][1] - y));
+		}
+	}
 }
 
 void writeSquares(std::vector<float>& grid, std::vector<float>& center, int n)

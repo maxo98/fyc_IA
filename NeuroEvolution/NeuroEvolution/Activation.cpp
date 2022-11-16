@@ -22,4 +22,5 @@ void Activation::initialize()
 	Activation::activationRegister.push_back(cedricSpikeActivation());
 	Activation::activationRegister.push_back(invPyramidActivation());
 	Activation::activationRegister.push_back(jigsawActivation());
+	Activation::activationRegister.push_back(absActivation());
 }

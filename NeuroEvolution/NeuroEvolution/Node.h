@@ -17,9 +17,9 @@ public:
 	~Node();
 
 	void wipeConnections();
-	void removeConnection(Node*);
+	//void removeConnection(Node*);
 	void addConnection(Node*, float, bool);
-	void changeWeight(Node*, float);
+	//void changeWeight(Node*, float);
 
 	inline float getOldValue() { return oldValue; }
 
@@ -31,13 +31,14 @@ public:
 
 	friend class ANeuralNetworkDisplayHUD;
 	friend class NeuralNetwork;
+
+	inline std::vector<std::pair<Node*, float>>* getPreviousNode() { return &previousNodes; };
+	inline Activation* getActivation() { return activation; };
 	
-
 private:
-
 	Activation* activation;
-	std::map<Node*, float> previousNodes;
-	std::map<Node*, float> recursionNodes;
+	std::vector<std::pair<Node*, float>> previousNodes;
+	std::vector<std::pair<Node*, float>> recursionNodes;
 	bool computed = false;
 	float value;
 	float oldValue;

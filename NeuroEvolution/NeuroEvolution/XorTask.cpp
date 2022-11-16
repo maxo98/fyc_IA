@@ -24,8 +24,6 @@ int launchXor()
 
 	neatparam.killRate = 0.2;
 
-	neatparam.bestHigh = true;//Remenber false option doesn't currently work
-
 	neatparam.champFileSave = "champ";
 	neatparam.avgFileSave = "avg";//Without extension type file
 	neatparam.saveChampHistory = false;

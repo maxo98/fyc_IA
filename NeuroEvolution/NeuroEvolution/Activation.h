@@ -44,6 +44,13 @@ public:
 	inline virtual std::string getId() const { return "linear"; };
 };
 
+class absActivation : public Activation {
+public:
+	virtual float activate(float x) const { return abs(x); };
+
+	inline virtual std::string getId() const { return "absolute"; };
+};
+
 class thresholdActivation : public Activation {
 public:
 	virtual float activate(float x) const { return (x >= 0.f ? 1.f : 0.f); };

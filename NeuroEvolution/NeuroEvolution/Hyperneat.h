@@ -68,25 +68,27 @@ public:
 	void addOutput(const std::vector<float>& node);
 	void addHiddenNode(unsigned int layer, const std::vector<float>& node);
 
-	void evolve();
-	void setScore(const std::vector < float >& newScores);
-	bool saveHistory();
+	inline void evolve() { cppns->evolve(); generateNetworks(); };
+	inline void setScore(const std::vector < float >& newScores) { cppns->setScore(newScores); }
+	inline bool saveHistory() { return cppns->saveHistory(); }
+	inline Genome* getGoat() { return cppns->getGoat(); };
 
 	void clear();
 
 	virtual void generateNetworks();
+	virtual void generateNetworksThread(int startIndex, int worlkload);
+	void genomeToNetwork(Genome& gen, NeuralNetwork& net);
+	void createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net);
 
 	inline NeuralNetwork* getNeuralNetwork(int i) { return &networks[i]; };
 
 protected:
 	/**
-	* Add nodes of a layer to the neuralnetwork
-	* and connect it to the previous layer
+	* Connect layer to the previous layer
 	*/
-	void addLayerAndConnect(unsigned int layer, unsigned int networkIndex, std::unordered_set<std::vector<float>, HyperNodeHash>::iterator itNode, 
+	void connectLayer(unsigned int layer, NeuralNetwork& hypernet, NeuralNetwork& net, std::unordered_set<std::vector<float>, HyperNodeHash>::iterator itNode,
 		std::unordered_set<std::vector<float>, HyperNodeHash>::iterator itNodeEnd,
-		std::unordered_set<std::vector<float>, HyperNodeHash>::iterator beginPreviousLayer, std::unordered_set<std::vector<float>, HyperNodeHash>::iterator endPreviousLayer,
-		bool outputLayer);
+		std::unordered_set<std::vector<float>, HyperNodeHash>::iterator beginPreviousLayer, std::unordered_set<std::vector<float>, HyperNodeHash>::iterator endPreviousLayer);
 
 	std::unordered_set<std::vector<float>, HyperNodeHash> inputSubstrate;
 	std::unordered_set<std::vector<float>, HyperNodeHash> outputSubstrate;

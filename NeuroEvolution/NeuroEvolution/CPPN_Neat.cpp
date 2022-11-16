@@ -29,7 +29,7 @@ void CPPN_Neat::mutate(Genome& genome, std::mutex* lock)
 	if (neatParam.pbMutateNode > randFloat())
 	{
 
-		unsigned int index = randInt(0, neatParam.activationFunctions.size() - 1);
+		unsigned int index = randInt(input, neatParam.activationFunctions.size() - 1);
 		genome.mutateNode(allConnections, neatParam.activationFunctions[index], lock);
 	}
 	
@@ -63,6 +63,7 @@ void CPPN_Neat::mutate(Genome& genome, std::mutex* lock)
 		if (neatParam.pbMutateActivation > randFloat())
 		{
 			unsigned int index = randInt(0, neatParam.activationFunctions.size() - 1);
+			genome.mutateActivation(neatParam.activationFunctions[index]);
 		}
 	//}
 

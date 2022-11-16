@@ -51,19 +51,19 @@ void Species::Add(Genome* gen)
 	}
 }
 
-void Species::countOffspring(float& skim, const float& avgFitness)//Uses the average fitness of the whole population 
+void Species::countOffspring(float& skim, const float& totalFitness, const int& popSize)//Uses the average fitness of the whole population 
 {
 	expectedOffspring = 0;
-	float skimIntPart;  //The whole offspring in the skim
+	int skimIntPart;  //The whole offspring in the skim
 
 	for (std::vector<Genome*>::iterator it = genomes.begin(); it != genomes.end(); ++it)
 	{
-		float eoGen = (*it)->getScore() / avgFitness;
+		float eoGen = (*it)->getScore() / totalFitness;
 		int eoIntPart = floor(eoGen);  //The floor of an organism's expected offspring
 		float eoFracPart = fmod(eoGen, 1.0); //Expected offspring fractional part
 		
 
-		expectedOffspring += eoIntPart;
+		expectedOffspring += eoIntPart * popSize;
 		skim += eoFracPart;
 		
 		//NOTE:  Some precision is lost by computer
@@ -71,7 +71,7 @@ void Species::countOffspring(float& skim, const float& avgFitness)//Uses the ave
 		if (skim > 1.0) 
 		{
 			skimIntPart = floor(skim);
-			expectedOffspring += (int)skimIntPart;
+			expectedOffspring += skimIntPart * popSize;
 			skim -= skimIntPart;
 		}
 	}
