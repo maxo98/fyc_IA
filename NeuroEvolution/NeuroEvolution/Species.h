@@ -17,9 +17,10 @@ public:
 	inline float getAvgFitness() const { return avgFitness; };
 	inline float getMaxFitness() const { return maxFitness; };
 
-	inline int getExpectedOffspring() { return expectedOffspring; };
-	inline void setExpectedOffspring(int value) { expectedOffspring = value; };
+	inline unsigned int getExpectedOffspring() { return expectedOffspring; };
+	inline void setExpectedOffspring(unsigned int value) { expectedOffspring = value; };
 	inline void incrementExpectedOffspring() { ++expectedOffspring; };
+	inline void decrementExpectedOffspring() { --expectedOffspring; };
 
 	inline Genome* getChamp() { return champ; };
 	inline void setChamp(Genome* value) { champ = value; };
@@ -37,6 +38,6 @@ private:
 	float avgFitness = 0; //The average fitness of the Species
 	float maxFitness = 0; //Max fitness of the Species
 	float maxFitnessEver = 0; //The max it ever had
-	int expectedOffspring = 0;
+	unsigned int expectedOffspring = 0;
 	bool novel = true;;
 };

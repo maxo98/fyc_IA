@@ -338,6 +338,21 @@ void Neat::evolve()
 			bestSpecies->setExpectedOffspring(populationSize);
 		}
 	}
+	else if (totalExpected > populationSize)
+	{
+		do {
+
+			std::list<Species*>::iterator it = sortedSpecies.begin();
+
+			while ((*it)->getExpectedOffspring() == 0)
+			{
+				++it;
+			}
+
+			(*it)->decrementExpectedOffspring();
+
+		} while (totalExpected > populationSize);
+	}
 
 	//Official implementation re-sorts the species list by their fitness
 	//but the fitness doesn't seem to have changed, maybe I missed something
