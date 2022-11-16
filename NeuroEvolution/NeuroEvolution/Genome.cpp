@@ -234,10 +234,13 @@ void Genome::mutateLinkToggle()
     connection->enabled = !connection->enabled;
 }
 
-void Genome::mutateActivation(Activation* activationFunction)
+void Genome::mutateActivation(std::vector<Activation*>& activationFunctions)
 {
-    unsigned int nodeIndex = randInt(input+1, nodes.size() - 1);
-    nodes[nodeIndex].setActivation(activationFunction);
+    for (int i = input; i < nodes.size(); i++)
+    {
+        unsigned int index = randInt(0, activationFunctions.size() - 1);
+        nodes[i].setActivation(activationFunctions[index]);
+    }
 }
 
 //Slightly modified version of mutate_link_weights from official implementation

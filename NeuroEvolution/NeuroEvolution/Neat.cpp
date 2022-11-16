@@ -280,7 +280,7 @@ void Neat::evolve()
 
 	for (int i = 0; i < populationSize; i++)
 	{
-		totalFitness += genomes[i].getScore();
+		totalFitness += genomes[i].getSpeciesScore();
 	}
 
 	if (neatParam.saveAvgHistory == true) avgHistory.push_back(totalFitness/populationSize);

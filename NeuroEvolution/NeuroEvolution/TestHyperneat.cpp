@@ -1,11 +1,11 @@
 #include "TestHyperneat.h"
 
-#define ERWAN
+//#define
 
 int launchHypeneatTest()
 {
 	int test = 10;
-	int n = 10;
+	int n = 20;
 
 	std::vector<std::vector<float>> grid;
 	std::vector<std::vector<float>> centers;
@@ -32,6 +32,19 @@ int launchHypeneatTest()
 	neatparam.activationFunctions.push_back(new reluActivation());
 	neatparam.activationFunctions.push_back(new linearActivation());
 
+#ifdef MICKAEL
+	neatparam.pbMutateLink = 0.3;// 0.05;
+	neatparam.pbMutateNode = 0.3;//0.03;
+	//neatparam.pbWeightShift = 0.7;
+	//neatparam.pbWeightRandom = 0.2;
+	neatparam.pbWeight = 0.9;// 0.9;
+	neatparam.pbToggleLink = 0.05;// 0.05;
+	//neatparam.weightShiftStrength = 2.5;
+	//neatparam.weightRandomStrength = 2.5;
+	neatparam.weightMuteStrength = 2.5;// 2.5;
+	neatparam.pbMutateActivation = 0.05;
+#endif 
+
 #ifdef ERWAN
 	neatparam.pbMutateLink = 0.3;// 0.05;
 	neatparam.pbMutateNode = 0.3;//0.03;
@@ -41,8 +54,8 @@ int launchHypeneatTest()
 	neatparam.pbToggleLink = 0.05;// 0.05;
 	//neatparam.weightShiftStrength = 2.5;
 	//neatparam.weightRandomStrength = 2.5;
-	neatparam.weightMuteStrength = 5;// 2.5;
-	neatparam.pbMutateActivation = 0.3;
+	neatparam.weightMuteStrength = 2.5;// 2.5;
+	neatparam.pbMutateActivation = 0.25;
 #endif 
 
 #ifdef CEDRIC
@@ -54,8 +67,8 @@ int launchHypeneatTest()
 	neatparam.pbToggleLink = 0.05;// 0.05;
 	//neatparam.weightShiftStrength = 2.5;
 	//neatparam.weightRandomStrength = 2.5;
-	neatparam.weightMuteStrength = 5;// 2.5;
-	neatparam.pbMutateActivation = 0.3;
+	neatparam.weightMuteStrength = 2.5;// 2.5;
+	neatparam.pbMutateActivation = 0.05;
 #endif 
 
 #ifdef MAXIME
@@ -67,8 +80,8 @@ int launchHypeneatTest()
 	neatparam.pbToggleLink = 0.05;// 0.05;
 	//neatparam.weightShiftStrength = 2.5;
 	//neatparam.weightRandomStrength = 2.5;
-	neatparam.weightMuteStrength = 5;// 2.5;
-	neatparam.pbMutateActivation = 0.3;
+	neatparam.weightMuteStrength = 2.5;// 2.5;
+	neatparam.pbMutateActivation = 0.025;
 #endif 
 
 	neatparam.disjointCoeff = 1.0;
@@ -103,6 +116,12 @@ int launchHypeneatTest()
 #ifdef MAXIME
 	neatparam.speciationDistance = 7.0;
 #endif
+
+#ifdef MICKAEL
+	neatparam.speciationDistance = 3.0;
+#endif
+
+
 	neatparam.speciationDistanceMod = 0.3;
 	neatparam.numSpeciesTarget = 4;
 	neatparam.adaptSpeciation = false;//Doesn't seem to have a lot of effect, despite being taken from official implementation

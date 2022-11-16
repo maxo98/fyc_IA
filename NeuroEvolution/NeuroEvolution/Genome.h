@@ -34,7 +34,7 @@ public:
 	//void mutateWeightShift(float weightShiftStrength);
 	//void mutateWeightRandom(float weightRandomStrength);
 	void mutateLinkToggle();
-	void mutateActivation(Activation* activationFunction);
+	void mutateActivation(std::vector<Activation*>& activationFunctions);
 	void mutateWeights(float power, float rate, WEIGHT_MUTATOR mutType);
 
 	inline std::map<unsigned int, GeneConnection>* const getConnections() { return &connections; };

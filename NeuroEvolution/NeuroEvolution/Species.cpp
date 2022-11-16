@@ -58,7 +58,7 @@ void Species::countOffspring(float& skim, const float& totalFitness, const int& 
 
 	for (std::vector<Genome*>::iterator it = genomes.begin(); it != genomes.end(); ++it)
 	{
-		float eoGen = (*it)->getScore() / totalFitness * popSize;
+		float eoGen = (*it)->getSpeciesScore() / totalFitness * popSize;
 		int eoIntPart = floor(eoGen);  //The floor of an organism's expected offspring
 		float eoFracPart = fmod(eoGen, 1.0); //Expected offspring fractional part
 
