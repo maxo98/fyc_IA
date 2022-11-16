@@ -1,6 +1,6 @@
 #include "TestHyperneat.h"
 
-#define MAXIME
+#define ERWAN
 
 int launchHypeneatTest()
 {
@@ -32,6 +32,20 @@ int launchHypeneatTest()
 	neatparam.activationFunctions.push_back(new reluActivation());
 	neatparam.activationFunctions.push_back(new linearActivation());
 
+#ifdef ERWAN
+	neatparam.pbMutateLink = 0.3;// 0.05;
+	neatparam.pbMutateNode = 0.3;//0.03;
+	//neatparam.pbWeightShift = 0.7;
+	//neatparam.pbWeightRandom = 0.2;
+	neatparam.pbWeight = 0.9;// 0.9;
+	neatparam.pbToggleLink = 0.05;// 0.05;
+	//neatparam.weightShiftStrength = 2.5;
+	//neatparam.weightRandomStrength = 2.5;
+	neatparam.weightMuteStrength = 5;// 2.5;
+	neatparam.pbMutateActivation = 0.3;
+#endif 
+
+#ifdef CEDRIC
 	neatparam.pbMutateLink = 0.5;// 0.05;
 	neatparam.pbMutateNode = 0.3;//0.03;
 	//neatparam.pbWeightShift = 0.7;
@@ -42,6 +56,20 @@ int launchHypeneatTest()
 	//neatparam.weightRandomStrength = 2.5;
 	neatparam.weightMuteStrength = 5;// 2.5;
 	neatparam.pbMutateActivation = 0.3;
+#endif 
+
+#ifdef MAXIME
+	neatparam.pbMutateLink = 0.5;// 0.05;
+	neatparam.pbMutateNode = 0.3;//0.03;
+	//neatparam.pbWeightShift = 0.7;
+	//neatparam.pbWeightRandom = 0.2;
+	neatparam.pbWeight = 1;// 0.9;
+	neatparam.pbToggleLink = 0.05;// 0.05;
+	//neatparam.weightShiftStrength = 2.5;
+	//neatparam.weightRandomStrength = 2.5;
+	neatparam.weightMuteStrength = 5;// 2.5;
+	neatparam.pbMutateActivation = 0.3;
+#endif 
 
 	neatparam.disjointCoeff = 1.0;
 	neatparam.excessCoeff = 1.0;
@@ -66,11 +94,15 @@ int launchHypeneatTest()
 
 #ifdef CEDRIC
 	neatparam.speciationDistance = 5.0;
-#endif CEDRIC
+#endif
+
+#ifdef ERWAN
+	neatparam.speciationDistance = 7.0;
+#endif
 
 #ifdef MAXIME
 	neatparam.speciationDistance = 7.0;
-#endif MAXIME
+#endif
 	neatparam.speciationDistanceMod = 0.3;
 	neatparam.numSpeciesTarget = 4;
 	neatparam.adaptSpeciation = false;//Doesn't seem to have a lot of effect, despite being taken from official implementation
@@ -85,7 +117,7 @@ int launchHypeneatTest()
 	hyperneatParam.thresholdFunction = leoThreshold;
 	hyperneatParam.weightModifierFunction = noChangeWeight;
 
-	int popSize = 150;
+	int popSize = 100;
 
 	int result = 0;
 
