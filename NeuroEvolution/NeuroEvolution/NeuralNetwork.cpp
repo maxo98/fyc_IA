@@ -323,6 +323,7 @@ void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size,
 	float restWorkload = 0;
 	int currentWorkload = totalWorkload;
 	int startIndex = 0;
+	int count = 0;
 
 	if (totalWorkload >= 20)
 	{
@@ -340,6 +341,8 @@ void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size,
 		{
 			threads.push_back(std::thread(&NeuralNetwork::concurrentComputing, this, currentWorkload + floor(restWorkload), startIndex, it, output, outputs));
 
+			count += currentWorkload + floor(restWorkload);
+
 			for (int i = 0; i < currentWorkload + floor(restWorkload); i++)
 			{
 				++it;
@@ -355,6 +358,14 @@ void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size,
 		{
 			restWorkload--;
 			currentWorkload++;
+		}
+
+		count += currentWorkload;
+
+		while (count > totalWorkload)
+		{
+			currentWorkload--;
+			count--;
 		}
 	}
 

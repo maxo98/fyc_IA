@@ -435,6 +435,7 @@ void Neat::evolve()
 	float totalWorkload = sortedSpecies.size();
 	float workload = totalWorkload / cpus;
 	int currentWorkload = 0;
+	int count = 0;
 
 //#ifndef REPRO_MULTITHREAD
 //	currentWorkload = totalWorkload;//Multithreading is creating problem when we modify when modifying the all connections unordered map
@@ -454,6 +455,8 @@ void Neat::evolve()
 
 		threads.push_back(std::thread(&Neat::reproduce, this, currentWorkload + floor(restWorkload), itSortedSpecies, newBornIndex, std::ref(sortedSpecies), newPop, &lock));
 
+		count += currentWorkload + floor(restWorkload);
+
 		for (int i = 0; i < currentWorkload + floor(restWorkload); i++)
 		{
 			newBornIndex += (*itSortedSpecies)->getExpectedOffspring();
@@ -468,6 +471,14 @@ void Neat::evolve()
 	{
 		restWorkload--;
 		currentWorkload++;
+	}
+
+	count += currentWorkload;
+
+	while (count > totalWorkload)
+	{
+		currentWorkload--;
+		count--;
 	}
 //#endif
 	reproduce(currentWorkload, itSortedSpecies, newBornIndex, sortedSpecies, newPop, &lock);
@@ -499,7 +510,7 @@ void Neat::evolve()
 	int cpt = 0;
 
 	std::vector<Species>::iterator it = species.end();
-	int count = 0;
+	count = 0;
 	int check = 0;
 
 	while(cpt < species.size())

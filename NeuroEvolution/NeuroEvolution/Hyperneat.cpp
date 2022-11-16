@@ -71,6 +71,7 @@ void Hyperneat::generateNetworks()
 	float restWorkload = 0;
 	int currentWorkload = totalWorkload;
 	int startIndex = 0;
+	int count = 0;
 
 	while (workload < 1)
 	{
@@ -86,6 +87,7 @@ void Hyperneat::generateNetworks()
 	{
 		threads.push_back(std::thread(&Hyperneat::generateNetworksThread, this, startIndex, currentWorkload + floor(restWorkload)));
 
+		count += currentWorkload + floor(restWorkload);
 		startIndex += currentWorkload + floor(restWorkload);
 
 		restWorkload -= floor(restWorkload);
@@ -96,6 +98,14 @@ void Hyperneat::generateNetworks()
 	{
 		restWorkload--;
 		currentWorkload++;
+	}
+
+	count += currentWorkload;
+
+	while (count > totalWorkload)
+	{
+		currentWorkload--;
+		count--;
 	}
 
 	generateNetworksThread(startIndex, currentWorkload);
