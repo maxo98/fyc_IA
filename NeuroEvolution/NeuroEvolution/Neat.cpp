@@ -20,6 +20,7 @@ Neat::Neat(unsigned int _populationSize, unsigned int _input, unsigned int _outp
 
 	networks.resize(populationSize);
 	genomes = new Genome[populationSize];
+	futureGen = new Genome[populationSize];
 
 	if (init != INIT::NONE)
 	{
@@ -123,6 +124,7 @@ void Neat::oneConnectionInit(Genome& gen)
 Neat::~Neat()
 {
 	delete[] genomes;
+	delete[] futureGen;
 }
 
 void Neat::mutate(Genome& genome, std::mutex* lock)
@@ -406,9 +408,6 @@ void Neat::evolve()
 		}
 	}
 
-
-	Genome* newPop = new Genome[populationSize];
-
 	//Perform reproduction.  Reproduction is done on a per-Species
 	//basis.  (So this could be paralellized potentially.)
 	int newBornIndex = 0;
@@ -439,7 +438,7 @@ void Neat::evolve()
 	while (cpus > threads.size()+1)
 	{
 
-		threads.push_back(std::thread(&Neat::reproduce, this, currentWorkload + floor(restWorkload), itSortedSpecies, newBornIndex, std::ref(sortedSpecies), newPop, &lock));
+		threads.push_back(std::thread(&Neat::reproduce, this, currentWorkload + floor(restWorkload), itSortedSpecies, newBornIndex, std::ref(sortedSpecies), futureGen, &lock));
 
 		count += currentWorkload + floor(restWorkload);
 
@@ -467,7 +466,7 @@ void Neat::evolve()
 		count--;
 	}
 //#endif
-	reproduce(currentWorkload, itSortedSpecies, newBornIndex, sortedSpecies, newPop, &lock);
+	reproduce(currentWorkload, itSortedSpecies, newBornIndex, sortedSpecies, futureGen, &lock);
 
 	for (int i = 0; i < threads.size(); i++)
 	{
@@ -485,12 +484,13 @@ void Neat::evolve()
 	//Add new born to species
 	for (int i = 0; i < populationSize; i++)
 	{
-		addToSpecies(&newPop[i]);
+		addToSpecies(&futureGen[i]);
 	}
 
 	//Remove old generation
-	delete[] genomes;
-	genomes = newPop;
+	Genome* genHolder = genomes;
+	genomes = futureGen;
+	futureGen = genHolder;
 
 	//Remove extinct species and age those that survive
 	int cpt = 0;

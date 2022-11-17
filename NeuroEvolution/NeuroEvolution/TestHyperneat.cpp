@@ -5,7 +5,7 @@
 int launchHypeneatTest()
 {
 	int test = 10;
-	int n = 20;
+	int n = 10;
 
 	std::vector<std::vector<float>> grid;
 	std::vector<std::vector<float>> centers;
