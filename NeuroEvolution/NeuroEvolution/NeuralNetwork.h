@@ -17,20 +17,22 @@ public:
 	NeuralNetwork();
 	~NeuralNetwork();
 
-	void fullyConnect();
+	//void fullyConnect();
 
-	inline unsigned int getLayerSize() { return hiddenNodes.size() + 2; };
+	inline unsigned int getLayerSize() { return hiddenLayerSize + 2; };
 	unsigned int getNHiddenNode(unsigned int layer);
-	inline unsigned int getNInputNode() { return inputNodes.size(); }
-	inline unsigned int getNOutputNode() { return outputNodes.size(); }
+	inline unsigned int getNInputNode() { return inputNodesSize; }
+	inline unsigned int getNOutputNode() { return outputNodesSize; }
 
 	std::pair<unsigned int, unsigned int> addHiddenNode(unsigned int layer, Activation* activation);
-	void addHiddenNode(int n, unsigned int layer, Activation* activation);
 	std::pair<unsigned int, unsigned int> addInputNode();
-	void addInputNode(int n);
 	std::pair<unsigned int, unsigned int> addOutputNode(Activation* activation);
-	void addOutputNode(int n, Activation* activation);
-	void removeHiddenNode(unsigned int layer);
+
+	void reserveHidden(int n, unsigned int layer, Activation* activation);
+	void reserveInput(int n);
+	void reserveOutput(int n, Activation* activation);
+
+	//void removeHiddenNode(unsigned int layer);
 	inline void removeInputNode() { inputNodes.pop_back(); };
 	inline void removeOutputNode() { outputNodes.pop_back(); };
 
@@ -51,13 +53,19 @@ public:
 	inline Node* getOutputNode(unsigned int node) { return &outputNodes[node]; };
 
 private:
-
+	//Nodes should never move in the memory
 	std::deque<std::deque<Node>> hiddenNodes;
 	std::deque<Node> inputNodes;
 	std::deque<Node> outputNodes;
+
+	int hiddenLayerSize = 0;
+	std::vector<int> hiddenNodesSize;
+	int inputNodesSize = 0;
+	int outputNodesSize = 0;
+
 	bool recursive = false;
 
 	Activation dummyActivation;
 
-	friend class ANeuralNetworkDisplayHUD;
+	//friend class ANeuralNetworkDisplayHUD;
 };
