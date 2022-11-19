@@ -14,14 +14,25 @@ Node::~Node()
 
 void Node::wipeConnections()
 {
-	previousNodesSize = 0;
-	recursionNodesSize = 0;
+	previousNodes.clear();
 }
 
 /*void Node::removeConnection(Node* node)
 {
 	previousNodes.erase(node);
 }*/
+
+void Node::addConnection(Node* node, float weight, bool recursive)
+{
+	if (recursive == false)
+	{
+		previousNodes.push_back(std::pair<Node*, float>(node, weight));
+	}
+	else {
+		previousNodes.push_back(std::pair<Node*, float>(node, weight));
+	}
+	
+}
 
 /*void Node::changeWeight(Node* node, float weight)
 {
@@ -34,14 +45,12 @@ float Node::compute()
 	{
 		value = 0;
 
-		int i = 0;
-		for (std::vector<std::pair<Node*, float>>::iterator nodes = previousNodes.begin(); i < previousNodesSize; ++nodes, ++i)
+		for (std::vector<std::pair<Node*, float>>::iterator nodes = previousNodes.begin(); nodes != previousNodes.end(); ++nodes)
 		{
 			value += nodes->first->compute() * nodes->second;
 		}
 
-		i = 0;
-		for (std::vector<std::pair<Node*, float>>::iterator nodes = recursionNodes.begin(); i < recursionNodesSize; ++nodes, ++i)
+		for (std::vector<std::pair<Node*, float>>::iterator nodes = recursionNodes.begin(); nodes != recursionNodes.end(); ++nodes)
 		{
 			value += nodes->first->getOldValue() * nodes->second;
 		}
@@ -58,30 +67,4 @@ float Node::compute()
 	}
 
 	return value;
-}
-
-void Node::addPreviousNode(Node* node, float weight) 
-{
-	if (previousNodesSize < previousNodes.size())
-	{
-		previousNodes[previousNodesSize] = std::pair(node, weight);
-	}
-	else {
-		previousNodes.push_back(std::pair(node, weight));
-	}
-
-	previousNodesSize++;
-}
-
-void Node::addRecursionNode(Node* node, float weight)
-{
-	if (recursionNodesSize < recursionNodes.size())
-	{
-		recursionNodes[recursionNodesSize] = std::pair(node, weight);
-	}
-	else {
-		recursionNodes.push_back(std::pair(node, weight));
-	}
-
-	recursionNodesSize++;
 }

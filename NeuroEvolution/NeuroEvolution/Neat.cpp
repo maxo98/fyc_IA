@@ -202,9 +202,18 @@ void Neat::genomeToNetwork(Genome& genome, NeuralNetwork& network)
 			break;
 
 		case NODE_TYPE::OUTPUT:
-			nodePosition.push_back(std::pair<unsigned int, unsigned int>(UINT_MAX, network.getNOutputNode()));
+			nodePosition.push_back(std::pair<unsigned int, unsigned int>(-1, network.getNOutputNode()));
 			network.addOutputNode(node->getActivation());
 			break;
+		}
+	}
+
+	//Need to find on which layer the output nodes really are
+	for (unsigned int i = 0; i < nodePosition.size(); i++)
+	{
+		if (nodePosition[i].first == -1)
+		{
+			nodePosition[i].first = network.getLayerSize() - 1;
 		}
 	}
 
@@ -214,9 +223,14 @@ void Neat::genomeToNetwork(Genome& genome, NeuralNetwork& network)
 	{
 		if (connection->second.isEnabled() == true)
 		{
+			//if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%i %i %i %i"), nodePosition[connection->second.getNodeA()].first, nodePosition[connection->second.getNodeA()].second, nodePosition[connection->second.getNodeB()].first, nodePosition[connection->second.getNodeB()].second));
+			//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%i %i"), connection->second.getNodeA(), nodes->size()));
+
 			network.connectNodes(nodePosition[connection->second.getNodeA()], nodePosition[connection->second.getNodeB()], connection->second.getWeight());
 		}
 	}
+
+	//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "End network");
 }
 
 void Neat::evolve()
@@ -539,9 +553,8 @@ void Neat::evolve()
 		species.erase(it, species.begin() + cpt);
 	}
 
-#ifdef SPECIES_DEBUG
 	std::cout << "species: " << species.size() << std::endl;
-#endif
+
 	//Official implmentation removes old innovations here not sure if that's really usefull
 	
 	generateNetworks();

@@ -7,13 +7,48 @@
 
 NeuralNetwork::NeuralNetwork()
 {
+	//Just for testing purpose
+	//addInputNode();
+	//addInputNode();
+	//addInputNode();
+
+	//addOutputNode();
+	//addOutputNode();
+	//addOutputNode();
+
+	//addHiddenNode(0);
+	//addHiddenNode(0);
+	//addHiddenNode(1);
+	//addHiddenNode(1);
+	//addHiddenNode(1);
+
+	/*connectNodes(0, 0, 1, 1, 0.5);
+	connectNodes(0, 1, 1, 1, 0.5);
+	connectNodes(1, 1, 2, 0, 1.5);
+	connectNodes(2, 0, 3, 2, 1);
+
+	connectNodes(0, 2, 1, 0, 1.5);
+	connectNodes(1, 0, 2, 2, 0.75);
+	connectNodes(2, 2, 3, 0, 3);
+
+	connectNodes(0, 2, 3, 0, 1.5);
+
+	std::vector<float> inputs, ouputs;
+
+	inputs.push_back(1);
+	inputs.push_back(1);
+	inputs.push_back(2);
+
+	compute(inputs, ouputs);*/
+
+	//fullyConnect();
 }
 
 NeuralNetwork::~NeuralNetwork()
 {
 }
 
-/*void NeuralNetwork::fullyConnect()
+void NeuralNetwork::fullyConnect()
 {
 	//Connect ouput nodes to previous layer
 	std::deque<Node>::iterator itOutput;
@@ -26,13 +61,13 @@ NeuralNetwork::~NeuralNetwork()
 		{
 			for (itPrevious = hiddenNodes.back().begin(); itPrevious != hiddenNodes.back().end(); ++itPrevious)
 			{
-				itOutput->addPreviousNode(&(*itPrevious), 0.5);
+				itOutput->addConnection(&(*itPrevious), 0.5, false);
 			}
 		}
 		else {
 			for (itPrevious = inputNodes.begin(); itPrevious != inputNodes.end(); ++itPrevious)
 			{
-				itOutput->addPreviousNode(&(*itPrevious), 0.5);
+				itOutput->addConnection(&(*itPrevious), 0.5, false);
 			}
 		}
 	}
@@ -51,7 +86,7 @@ NeuralNetwork::~NeuralNetwork()
 
 			for (itPrevious; itPrevious != itLayer->end(); ++itPrevious)
 			{
-				itNext->addPreviousNode(&(*itPrevious), 0.5);
+				itNext->addConnection(&(*itPrevious), 0.5, false);
 			}
 		}
 
@@ -66,90 +101,98 @@ NeuralNetwork::~NeuralNetwork()
 		std::deque<Node>::iterator it_input;
 		for (it_input = inputNodes.begin(); it_input != inputNodes.end(); ++it_input)
 		{
-			itNext->addPreviousNode(&(*it_input), 0.5);
+			itNext->addConnection(&(*it_input), 0.5, false);
 		}
 	}
-}*/
+}
 
 unsigned int NeuralNetwork::getNHiddenNode(unsigned int layer)
 {
 	layer--;
 
-	if (layer >= hiddenLayerSize)
+	if (layer >= hiddenNodes.size())
 	{
 		return 0;
 	}
 
-	return hiddenNodesSize[layer];
+	int i = 0;
+	std::deque<std::deque<Node>>::iterator it;
+	for(it = hiddenNodes.begin(); it != hiddenNodes.end() && i != layer; ++it, ++i);
+
+	return it->size();
+}
+
+void NeuralNetwork::addHiddenNode(int n, unsigned int layer, Activation* activation)
+{
+	if (layer > hiddenNodes.size())
+	{
+		while (layer > hiddenNodes.size())
+		{
+			hiddenNodes.push_back(std::deque<Node>());
+		}
+
+		hiddenNodes.back().resize(n + hiddenNodes.size(), Node(activation));
+	}
+	else {
+
+		layer--;
+
+		int i = 0;
+		std::deque<std::deque<Node>>::iterator it;
+		for (it = hiddenNodes.begin(); it != hiddenNodes.end() && i != layer; ++it, ++i);
+
+		it->resize(n + hiddenNodes.size(), Node(activation));
+	}
 }
 
 std::pair<unsigned int, unsigned int> NeuralNetwork::addHiddenNode(unsigned int layer, Activation* activation)
 {
-	while (layer > hiddenLayerSize)
+	if (layer > hiddenNodes.size())
 	{
-		hiddenLayerSize++;
-	}
-
-	if (hiddenNodes.size() < hiddenLayerSize)
-	{
-		
-		do{
+		while (layer > hiddenNodes.size())
+		{
 			hiddenNodes.push_back(std::deque<Node>());
-			hiddenNodesSize.push_back(0);
-			
-		}while (hiddenNodes.size() < hiddenLayerSize);
+		}
 		
 		hiddenNodes.back().push_back(Node(activation));
-		hiddenNodesSize[layer-1]++;
 
 		return std::pair<unsigned int, unsigned int>(layer, hiddenNodes.back().size()-1);
 	}
 
 	layer--;
 
-	if (hiddenNodes[layer].size() > hiddenNodesSize[layer])
-	{
-		hiddenNodes[layer][hiddenNodesSize[layer]].setActivation(activation);
-		hiddenNodes[layer][hiddenNodesSize[layer]].wipeConnections();
-	}
-	else {
-		hiddenNodes[layer].push_back(Node(activation));
-	}
+	int i = 0;
+	std::deque<std::deque<Node>>::iterator it;
+	for (it = hiddenNodes.begin(); it != hiddenNodes.end() && i != layer; ++it, ++i);
 
-	hiddenNodesSize[layer]++;
+	it->push_back(Node(activation));
 
-	return std::pair<unsigned int, unsigned int>(layer+1, hiddenNodesSize[layer] - 1);
+	return std::pair<unsigned int, unsigned int>(layer, it->size() - 1);
 }
 
 std::pair<unsigned int, unsigned int> NeuralNetwork::addInputNode()
 { 
-	if (inputNodes.size() <= inputNodesSize)
-	{
-		inputNodes.push_back(Node(&dummyActivation));
-	}
+	inputNodes.push_back(Node(&dummyActivation));
+	return std::pair<unsigned int, unsigned int>(0, inputNodes.size() - 1);
+}
 
-	inputNodesSize++;
-
-	return std::pair<unsigned int, unsigned int>(std::numeric_limits<int>::max(), outputNodesSize - 1);
+void NeuralNetwork::addInputNode(int n)
+{
+	inputNodes.resize(inputNodes.size() + n, Node(&dummyActivation));
 }
 
 std::pair<unsigned int, unsigned int> NeuralNetwork::addOutputNode(Activation* activation)
 { 
-	if (outputNodes.size() < outputNodesSize)
-	{
-		outputNodes[outputNodesSize].setActivation(activation);
-		outputNodes[outputNodesSize].wipeConnections();
-	}
-	else {
-		outputNodes.push_back(Node(activation));
-	}
-
-	outputNodesSize++;
-
-	return std::pair<unsigned int, unsigned int>(std::numeric_limits<int>::max(), outputNodesSize - 1);
+	outputNodes.push_back(Node(activation)); 
+	return std::pair<unsigned int, unsigned int>(std::numeric_limits<int>::max(), outputNodes.size() - 1);
 }
 
-/*void NeuralNetwork::removeHiddenNode(unsigned int layer)
+void NeuralNetwork::addOutputNode(int n, Activation* activation)
+{
+	outputNodes.resize(n + outputNodes.size(), Node(activation));
+}
+
+void NeuralNetwork::removeHiddenNode(unsigned int layer)
 {
 	layer--;
 	int i = 0;
@@ -157,7 +200,7 @@ std::pair<unsigned int, unsigned int> NeuralNetwork::addOutputNode(Activation* a
 	for (it = hiddenNodes.begin(); it != hiddenNodes.end() && i != layer; ++it, ++i);
 
 	it->pop_back();
-}*/
+}
 
 void NeuralNetwork::connectNodes(std::pair<unsigned int, unsigned int> nodeA, std::pair<unsigned int, unsigned int> nodeB, float weight)
 {
@@ -166,14 +209,14 @@ void NeuralNetwork::connectNodes(std::pair<unsigned int, unsigned int> nodeA, st
 
 void NeuralNetwork::connectNodes(unsigned int layerA, unsigned int nodeA, unsigned int layerB, unsigned int nodeB, float weight)
 {
-	if (layerA >= layerB && recursive == false && layerB != UINT_MAX)
+	if (layerA >= layerB && recursive == false)
 	{
 		std::cout << "Error connecting nodes, layerA is superior or equal to layerB, recursion deactivated\n";
 
 		return;
 	}
 
-	if (layerB >= getLayerSize() && layerB != UINT_MAX)
+	if (layerB >= getLayerSize())
 	{
 		std::cout << "Error connecting nodes, layerB doesn't exist." << std::endl;
 	}
@@ -189,13 +232,7 @@ void NeuralNetwork::connectNodes(unsigned int layerA, unsigned int nodeA, unsign
 		return;
 	}
 
-	if (layerA < layerB)
-	{
-		nextNode->addPreviousNode(previousNode, weight);
-	}
-	else {
-		nextNode->addRecursionNode(previousNode, weight);
-	}
+	nextNode->addConnection(previousNode, weight, layerA >= layerB);
 }
 
 Node* NeuralNetwork::getNode(unsigned int layer, unsigned int node)
@@ -204,12 +241,11 @@ Node* NeuralNetwork::getNode(unsigned int layer, unsigned int node)
 	{
 		return getNodeFromLayer(inputNodes, node);
 	}
-	else if (layer == UINT_MAX || (layer-1) == hiddenNodes.size())
+	else if ((layer-1) == hiddenNodes.size()) 
 	{
 		return getNodeFromLayer(outputNodes, node);
 	}
-	else if((layer - 1) < hiddenNodes.size())
-	{
+	else if((layer - 1) < hiddenNodes.size()){
 		layer--;
 
 		return getNodeFromLayer(hiddenNodes[layer], node);
@@ -235,54 +271,46 @@ Node* NeuralNetwork::getNodeFromLayer(std::deque<Node>& layer, unsigned int node
 
 void NeuralNetwork::compute(const std::vector<float>& inputs, std::vector<float>& outputs)
 {
-	//outputs.clear();
+	outputs.clear();
 
-	if (inputs.size() >= inputNodesSize)
+	if (inputs.size() >= inputNodes.size())
 	{
 		//Reset the hidden nodes
-		unsigned int i = 0;
-		for (std::deque<std::deque<Node>>::iterator it = hiddenNodes.begin(); i < hiddenLayerSize; ++it, ++i)
+		for (std::deque<std::deque<Node>>::iterator it = hiddenNodes.begin(); it != hiddenNodes.end(); ++it)
 		{
-			unsigned int cpt = 0;
-			for (std::deque<Node>::iterator itNode = it->begin(); cpt < hiddenNodesSize[i]; ++itNode, ++cpt)
+			for (std::deque<Node>::iterator itNode = it->begin(); itNode != it->end(); ++itNode)
 			{
 				itNode->next();
 			}
 		}
 
 		//Set the input values
-		i = 0;
-		for (std::deque<Node>::iterator it = inputNodes.begin(); i < inputNodesSize; ++it, ++i)
+		unsigned int i = 0;
+		for (std::deque<Node>::iterator it = inputNodes.begin(); it != inputNodes.end(); ++it, ++i)
 		{
 			it->setValue(inputs[i]);
 		}
 
 		//Parallel computing hidden nodes value
-		i = 0;
-		for (std::deque<std::deque<Node>>::iterator it = hiddenNodes.begin(); i < hiddenLayerSize; ++i, ++it)
+		for (std::deque<std::deque<Node>>::iterator it = hiddenNodes.begin(); it != hiddenNodes.end(); ++it)
 		{
 			std::deque<Node>::iterator itNode = it->begin();
 
-			splitLayerComputing(itNode, hiddenNodesSize[i]);
+			splitLayerComputing(itNode, it->size());
 		}
 
 		outputs.resize(outputNodes.size(), 0);
 
 		//Compute the result
-		splitLayerComputing(outputNodes.begin(), outputNodesSize, true, &outputs);
+		splitLayerComputing(outputNodes.begin(), outputNodes.size(), true, &outputs);
 	}
 }
 
 void NeuralNetwork::clear()
 {
-	for (int i = 0; i < hiddenNodesSize.size(); i++)
-	{
-		hiddenNodesSize[i] = 0;
-	}
-	
-	hiddenLayerSize = 0;
-	inputNodesSize = 0;
-	outputNodesSize = 0;
+	hiddenNodes.clear();
+	inputNodes.clear();
+	outputNodes.clear();
 }
 
 void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size, bool output, std::vector<float>* outputs)
@@ -360,44 +388,5 @@ void NeuralNetwork::concurrentComputing(int workload, int startIndex, std::deque
 			it->next();
 			(*outputs)[i] = it->compute();
 		}
-	}
-}
-
-void NeuralNetwork::reserveHidden(int n, unsigned int layer, Activation* activation)
-{
-	layer--;
-
-	int size = hiddenNodes[layer].size();
-
-	for (int i = 0; i < size && i < n; i++)
-	{
-		hiddenNodes[layer][i].setActivation(activation);
-	}
-
-	if (size < n)
-	{
-		hiddenNodes[layer].resize(n, Node(activation));
-	}
-}
-
-void NeuralNetwork::reserveInput(int n)
-{
-
-	if (inputNodes.size() < n)
-	{
-		inputNodes.resize(n, Node(&dummyActivation));
-	}
-}
-
-void NeuralNetwork::reserveOutput(int n, Activation* activation)
-{
-	for (int i = 0; i < outputNodes.size() && i < n; i++)
-	{
-		outputNodes[i].setActivation(activation);
-	}
-
-	if (outputNodes.size() < n)
-	{
-		outputNodes.resize(n, Node(activation));
 	}
 }

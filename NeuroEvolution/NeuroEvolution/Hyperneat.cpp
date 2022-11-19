@@ -136,7 +136,7 @@ void Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 	net.clear();
 
 	//Add the input layer
-	net.reserveInput(inputSubstrate.size());
+	net.addInputNode(inputSubstrate.size());
 
 	std::unordered_set<std::vector<float>, HyperNodeHash>::iterator beginPreviousLayer = inputSubstrate.begin();
 	std::unordered_set<std::vector<float>, HyperNodeHash>::iterator endPreviousLayer = inputSubstrate.end();
@@ -146,7 +146,7 @@ void Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 	//Add and connect the hidden layers
 	for (std::deque<std::unordered_set<std::vector<float>, HyperNodeHash>>::iterator itLayer = hiddenSubstrates.begin(); itLayer != hiddenSubstrates.end(); ++itLayer)
 	{
-		net.reserveOutput(itLayer->size(), hyperParam.activationFunction);
+		net.addOutputNode(itLayer->size(), hyperParam.activationFunction);
 
 		connectLayer(layer, hypernet, net, itLayer->begin(), itLayer->end(), beginPreviousLayer, endPreviousLayer);
 
@@ -157,7 +157,7 @@ void Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 	}
 
 	//Add and connect the output layer
-	net.reserveOutput(outputSubstrate.size(), hyperParam.activationFunction);
+	net.addOutputNode(outputSubstrate.size(), hyperParam.activationFunction);
 
 	connectLayer(layer, hypernet, net, outputSubstrate.begin(), outputSubstrate.end(), beginPreviousLayer, endPreviousLayer);
 }
