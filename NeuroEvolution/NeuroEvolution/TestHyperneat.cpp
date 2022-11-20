@@ -1,6 +1,5 @@
 #include "TestHyperneat.h"
-
-//#define
+#include <iomanip>
 
 int launchHypeneatTest()
 {
@@ -32,7 +31,6 @@ int launchHypeneatTest()
 	neatparam.activationFunctions.push_back(new reluActivation());
 	neatparam.activationFunctions.push_back(new linearActivation());
 
-#ifdef MICKAEL
 	neatparam.pbMutateLink = 0.3;// 0.05;
 	neatparam.pbMutateNode = 0.3;//0.03;
 	//neatparam.pbWeightShift = 0.7;
@@ -42,51 +40,12 @@ int launchHypeneatTest()
 	//neatparam.weightShiftStrength = 2.5;
 	//neatparam.weightRandomStrength = 2.5;
 	neatparam.weightMuteStrength = 2.5;// 2.5;
-	neatparam.pbMutateActivation = 0.05;
-#endif 
-
-#ifdef ERWAN
-	neatparam.pbMutateLink = 0.3;// 0.05;
-	neatparam.pbMutateNode = 0.3;//0.03;
-	//neatparam.pbWeightShift = 0.7;
-	//neatparam.pbWeightRandom = 0.2;
-	neatparam.pbWeight = 0.9;// 0.9;
-	neatparam.pbToggleLink = 0.05;// 0.05;
-	//neatparam.weightShiftStrength = 2.5;
-	//neatparam.weightRandomStrength = 2.5;
-	neatparam.weightMuteStrength = 2.5;// 2.5;
-	neatparam.pbMutateActivation = 0.25;
-#endif 
-
-#ifdef CEDRIC
-	neatparam.pbMutateLink = 0.5;// 0.05;
-	neatparam.pbMutateNode = 0.3;//0.03;
-	//neatparam.pbWeightShift = 0.7;
-	//neatparam.pbWeightRandom = 0.2;
-	neatparam.pbWeight = 1;// 0.9;
-	neatparam.pbToggleLink = 0.05;// 0.05;
-	//neatparam.weightShiftStrength = 2.5;
-	//neatparam.weightRandomStrength = 2.5;
-	neatparam.weightMuteStrength = 2.5;// 2.5;
-	neatparam.pbMutateActivation = 0.05;
-#endif 
-
-#ifdef MAXIME
-	neatparam.pbMutateLink = 0.5;// 0.05;
-	neatparam.pbMutateNode = 0.3;//0.03;
-	//neatparam.pbWeightShift = 0.7;
-	//neatparam.pbWeightRandom = 0.2;
-	neatparam.pbWeight = 1;// 0.9;
-	neatparam.pbToggleLink = 0.05;// 0.05;
-	//neatparam.weightShiftStrength = 2.5;
-	//neatparam.weightRandomStrength = 2.5;
-	neatparam.weightMuteStrength = 2.5;// 2.5;
-	neatparam.pbMutateActivation = 0.025;
-#endif 
+	neatparam.pbMutateActivation = 0.15;
 
 	neatparam.disjointCoeff = 1.0;
 	neatparam.excessCoeff = 1.0;
 	neatparam.mutDiffCoeff = 0.4;
+	neatparam.activationDiffCoeff = 2.0;
 
 	neatparam.killRate = 0.2;
 
@@ -105,26 +64,14 @@ int launchHypeneatTest()
 	neatparam.pbMutateOnly = 0.25;
 	neatparam.pbMateOnly = 0.2;
 
-#ifdef CEDRIC
-	neatparam.speciationDistance = 5.0;
-#endif
-
-#ifdef ERWAN
-	neatparam.speciationDistance = 7.0;
-#endif
-
-#ifdef MAXIME
-	neatparam.speciationDistance = 7.0;
-#endif
-
-#ifdef MICKAEL
-	neatparam.speciationDistance = 3.0;
-#endif
+	neatparam.speciationDistance = 4.0;
 
 
 	neatparam.speciationDistanceMod = 0.3;
 	neatparam.numSpeciesTarget = 4;
-	neatparam.adaptSpeciation = false;//Doesn't seem to have a lot of effect, despite being taken from official implementation
+	neatparam.adaptSpeciation = true;
+
+	neatparam.elistism = true;
 
 	HyperneatParameters hyperneatParam;
 
@@ -178,8 +125,6 @@ int launchHypeneatTest()
 		NeuralNetwork network;
 		hyper.genomeToNetwork(*hyper.getGoat(), network);
 
-		Genome* gen = hyper.getGoat();
-
 		std::vector<float> gridTest;
 		std::vector<float> centerTest;
 
@@ -204,11 +149,12 @@ int launchHypeneatTest()
 
 		int x, y;
 
-		x = maxIndex % 10;
-		y = floor(maxIndex / 10);
+		x = maxIndex % n;
+		y = floor(maxIndex / n);
 
 		std::cout << centerTest[0] << ", " << centerTest[1] << std::endl;
 		std::cout << x << ", " << y << std::endl;
+
 	}
 
 	for (int i = 0; i < neatparam.activationFunctions.size(); i++)
@@ -229,7 +175,7 @@ bool hypeneatTest(int popSize, int test, int n, const std::vector<std::vector<fl
 
 	for (int i3 = 0; i3 < 100; i3++)
 	{
-		std::cout << "gen " << i3 << std::endl;
+		std::cout << std::endl << "gen " << i3 << std::endl;
 
 		for (int i = 0; i < popSize; i++)
 		{

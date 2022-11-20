@@ -525,3 +525,14 @@ void Genome::shiftNodes(unsigned int node, unsigned int layerMin)
         }
     }
 }
+
+std::string Genome::toString()
+{
+    std::string str = "";
+
+    str += "input " + std::to_string(input) + " score " + std::to_string(score) + " speciesScore " + std::to_string(speciesScore) + " superChampOffspring " + std::to_string(superChampOffspring)
+        + " eliminate " + std::to_string(eliminate) + " connection size " + std::to_string(connections.size()) + " nodesToConnection size " + std::to_string(nodesToConnection.size())
+        + " orderAddedCon size " + std::to_string(orderAddedCon.size()) + " nodes size " + std::to_string(nodes.size());
+
+    return str;
+}

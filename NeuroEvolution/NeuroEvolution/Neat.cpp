@@ -237,12 +237,22 @@ void Neat::evolve()
 {
 	generation++;
 
+	//if (neatParam.adaptSpeciation == true && generation > 1)
+	//{
+	//	if (species.size() < neatParam.numSpeciesTarget)
+	//		neatParam.speciationDistance -= neatParam.speciationDistanceMod;
+	//	else if (species.size() > neatParam.numSpeciesTarget)
+	//		neatParam.speciationDistance += neatParam.speciationDistanceMod;
+
+	//	if (neatParam.speciationDistance < 0.3) neatParam.speciationDistance = 0.3;
+	//}
+
 	if (neatParam.adaptSpeciation == true && generation > 1)
 	{
 		if (species.size() < neatParam.numSpeciesTarget)
-			neatParam.speciationDistance -= neatParam.speciationDistanceMod;
-		else if (species.size() < neatParam.numSpeciesTarget)
-			neatParam.speciationDistance += neatParam.speciationDistanceMod;
+			neatParam.speciationDistance -= (neatParam.speciationDistanceMod * neatParam.numSpeciesTarget / species.size());
+		else if (species.size() > neatParam.numSpeciesTarget)
+			neatParam.speciationDistance += (neatParam.speciationDistanceMod * species.size() / neatParam.numSpeciesTarget);
 
 		if (neatParam.speciationDistance < 0.3) neatParam.speciationDistance = 0.3;
 	}
@@ -256,19 +266,23 @@ void Neat::evolve()
 	}
 
 	sortedSpecies.sort(speciesSortAsc());
-	
+
 	//Flag the lowest performing species over age 20 every 30 generations 
 	//NOTE: THIS IS FOR COMPETITIVE COEVOLUTION STAGNATION DETECTION
 	if ((generation % 30) == 0)
 	{
-		std::list<Species*>::reverse_iterator currSpecies = sortedSpecies.rbegin();
+#ifdef DEBUG
+		std::cout << "flag for obliterate" << std::endl;
+#endif //DEBUG
 
-		while (currSpecies != sortedSpecies.rend() && (*currSpecies)->age < 20)
+		std::list<Species*>::iterator currSpecies = sortedSpecies.begin();
+
+		while (currSpecies != sortedSpecies.end() && (*currSpecies)->age < 20)
 		{
 			++currSpecies;
 		}
 
-		if (currSpecies != sortedSpecies.rend())
+		if (currSpecies != sortedSpecies.end())
 		{
 			(*currSpecies)->obliterate = true;
 		}
@@ -302,10 +316,11 @@ void Neat::evolve()
 	//If we lost precision, give an extra baby to the best Species
 	if (totalExpected < populationSize)
 	{
+
+
 		//Find the Species expecting the most
-		int maxExpected = 0;
 		int finalExpected = 0;
-		
+		int maxExpected = 0;
 
 		for (std::vector<Species>::iterator it = species.begin(); it != species.end(); ++it)
 		{
@@ -356,13 +371,57 @@ void Neat::evolve()
 		} while (totalExpected > populationSize);
 	}
 
+	bestSpecies = (*sortedSpecies.rbegin());
+
+	bestSpecies->setPopChamp(true);
+
+	//START Cedric Modif
+	//We don't have stolen babies like official implementation,
+	//But we should give a slight edge to the champion species, if it doesn't already have it
+	if(neatParam.elistism == true && bestSpecies->getExpectedOffspring() < 2 && (bestSpecies->age - bestSpecies->lastImprove) < neatParam.dropOffAge)
+	{
+		//Steal one offspring from a bottom species that is not new
+		int ageThreshold = 5;
+
+		do{
+			std::list<Species*>::iterator it = sortedSpecies.begin();
+
+			do {
+
+				for (it; it != sortedSpecies.end() && (*it)->age < ageThreshold && (*it)->getExpectedOffspring() < 2; ++it)
+				{}
+
+				while ((*it)->getExpectedOffspring() > 1)
+				{
+					(*it)->decrementExpectedOffspring();
+
+					bestSpecies->incrementExpectedOffspring();
+				}
+
+				++it;
+
+			} while (bestSpecies->getExpectedOffspring() < 2 && it != sortedSpecies.end());
+
+			ageThreshold = 0;
+		} while (bestSpecies->getExpectedOffspring() < 2);
+
+	}
+#ifdef DEBUG
+	else if (bestSpecies->getExpectedOffspring() < 2 && neatParam.elistism == false)
+	{
+		std::cout << "champ dies of age " << std::endl;
+	}
+#endif DEBUG
+
+	//END Cedric Modif
+
 	//Official implementation re-sorts the species list by their fitness
 	//but the fitness doesn't seem to have changed, maybe I missed something
 	//Seems like the sorting functions are not the same, strange...
 	//It seems that genomes in species were sorted by fitness at some point
 	//but didn't see where
 
-	bestSpecies = (*sortedSpecies.rbegin());
+	
 
 	//Official implementation compute incrment the value of the last time the population as improved or reset it, here
 	//It's more optimal for us to do it in the setScore function
@@ -370,8 +429,9 @@ void Neat::evolve()
 	//Check for stagnation- if there is stagnation, perform delta-coding
 	if (highestLastChanged >= neatParam.dropOffAge + 5) 
 	{
-
-		//    cout<<"PERFORMING DELTA CODING"<<endl;
+#ifdef DEBUG
+		std::cout << "PERFORMING DELTA CODING" << std::endl;
+#endif // DEBUG
 
 		highestLastChanged = 0;
 
@@ -433,12 +493,9 @@ void Neat::evolve()
 
 	float totalWorkload = sortedSpecies.size();
 	float workload = totalWorkload / cpus;
-	int currentWorkload = 0;
+	int currentWorkload = totalWorkload;
 	int count = 0;
 
-//#ifndef REPRO_MULTITHREAD
-//	currentWorkload = totalWorkload;//Multithreading is creating problem when we modify when modifying the all connections unordered map
-//#else
 	while (workload < 1)
 	{
 		cpus--;
@@ -479,7 +536,7 @@ void Neat::evolve()
 		currentWorkload--;
 		count--;
 	}
-//#endif
+
 	reproduce(currentWorkload, itSortedSpecies, newBornIndex, sortedSpecies, futureGen, &lock);
 
 	for (int i = 0; i < threads.size(); i++)
@@ -553,8 +610,9 @@ void Neat::evolve()
 		species.erase(it, species.begin() + cpt);
 	}
 
+#ifdef DEBUG
 	std::cout << "species: " << species.size() << std::endl;
-
+#endif //DEBUG
 	//Official implmentation removes old innovations here not sure if that's really usefull
 	
 	generateNetworks();
@@ -570,6 +628,7 @@ void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBorn
 
 		for (int count = 0; count < curSpecies->getExpectedOffspring(); count++, newBornIndex++)
 		{
+
 			if(curSpecies->getChamp()->getSuperChampOffspring() > 0)
 			{
 				newPop[newBornIndex] = *curSpecies->getChamp();
@@ -591,12 +650,20 @@ void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBorn
 
 				curSpecies->getChamp()->decrementSuperChampOffspring();
 			}
-			//If we have a Species champion, just clone it 
-			else if ((champDone == false) && (curSpecies->getExpectedOffspring() > 5)) 
+			//If we have a Species champion and lots of offspring or pouplation champion, just clone it 
+			//Cedric Modif clone the pop champ
+			else if (champDone == false && (curSpecies->getExpectedOffspring() > 5 || curSpecies->isPopChamp() == true))
 			{
 				newPop[newBornIndex] = *curSpecies->getChamp();
 
+#ifdef DEBUG
+				if (curSpecies->isPopChamp() == true)
+				{
+					std::cout << "DONE" << std::endl;
+				}
+#endif
 				champDone = true;
+				curSpecies->setPopChamp(false);
 			}
 			//First, decide whether to mate or mutate
 			//If there is only one organism in the pool, then always mutate
@@ -766,7 +833,6 @@ void Neat::addToSpecies(Genome* gen)
 	{
 		species.push_back(Species(gen));
 	}
-
 }
 
 float Neat::distance(Genome& genomeA, Genome& genomeB)

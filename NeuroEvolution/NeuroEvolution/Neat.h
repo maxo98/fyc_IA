@@ -32,6 +32,7 @@ typedef struct {
 	int dropOffAge;
 	float ageSignificance;
 	
+	bool elistism;
 
 	std::vector<Activation*> activationFunctions;
 
@@ -97,7 +98,7 @@ public:
 	
 	virtual void mutate(Genome& genome, std::mutex* lock = nullptr);
 	void generateNetworks();
-	void genomeToNetwork(Genome& genome, NeuralNetwork& network);
+	static void genomeToNetwork(Genome& genome, NeuralNetwork& network);
 
 	virtual float distance(Genome& genomeA, Genome& genomeB);
 

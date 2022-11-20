@@ -83,5 +83,5 @@ float CPPN_Neat::distance(Genome& genomeA, Genome& genomeB)
 		}
 	}
 
-	return Neat::distance(genomeA, genomeB) + neatParam.activationDiffCoeff * count;
+	return Neat::distance(genomeA, genomeB) + neatParam.activationDiffCoeff * count / std::min(nodesA->size(), nodesB->size());
 }

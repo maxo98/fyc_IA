@@ -26,6 +26,8 @@ public:
 	inline void setChamp(Genome* value) { champ = value; };
 	inline bool getNovel() { return novel; }
 	inline void setNovel(bool value) { novel = value; }
+	inline void setPopChamp(bool value) { popChamp = value; }
+	inline bool isPopChamp() { return popChamp; }
 
 	int age = 1; //The age of the Species 
 	bool obliterate = false;  //Allows killing off in competitive coevolution stagnation
@@ -39,5 +41,6 @@ private:
 	float maxFitness = 0; //Max fitness of the Species
 	float maxFitnessEver = 0; //The max it ever had
 	unsigned int expectedOffspring = 0;
-	bool novel = true;;
+	bool novel = true;
+	bool popChamp = false;
 };

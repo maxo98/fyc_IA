@@ -24,6 +24,8 @@ int launchXor()
 
 	neatparam.killRate = 0.2;
 
+	neatparam.elistism = false;
+
 	neatparam.champFileSave = "champ";
 	neatparam.avgFileSave = "avg";//Without extension type file
 	neatparam.saveChampHistory = false;
@@ -42,7 +44,7 @@ int launchXor()
 	neatparam.speciationDistance = 4.0;
 	neatparam.speciationDistanceMod = 0.3;
 	neatparam.numSpeciesTarget = 4;
-	neatparam.adaptSpeciation = false;//Doesn't seem to have a lot of effect, despite being taken from official implementation
+	neatparam.adaptSpeciation = false;
 
 	int n = 1;
 

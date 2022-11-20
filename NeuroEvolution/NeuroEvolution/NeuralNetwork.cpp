@@ -208,7 +208,7 @@ void NeuralNetwork::connectNodes(std::pair<unsigned int, unsigned int> nodeA, st
 }
 
 void NeuralNetwork::connectNodes(unsigned int layerA, unsigned int nodeA, unsigned int layerB, unsigned int nodeB, float weight)
-{
+{	
 	if (layerA >= layerB && recursive == false)
 	{
 		std::cout << "Error connecting nodes, layerA is superior or equal to layerB, recursion deactivated\n";
@@ -284,6 +284,12 @@ void NeuralNetwork::compute(const std::vector<float>& inputs, std::vector<float>
 			}
 		}
 
+		//Reset output nodes
+		for (std::deque<Node>::iterator itNode = outputNodes.begin(); itNode != outputNodes.end(); ++itNode)
+		{
+			itNode->next();
+		}
+
 		//Set the input values
 		unsigned int i = 0;
 		for (std::deque<Node>::iterator it = inputNodes.begin(); it != inputNodes.end(); ++it, ++i)
@@ -325,7 +331,7 @@ void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size,
 	int startIndex = 0;
 	int count = 0;
 
-	if (totalWorkload >= 20)
+	if (totalWorkload >= 40)
 	{
 		while (workload < 1)
 		{
@@ -369,7 +375,14 @@ void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size,
 		}
 	}
 
+	if (currentWorkload == 0)
+	{
+		std::cout << "error workload" << std::endl;
+	}
+
 	concurrentComputing(currentWorkload, startIndex, it, output, outputs);
+
+	//std::cout << std::endl;
 
 	for (int i = 0; i < threads.size(); i++)
 	{
@@ -384,8 +397,8 @@ void NeuralNetwork::concurrentComputing(int workload, int startIndex, std::deque
 		if (output == false)
 		{
 			it->compute();
+			//std::cout << i << " " << it->compute();
 		}else{
-			it->next();
 			(*outputs)[i] = it->compute();
 		}
 	}
