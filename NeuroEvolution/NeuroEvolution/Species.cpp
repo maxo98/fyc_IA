@@ -1,4 +1,5 @@
 #include "Species.h"
+#include <algorithm>
 
 Species::Species(Genome* first)
 {
@@ -39,6 +40,11 @@ void Species::computeScore()
 	{
 		lastImprove = age;
 	}
+}
+
+void Species::sort()
+{
+	std::sort(genomes.begin(), genomes.end(), genomeSortDesc);
 }
 
 void Species::Add(Genome* gen)

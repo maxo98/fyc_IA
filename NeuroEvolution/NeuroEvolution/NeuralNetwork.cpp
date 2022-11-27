@@ -275,6 +275,13 @@ void NeuralNetwork::compute(const std::vector<float>& inputs, std::vector<float>
 
 	if (inputs.size() >= inputNodes.size())
 	{
+#ifdef WARNING
+		if (inputs.size() > inputNodes.size())
+		{
+			std::cout << "Inputs given larger than expected\n";
+		}
+#endif // WARNING
+
 		//Reset the hidden nodes
 		for (std::deque<std::deque<Node>>::iterator it = hiddenNodes.begin(); it != hiddenNodes.end(); ++it)
 		{

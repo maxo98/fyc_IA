@@ -2,6 +2,7 @@
 
 #pragma once
 
+//#define WARNING
 
 #include <list>
 #include "Node.h"

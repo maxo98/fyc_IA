@@ -70,3 +70,7 @@ private:
 	int superChampOffspring = 0;
 	bool eliminate = false;
 };
+
+inline bool genomeSortDesc(Genome* i, Genome* j) { return (i->getScore() > j->getScore()); };
+
+inline bool genomeSortAsc(Genome* i, Genome* j) { return (i->getScore() < j->getScore()); };

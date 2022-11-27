@@ -1,5 +1,6 @@
 #include "Utils.h"
 #include <fstream>
+#include <random>
 
 bool saveVectorToCsv(std::string name, std::vector<float>& data)
 {
@@ -50,4 +51,19 @@ bool saveVectorToCsv(std::string name, std::vector<float>& data)
 
 	csvFile.close();
 	return true;
+}
+
+int randGeoDist(float p, int max)
+{
+	std::default_random_engine generator;
+	std::geometric_distribution<int> distribution(p);
+
+	int value;
+
+	do {
+		value = distribution(generator);
+
+	} while (value > max);
+
+	return value;
 }

@@ -4,6 +4,7 @@
 #include "Genome.h"
 #include <stack>
 
+
 Genome::Genome()
 {
     input = 0;
@@ -227,7 +228,7 @@ bool Genome::mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>
 
 void Genome::mutateLinkToggle()
 {
-    unsigned int geneConnectionIndex = randInt(0, connections.size() - 1);;
+    unsigned int geneConnectionIndex = randInt(0, connections.size() - 1);
     GeneConnection* connection = &std::next(connections.begin(), geneConnectionIndex)->second;
 
     //Switches the activation of the connection
@@ -236,11 +237,21 @@ void Genome::mutateLinkToggle()
 
 void Genome::mutateActivation(std::vector<Activation*>& activationFunctions)
 {
-    for (int i = input; i < nodes.size(); i++)
+    int indexNode = 1;
+        
+    if (nodes.size() - input > 1)
+    {
+        randGeoDist(0.1, (nodes.size() - input - 1)) + 1;
+    }
+        
+    unsigned int index = randInt(0, activationFunctions.size() - 1);
+    nodes[nodes.size() - indexNode].setActivation(activationFunctions[index]);
+
+    /*for (int i = input; i < nodes.size(); i++)
     {
         unsigned int index = randInt(0, activationFunctions.size() - 1);
         nodes[i].setActivation(activationFunctions[index]);
-    }
+    }*/
 }
 
 //Slightly modified version of mutate_link_weights from official implementation

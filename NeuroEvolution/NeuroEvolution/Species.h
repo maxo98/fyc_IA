@@ -11,6 +11,7 @@ public:
 	void computeScore();
 	void countOffspring(float& skim, const float& totalFitness, const int& popSize);
 	bool remove(Genome* gen);
+	void sort();
 
 	inline std::vector<Genome*>* getSpecies() { return &genomes; };
 

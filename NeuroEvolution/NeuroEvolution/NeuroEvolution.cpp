@@ -9,7 +9,7 @@ int main()
 
 	std::cout << "seed " << seed << std::endl;
 
-	srand(seed);
+	srand(seed);//Some random parts don't use this seed 
 
 	//return launchXor();
 	return launchHypeneatTest();

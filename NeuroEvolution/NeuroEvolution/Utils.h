@@ -21,6 +21,8 @@ inline float randFloat() { return ((double)rand()) / RAND_MAX; }
 
 inline int randInt(int x, int y) { return rand() % (y - x + 1) + x; };
 
+int randGeoDist(float p, int max);
+
 bool saveVectorToCsv(std::string name, std::vector<float>& data);
 
 inline int randPosNeg() { return (rand() % 2) == 1 ? 1 : -1; };

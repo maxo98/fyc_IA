@@ -247,22 +247,30 @@ void Neat::evolve()
 	//	if (neatParam.speciationDistance < 0.3) neatParam.speciationDistance = 0.3;
 	//}
 
+	//Start CEDRIC Speciation threshold adaption
 	if (neatParam.adaptSpeciation == true && generation > 1)
 	{
-		if (species.size() < neatParam.numSpeciesTarget)
-			neatParam.speciationDistance -= (neatParam.speciationDistanceMod * neatParam.numSpeciesTarget / species.size());
-		else if (species.size() > neatParam.numSpeciesTarget)
-			neatParam.speciationDistance += (neatParam.speciationDistanceMod * species.size() / neatParam.numSpeciesTarget);
+		if (species.size() < neatParam.minExpectedSpecies)
+			neatParam.speciationDistance -= (neatParam.speciationDistanceMod * neatParam.minExpectedSpecies / species.size()) * 1;
+		else if (species.size() > neatParam.maxExpectedSpecies)
+			neatParam.speciationDistance += (neatParam.speciationDistanceMod * species.size() / neatParam.maxExpectedSpecies) * 0.5;
 
 		if (neatParam.speciationDistance < 0.3) neatParam.speciationDistance = 0.3;
 	}
-	
+	//End CEDRIC Speciation threshold adaption
+
+
 	std::list<Species*> sortedSpecies;
 
 	for (std::vector<Species>::iterator it = species.begin(); it != species.end(); ++it)
 	{
 		it->computeScore();
 		sortedSpecies.push_back(&*it);
+
+		if (neatParam.elistism == true)
+		{
+			it->sort();
+		}
 	}
 
 	sortedSpecies.sort(speciesSortAsc());
@@ -299,7 +307,7 @@ void Neat::evolve()
 		totalFitness += genomes[i].getSpeciesScore();
 	}
 
-	if (neatParam.saveAvgHistory == true) avgHistory.push_back(totalFitness/populationSize);
+	if (neatParam.saveAvgHistory == true) avgHistory.push_back(totalFitness/(float)populationSize);
 
 	float skim = 0;
 	int totalExpected = 0;
@@ -378,17 +386,18 @@ void Neat::evolve()
 	//START Cedric Modif
 	//We don't have stolen babies like official implementation,
 	//But we should give a slight edge to the champion species, if it doesn't already have it
-	if(neatParam.elistism == true && bestSpecies->getExpectedOffspring() < 2 && (bestSpecies->age - bestSpecies->lastImprove) < neatParam.dropOffAge)
+	if(neatParam.keepChamp == true && bestSpecies->getExpectedOffspring() < 2 && (bestSpecies->age - bestSpecies->lastImprove) < neatParam.dropOffAge)
 	{
 		//Steal one offspring from a bottom species that is not new
 		int ageThreshold = 5;
+		int offspringThreshold = 2;
 
 		do{
 			std::list<Species*>::iterator it = sortedSpecies.begin();
 
 			do {
 
-				for (it; it != sortedSpecies.end() && (*it)->age < ageThreshold && (*it)->getExpectedOffspring() < 2; ++it)
+				for (it; it != sortedSpecies.end() && (*it)->age < ageThreshold && (*it)->getExpectedOffspring() < offspringThreshold; ++it)
 				{}
 
 				while ((*it)->getExpectedOffspring() > 1)
@@ -402,14 +411,26 @@ void Neat::evolve()
 
 			} while (bestSpecies->getExpectedOffspring() < 2 && it != sortedSpecies.end());
 
+			if (ageThreshold == 0)
+			{
+				offspringThreshold = 1;
+			}
+
 			ageThreshold = 0;
 		} while (bestSpecies->getExpectedOffspring() < 2);
 
+#ifdef DEBUG
+		std::cout << "offspring added to champ" << std::endl;
+#endif DEBUG
+
 	}
 #ifdef DEBUG
-	else if (bestSpecies->getExpectedOffspring() < 2 && neatParam.elistism == false)
+	else if (bestSpecies->getExpectedOffspring() < 2 && neatParam.keepChamp == true)
 	{
-		std::cout << "champ dies of age " << std::endl;
+		std::cout << "champ dies of age " << (bestSpecies->age - bestSpecies->lastImprove) << std::endl;
+	}
+	else {
+		std::cout << "champ offspring: " << bestSpecies->getExpectedOffspring() << std::endl;
 	}
 #endif DEBUG
 
@@ -482,6 +503,17 @@ void Neat::evolve()
 		}
 	}
 
+#ifdef DEBUG
+	for (std::vector<Species>::iterator it = species.begin(); it != species.end(); ++it)
+	{
+		if (it->getSpecies()->size() == 0)
+		{
+			std::cout << "Species killed" << std::endl;
+		}
+	}
+#endif //DEBUG
+
+
 	//Perform reproduction.  Reproduction is done on a per-Species
 	//basis.  (So this could be paralellized potentially.)
 	int newBornIndex = 0;
@@ -539,6 +571,7 @@ void Neat::evolve()
 
 	reproduce(currentWorkload, itSortedSpecies, newBornIndex, sortedSpecies, futureGen, &lock);
 
+
 	for (int i = 0; i < threads.size(); i++)
 	{
 		threads[i].join();
@@ -553,6 +586,7 @@ void Neat::evolve()
 	}
 
 	//Add new born to species
+	//This could probably benifit from concurrency
 	for (int i = 0; i < populationSize; i++)
 	{
 		addToSpecies(&futureGen[i]);
@@ -628,11 +662,26 @@ void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBorn
 
 		for (int count = 0; count < curSpecies->getExpectedOffspring(); count++, newBornIndex++)
 		{
-
-			if(curSpecies->getChamp()->getSuperChampOffspring() > 0)
+			//If we have a Species champion and lots of offspring or pouplation champion, just clone it 
+			//Cedric Modif clone the pop champ
+			if ((champDone == false && curSpecies->getExpectedOffspring() > 5) || curSpecies->isPopChamp() == true)
 			{
 				newPop[newBornIndex] = *curSpecies->getChamp();
-				
+
+#ifdef DEBUG
+				if (curSpecies->isPopChamp() == true)
+				{
+					std::cout << "DONE" << std::endl;
+				}
+#endif
+				champDone = true;
+				curSpecies->setPopChamp(false);
+			}
+			else if (curSpecies->getChamp()->getSuperChampOffspring() > 0)
+			{
+				newPop[newBornIndex] = *curSpecies->getChamp();
+				newPop[newBornIndex].setSuperChampOffspring(0);
+
 				if (curSpecies->getChamp()->getSuperChampOffspring() > 1)
 				{
 					if ((randFloat() < 0.8) || (neatParam.pbMutateLink == 0.0))
@@ -650,21 +699,6 @@ void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBorn
 
 				curSpecies->getChamp()->decrementSuperChampOffspring();
 			}
-			//If we have a Species champion and lots of offspring or pouplation champion, just clone it 
-			//Cedric Modif clone the pop champ
-			else if (champDone == false && (curSpecies->getExpectedOffspring() > 5 || curSpecies->isPopChamp() == true))
-			{
-				newPop[newBornIndex] = *curSpecies->getChamp();
-
-#ifdef DEBUG
-				if (curSpecies->isPopChamp() == true)
-				{
-					std::cout << "DONE" << std::endl;
-				}
-#endif
-				champDone = true;
-				curSpecies->setPopChamp(false);
-			}
 			//First, decide whether to mate or mutate
 			//If there is only one organism in the pool, then always mutate
 			else if ((randFloat() < neatParam.pbMutateOnly) || curSpecies->getSpecies()->size() == 1)
@@ -676,14 +710,36 @@ void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBorn
 				mutate(newPop[newBornIndex], lock);
 			}//Otherwise we should mate 
 			else {
-				Genome* gen1 = (*curSpecies->getSpecies())[randInt(0, curSpecies->getSpecies()->size() - 1)];
+
+				int index = -1;
+
+				if (neatParam.elistism == true)
+				{
+					index = randGeoDist(std::min(neatParam.rouletteMultiplier / curSpecies->getSpecies()->size(), 1.f), curSpecies->getSpecies()->size() - 1);
+				}
+				else {
+					index = randInt(0, curSpecies->getSpecies()->size() - 1);
+				}
+				
+
+				Genome* gen1 = (*curSpecies->getSpecies())[index];
 				Genome* gen2;
 
 				if ((randFloat() > neatParam.interspeciesMateRate))
 				{//Mate within Species
 					
+					index = -1;
+
+					if (neatParam.elistism == true)
+					{
+						index = randGeoDist(std::min(neatParam.rouletteMultiplier / curSpecies->getSpecies()->size(), 1.f), curSpecies->getSpecies()->size() - 1);
+					}
+					else {
+						index = randInt(0, curSpecies->getSpecies()->size() - 1);
+					}
+
 					do {
-						gen2 = (*curSpecies->getSpecies())[randInt(0, curSpecies->getSpecies()->size() - 1)];
+						gen2 = (*curSpecies->getSpecies())[index];
 					} while (gen2 == gen1);
 
 				}
@@ -714,7 +770,17 @@ void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBorn
 						++giveUp;
 					} while ((randspecies == curSpecies) && (giveUp < 5));
 
-					gen2 = (*randspecies->getSpecies())[randInt(0, randspecies->getSpecies()->size() - 1)];
+					index = -1;
+
+					if (neatParam.elistism == true)
+					{
+						index = randGeoDist(std::min(neatParam.rouletteMultiplier / randspecies->getSpecies()->size(), 1.f), randspecies->getSpecies()->size() - 1);
+					}
+					else {
+						index = randInt(0, randspecies->getSpecies()->size() - 1);
+					}
+
+					gen2 = (*randspecies->getSpecies())[index];
 				}
 
 				//Perform mating based on probabilities of differrent mating types
@@ -805,10 +871,11 @@ void Neat::adjustFitness()
 		//Adding 1.0 ensures that at least one will survive
 		int numParents = (int)floor(neatParam.killRate * (float)itSpecies->getSpecies()->size() + 1.0);
 
-		//Mark for death those who are ranked too low to be parents
-		itSpecies->setChamp(itSpecies->getSpecies()->back());  //Mark the champ as such
+		//itSpecies->setChamp(itSpecies->getSpecies()->back());  //Mark the champ as such
+		//Should have already been done
 
-		int i = 0;
+		//Mark for death those who are ranked too low to be parents
+		int i = 1;
 
 		for (std::vector<Genome*>::iterator itGen = itSpecies->getSpecies()->begin(); itGen != itSpecies->getSpecies()->end() && numParents > i; ++itGen, ++i)
 		{
@@ -819,18 +886,26 @@ void Neat::adjustFitness()
 
 void Neat::addToSpecies(Genome* gen)
 {
-	bool found = false;
-	for (std::vector<Species>::iterator it = species.begin(); it != species.end() && found == false; ++it)
+	Species* bestSpecies = nullptr;
+	float bestDistance = 9999999;
+
+	for (std::vector<Species>::iterator it = species.begin(); it != species.end() && bestSpecies == nullptr; ++it)
 	{
-		if (distance(*it->getChamp(), *gen) < neatParam.speciationDistance)
+		float dist = distance(*it->getChamp(), *gen);
+
+		if (dist < neatParam.speciationDistance && bestDistance >= dist)
 		{
-			found = true;
-			it->Add(gen);
+			bestSpecies = &*it;
+			bestDistance = dist;
 		}
 	}
 
-	if (found == false)
+	if (bestSpecies != nullptr)
 	{
+		bestSpecies->Add(gen);
+
+	}else{
+
 		species.push_back(Species(gen));
 	}
 }
@@ -931,11 +1006,13 @@ void Neat::setScore(const std::vector < float >& newScores)
 		}
 	}
 
-	if (lastBestScore > bestScore)
+	if (lastBestScore >= bestScore)
 	{
 		highestLastChanged++;
 	}
 	else {
+		std::cout << "new best score " << bestScore << std::endl;
+
 		lastBestScore = bestScore;
 		highestLastChanged = 0;
 		goat = genomes[bestIndex];

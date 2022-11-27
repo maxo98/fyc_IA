@@ -3,8 +3,8 @@
 
 int launchHypeneatTest()
 {
-	int test = 10;
-	int n = 10;
+	int test = 4;
+	int n = 20;
 
 	std::vector<std::vector<float>> grid;
 	std::vector<std::vector<float>> centers;
@@ -17,7 +17,7 @@ int launchHypeneatTest()
 		grid[cpt].resize(n*n, 0);
 		centers[cpt].resize(2);
 
-		writeSquares(grid[cpt], centers[cpt], n);
+		writeSquares(grid[cpt], centers[cpt], n, cpt);
 	}
 
 	NeatParameters neatparam;
@@ -25,27 +25,24 @@ int launchHypeneatTest()
 	//neatparam.activationFunctions.push_back(new thresholdActivation());
 	neatparam.activationFunctions.push_back(new sigmoidActivation());
 	neatparam.activationFunctions.push_back(new sinActivation());
-	neatparam.activationFunctions.push_back(new tanhActivation());
 	neatparam.activationFunctions.push_back(new gaussianActivation());
 	neatparam.activationFunctions.push_back(new absActivation());
-	neatparam.activationFunctions.push_back(new reluActivation());
-	neatparam.activationFunctions.push_back(new linearActivation());
 
-	neatparam.pbMutateLink = 0.3;// 0.05;
-	neatparam.pbMutateNode = 0.3;//0.03;
+	neatparam.pbMutateLink = 0.1;// 0.05;
+	neatparam.pbMutateNode = 0.06;//0.03;
 	//neatparam.pbWeightShift = 0.7;
 	//neatparam.pbWeightRandom = 0.2;
 	neatparam.pbWeight = 0.9;// 0.9;
 	neatparam.pbToggleLink = 0.05;// 0.05;
 	//neatparam.weightShiftStrength = 2.5;
 	//neatparam.weightRandomStrength = 2.5;
-	neatparam.weightMuteStrength = 2.5;// 2.5;
-	neatparam.pbMutateActivation = 0.15;
+	neatparam.weightMuteStrength = 3.0;// 2.5;
+	neatparam.pbMutateActivation = 0.9;
 
 	neatparam.disjointCoeff = 1.0;
 	neatparam.excessCoeff = 1.0;
 	neatparam.mutDiffCoeff = 0.4;
-	neatparam.activationDiffCoeff = 2.0;
+	neatparam.activationDiffCoeff = 1.0;
 
 	neatparam.killRate = 0.2;
 
@@ -53,8 +50,6 @@ int launchHypeneatTest()
 	neatparam.avgFileSave = "avg";//Without extension type file
 	neatparam.saveChampHistory = true;
 	neatparam.saveAvgHistory = true;
-
-	neatparam.scoreMultiplier = 1000;
 
 	neatparam.pbMateMultipoint = 0.6;
 	neatparam.pbMateSinglepoint = 0.0;
@@ -64,26 +59,29 @@ int launchHypeneatTest()
 	neatparam.pbMutateOnly = 0.25;
 	neatparam.pbMateOnly = 0.2;
 
-	neatparam.speciationDistance = 4.0;
+	neatparam.speciationDistance = 2.0;
 
 
 	neatparam.speciationDistanceMod = 0.3;
-	neatparam.numSpeciesTarget = 4;
+	neatparam.minExpectedSpecies = 6;
+	neatparam.maxExpectedSpecies = 12;
 	neatparam.adaptSpeciation = true;
 
+	neatparam.keepChamp = true;
 	neatparam.elistism = true;
+	neatparam.rouletteMultiplier = 2.0;
 
 	HyperneatParameters hyperneatParam;
 
 	hyperneatParam.activationFunction = new sigmoidActivation();
-	hyperneatParam.cppnInput = 3;
-	hyperneatParam.cppnInputFunction = basicCppnInput;
-	hyperneatParam.cppnOutput = 2;
+	hyperneatParam.cppnInput = 5;
+	hyperneatParam.cppnInputFunction = biasCppnInput;
+	hyperneatParam.cppnOutput = 1;
 	hyperneatParam.nDimensions = 2;
-	hyperneatParam.thresholdFunction = leoThreshold;
+	hyperneatParam.thresholdFunction = noThreshold;// leoThreshold;
 	hyperneatParam.weightModifierFunction = noChangeWeight;
 
-	int popSize = 100;
+	int popSize = 150;
 
 	int result = 0;
 
@@ -96,11 +94,11 @@ int launchHypeneatTest()
 	{
 		Hyperneat hyper(popSize, neatparam, hyperneatParam);
 
-		for (int i = 0; i < n; i++)
+		for (int i = 1; i <= n; i++)
 		{
 			pos[0] = i;
 
-			for (int j = 0; j < n; j++)
+			for (int j = 1; j <= n; j++)
 			{
 				pos[1] = j;
 
@@ -131,7 +129,7 @@ int launchHypeneatTest()
 		gridTest.resize(n * n);
 		centerTest.resize(2);
 
-		writeSquares(gridTest, centerTest, n);
+		writeSquares(gridTest, centerTest, n, 0);
 
 		network.compute(gridTest, output);
 
@@ -179,7 +177,7 @@ bool hypeneatTest(int popSize, int test, int n, const std::vector<std::vector<fl
 
 		for (int i = 0; i < popSize; i++)
 		{
-			fitness[i] = n*10;// 4000;//(10*10 + 10*10)*20
+			fitness[i] = pow(n*test, 2);// 4000;//(10*10 + 10*10)*20
 		}
 
 		std::vector<std::thread> threads;
@@ -259,25 +257,58 @@ void evaluate(int test, int startIndex, int n, int workload, const std::vector<s
 
 			int x, y;
 
-			x = maxIndex % n;
-			y = floor(maxIndex / n);
+			x = maxIndex % n + 1;
+			y = floor(maxIndex / n) + 1;
 
 			//std::cout << centers[cpt][0] << " " << centers[cpt][1] << " " << x << " " << y << std::endl;
 
-			fitness[i] -= sqrtf((centers[cpt][0] - x) * (centers[cpt][0] - x) + (centers[cpt][1] - y) * (centers[cpt][1] - y));
+			fitness[i] -= (centers[cpt][0] - x) * (centers[cpt][0] - x) + (centers[cpt][1] - y) * (centers[cpt][1] - y);
 		}
 	}
 }
 
-void writeSquares(std::vector<float>& grid, std::vector<float>& center, int n)
+void writeSquares(std::vector<float>& grid, std::vector<float>& center, int n, int i = 0)
 {
-	int squareSize = 4;
+	int squareSize = 5;
 
 	int x1 = randInt(0, n - squareSize);
 	int y1 = randInt(0, n - squareSize);
 
 	center[0] = x1 + squareSize / 2;
 	center[1] = y1 + squareSize / 2;
+
+	switch (i)
+	{
+	case 0:
+		x1 = 3;
+		y1 = 3;
+		center[0] = 5;
+		center[1] = 5;
+		break;
+
+	case 1:
+		x1 = 13;
+		y1 = 14;
+		center[0] = 15;
+		center[1] = 16;
+		break;
+
+	case 2:
+		x1 = 7;
+		y1 = 11;
+		center[0] = 9;
+		center[1] = 13;
+		break;
+
+	case 3:
+		x1 = 14;
+		y1 = 2;
+		center[0] = 16;
+		center[1] = 4;
+		break;
+	}
+
+
 
 	for (int i = 0; i < squareSize; i++)
 	{
@@ -287,13 +318,36 @@ void writeSquares(std::vector<float>& grid, std::vector<float>& center, int n)
 		}
 	}
 
-	int squareSize2 = 2;
+	int squareSize2 = 3;
 
 	bool valid = false;
 	int x2;
 	int y2;
 
-	do {
+	switch (i)
+	{
+	case 0:
+		x2 = 15;
+		y2 = 16;
+		break;
+
+	case 1:
+		x2 = 4;
+		y2 = 3;
+		break;
+
+	case 2:
+		x2 = 14;
+		y2 = 4;
+		break;
+
+	case 3:
+		x2 = 9;
+		y2 = 11;
+		break;
+	}
+
+	/*do {
 		x2 = randInt(0, n - squareSize2);
 		y2 = randInt(0, n - squareSize2);
 
@@ -302,7 +356,7 @@ void writeSquares(std::vector<float>& grid, std::vector<float>& center, int n)
 			valid = true;
 		}
 
-	}while(valid == false);
+	}while(valid == false);*/
 
 	for (int i = 0; i < squareSize2; i++)
 	{

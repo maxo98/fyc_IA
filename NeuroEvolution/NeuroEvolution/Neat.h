@@ -2,13 +2,12 @@
 
 #pragma once
 
+#define DEBUG
 
 #include <vector>
 #include "NeuralNetwork.h"
 #include "Species.h"
 #include "Activation.h"
-
-//#define REPRO_MULTITHREAD
 
 typedef struct {
 	float pbMutateOnly;
@@ -32,21 +31,23 @@ typedef struct {
 	int dropOffAge;
 	float ageSignificance;
 	
-	bool elistism;
+	bool keepChamp;//Ensures that the pop champ gets to reproduce unless he's to old
+	bool elistism;//True => roulette favoring higher score, False => uniform rand
+	float rouletteMultiplier;
 
 	std::vector<Activation*> activationFunctions;
 
 	float disjointCoeff, excessCoeff, mutDiffCoeff, activationDiffCoeff;
 	float speciationDistance;
+
 	float speciationDistanceMod;
-	int numSpeciesTarget;
-	bool adaptSpeciation;
+	int minExpectedSpecies;//Setting expected species to high values who'd probably enforce diversity
+	int maxExpectedSpecies;//if you don't want to go through novelty search but still avoid deceptive local maximum
+	bool adaptSpeciation;//Setting it to true would lead to more diversity I believe
 
 	std::string champFileSave, avgFileSave;//Without extension type file
 	bool saveChampHistory;
 	bool saveAvgHistory;
-
-	float scoreMultiplier;
 
 } NeatParameters;
 
@@ -66,10 +67,6 @@ struct speciesSortAsc
 		return (i->getMaxFitness() < j->getMaxFitness());
 	}
 };
-
-inline bool genomeSortDesc(Genome* i, Genome* j) { return (i->getScore() > j->getScore()); };
-
-inline bool genomeSortAsc(Genome* i, Genome* j) { return (i->getScore() < j->getScore()); };
 
 
 /**

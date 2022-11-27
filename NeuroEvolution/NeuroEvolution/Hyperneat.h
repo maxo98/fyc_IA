@@ -103,6 +103,7 @@ protected:
 
 //CPPN Input Functions
 std::vector<float> basicCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2);
+std::vector<float> biasCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2);
 std::vector<float> sqrDistCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2);
 std::vector<float> deltaDistCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2);
 
@@ -112,6 +113,10 @@ inline bool fixedThreshold(std::vector<void*> variables, std::vector<float> valu
 	return (*(float*)variables[0] < abs(values[0]));
 }
 
+inline bool noThreshold(std::vector<void*> variables, std::vector<float> values, const std::vector<float>& p1, const std::vector<float>& p2)
+{
+	return true;
+}
 
 inline bool leoThreshold(std::vector<void*> variables, std::vector<float> values, const std::vector<float>& p1, const std::vector<float>& p2)
 {
@@ -127,4 +132,9 @@ inline float noChangeWeight(std::vector<void*> variables, float weight, const st
 inline float proportionnalWeight (std::vector<void*> variables, float weight, const std::vector<float>& p1, const std::vector<float>& p2)
 {
 	return *(float*)variables[0] * weight;
+}
+
+inline float substractWeight(std::vector<void*> variables, float weight, const std::vector<float>& p1, const std::vector<float>& p2)
+{
+	return weight - *(float*)variables[0];
 }

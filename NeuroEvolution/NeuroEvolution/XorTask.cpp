@@ -24,14 +24,14 @@ int launchXor()
 
 	neatparam.killRate = 0.2;
 
-	neatparam.elistism = false;
+	neatparam.keepChamp = true;
+	neatparam.elistism = true;
+	neatparam.rouletteMultiplier = 2.0;
 
 	neatparam.champFileSave = "champ";
 	neatparam.avgFileSave = "avg";//Without extension type file
 	neatparam.saveChampHistory = false;
 	neatparam.saveAvgHistory = false;
-
-	neatparam.scoreMultiplier = 1000;
 
 	neatparam.pbMateMultipoint = 0.6;
 	neatparam.pbMateSinglepoint = 0.0;
@@ -43,7 +43,8 @@ int launchXor()
 
 	neatparam.speciationDistance = 4.0;
 	neatparam.speciationDistanceMod = 0.3;
-	neatparam.numSpeciesTarget = 4;
+	neatparam.minExpectedSpecies = 4;
+	neatparam.maxExpectedSpecies = 8;
 	neatparam.adaptSpeciation = false;
 
 	int n = 1;
