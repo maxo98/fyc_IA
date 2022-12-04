@@ -143,6 +143,7 @@
     <ClCompile Include="Activation.cpp" />
     <ClCompile Include="CPPN_Neat.cpp" />
     <ClCompile Include="ES_Hyperneat.cpp" />
+    <ClCompile Include="ES_Snake.cpp" />
     <ClCompile Include="GeneConnection.cpp" />
     <ClCompile Include="GeneNode.cpp" />
     <ClCompile Include="Genome.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Activation.h" />
     <ClInclude Include="CPPN_Neat.h" />
     <ClInclude Include="ES_Hyperneat.h" />
+    <ClInclude Include="ES_Snake.h" />
     <ClInclude Include="GeneConnection.h" />
     <ClInclude Include="GeneNode.h" />
     <ClInclude Include="Genome.h" />

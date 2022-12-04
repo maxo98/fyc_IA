@@ -2,6 +2,7 @@
 //
 #include "XorTask.h"
 #include "TestHyperneat.h"
+#include "ES_Snake.h"
 
 int main()
 {
@@ -12,6 +13,7 @@ int main()
 	srand(seed);//Some random parts don't use this seed 
 
 	//return launchXor();
-	return launchHypeneatTest();
+	//return launchHypeneatTest();
+	return launchESHypeneatTest();
 }
 

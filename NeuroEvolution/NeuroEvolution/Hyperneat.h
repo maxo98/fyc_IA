@@ -6,6 +6,8 @@
 #include "CPPN_Neat.h"
 #include <deque>
 #include <unordered_set>
+#include <cstring>
+#include <algorithm>
 
 typedef bool (*ThresholdFunction) (std::vector<void*> variables, std::vector<float> values, const std::vector<float>& p1, const std::vector<float>& p2);
 

@@ -2,7 +2,7 @@
 
 #pragma once
 
-//#define WARNING
+#define WARNING
 
 #include <list>
 #include "Node.h"
@@ -50,6 +50,8 @@ public:
 	Node* getNode(unsigned int layer, unsigned int node);
 	Node* getNodeFromLayer(std::deque<Node>& layer, unsigned int node);
 	inline Node* getOutputNode(unsigned int node) { return &outputNodes[node]; };
+
+	bool warningRecursive = true;
 
 private:
 

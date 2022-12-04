@@ -2,19 +2,22 @@
 
 #pragma once
 
-
 #include "HyperNeat.h"
-#include <cstring>
+
 
 //Hyperneat configuration
 typedef struct {
-	unsigned int nDecomposition;
 	float width;
 	int initialDepth, maxDepth, divThreshold;
+	//The initial resolution for the division phase of ES-HyperNEAT
+	//maxDepth: The maximum resolution for the division phase of ES-HyperNEAT.
+	//divThreshold: The variance value that a quadtree node in ES - HyperNEAT must exceed to be further divided.
 	std::vector<float> center;
-	float varianceThreshold;
-	float bandThreshold;
-	int iterationLevel;
+	float varianceThreshold;//The variance value that determines how far the depth-first search in the pruning and extraction phase in ES-HyperNEAT should traverse the quadtree.
+	float bandThreshold;//The value that the band level of a connection must exceed to be expressed in ES-HyperNEAT.
+	int iterationLevel;//The parameter that determines how many times the quadtree extraction algorithm in ES-HyperNEAT should be iteratively applied to discovering hidden neurons.
+
+	bool allowRecurisvity;
 
 } ES_Parameters;
 
@@ -29,7 +32,6 @@ public:
 	~ES_Hyperneat();
 
 	virtual void generateNetworks();
-	void generateSubstrate();
 
 	inline void setCenter(std::vector<float> _center) { esParam.center = _center; }
 	inline void setWidth(float _width) { esParam.width = _width; }

@@ -1,6 +1,7 @@
 #include "TestHyperneat.h"
 #include <iomanip>
 
+
 int launchHypeneatTest()
 {
 	int test = 4;

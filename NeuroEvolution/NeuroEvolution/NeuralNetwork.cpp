@@ -184,7 +184,7 @@ void NeuralNetwork::addInputNode(int n)
 std::pair<unsigned int, unsigned int> NeuralNetwork::addOutputNode(Activation* activation)
 { 
 	outputNodes.push_back(Node(activation)); 
-	return std::pair<unsigned int, unsigned int>(std::numeric_limits<int>::max(), outputNodes.size() - 1);
+	return std::pair<unsigned int, unsigned int>(std::numeric_limits<unsigned int>::max(), outputNodes.size() - 1);
 }
 
 void NeuralNetwork::addOutputNode(int n, Activation* activation)
@@ -211,12 +211,15 @@ void NeuralNetwork::connectNodes(unsigned int layerA, unsigned int nodeA, unsign
 {	
 	if (layerA >= layerB && recursive == false)
 	{
-		std::cout << "Error connecting nodes, layerA is superior or equal to layerB, recursion deactivated\n";
+		if (warningRecursive == true)
+		{
+			std::cout << "Error connecting nodes, layerA is superior or equal to layerB, recursion deactivated\n";
+		}
 
 		return;
 	}
 
-	if (layerB >= getLayerSize())
+	if (layerB >= getLayerSize() && layerB != std::numeric_limits<unsigned int>::max())
 	{
 		std::cout << "Error connecting nodes, layerB doesn't exist." << std::endl;
 	}
@@ -241,7 +244,7 @@ Node* NeuralNetwork::getNode(unsigned int layer, unsigned int node)
 	{
 		return getNodeFromLayer(inputNodes, node);
 	}
-	else if ((layer-1) == hiddenNodes.size()) 
+	else if ((layer-1) == hiddenNodes.size() || layer == std::numeric_limits<unsigned int>::max())
 	{
 		return getNodeFromLayer(outputNodes, node);
 	}
@@ -316,6 +319,9 @@ void NeuralNetwork::compute(const std::vector<float>& inputs, std::vector<float>
 
 		//Compute the result
 		splitLayerComputing(outputNodes.begin(), outputNodes.size(), true, &outputs);
+	}
+	else {
+		std::cout << "Inputs given smaller than expected\n";
 	}
 }
 
