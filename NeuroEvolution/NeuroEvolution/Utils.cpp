@@ -1,6 +1,7 @@
 #include "Utils.h"
 #include <fstream>
 #include <random>
+#include <iostream>
 
 bool saveVectorToCsv(std::string name, std::vector<float>& data)
 {
@@ -66,4 +67,19 @@ int randGeoDist(float p, int max)
 	} while (value > max);
 
 	return value;
+}
+
+std::ostream& operator<<(std::ostream& os, const std::vector<float>& dt)
+{
+	for (int i = 0; i < dt.size(); i++)
+	{
+		if (i != 0)
+		{
+			os << ", ";
+		}
+
+		os << dt[i];
+	}
+	
+	return os;
 }

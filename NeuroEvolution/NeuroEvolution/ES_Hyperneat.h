@@ -31,7 +31,7 @@ public:
 	ES_Hyperneat(unsigned int _populationSize, const NeatParameters& _neatParam, const HyperneatParameters& _hyperParam, const ES_Parameters& _esParam);
 	~ES_Hyperneat();
 
-	virtual void generateNetworks();
+	virtual void createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net);
 
 	inline void setCenter(std::vector<float> _center) { esParam.center = _center; }
 	inline void setWidth(float _width) { esParam.width = _width; }
@@ -98,8 +98,8 @@ protected:
 		}
 	};
 
-	void divAndInit(int index, const std::vector<float>& pos, SubstrateTree* root, bool outgoing);
-	void prunAndExtract(int index, const std::vector<float>& pos, SubstrateTree* tree, bool outgoing, std::unordered_set<Connection, HyperConnectionHash,
+	void divAndInit(NeuralNetwork& hypernet, const std::vector<float>& pos, SubstrateTree* root, bool outgoing);
+	void prunAndExtract(NeuralNetwork& hypernet, const std::vector<float>& pos, SubstrateTree* tree, bool outgoing, std::unordered_set<Connection, HyperConnectionHash,
 		HyperConnectionEqual>& connections);
 
 	void reachableConnections(const std::unordered_multimap<std::vector<float>, const Connection*, HyperNodeHash>& connections,

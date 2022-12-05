@@ -77,10 +77,10 @@ public:
 
 	void clear();
 
-	virtual void generateNetworks();
-	virtual void generateNetworksThread(int startIndex, int worlkload);
+	void generateNetworks();
+	void generateNetworksThread(int startIndex, int worlkload);
 	void genomeToNetwork(Genome& gen, NeuralNetwork& net);
-	void createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net);
+	virtual void createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net);
 
 	inline NeuralNetwork* getNeuralNetwork(int i) { return &networks[i]; };
 

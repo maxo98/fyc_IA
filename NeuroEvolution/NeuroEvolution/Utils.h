@@ -26,3 +26,5 @@ int randGeoDist(float p, int max);
 bool saveVectorToCsv(std::string name, std::vector<float>& data);
 
 inline int randPosNeg() { return (rand() % 2) == 1 ? 1 : -1; };
+
+std::ostream& operator<<(std::ostream& os, const std::vector<float>& dt);

@@ -21,8 +21,8 @@ int launchESHypeneatTest()
     neatparam.activationFunctions.push_back(new gaussianActivation());
     neatparam.activationFunctions.push_back(new absActivation());
 
-    neatparam.pbMutateLink = 0.1;// 0.05;
-    neatparam.pbMutateNode = 0.06;//0.03;
+    neatparam.pbMutateLink = 0.15;// 0.05;
+    neatparam.pbMutateNode = 0.1;//0.03;
     //neatparam.pbWeightShift = 0.7;
     //neatparam.pbWeightRandom = 0.2;
     neatparam.pbWeight = 0.9;// 0.9;
@@ -66,7 +66,7 @@ int launchESHypeneatTest()
 
     HyperneatParameters hyperneatParam;
 
-    hyperneatParam.activationFunction = new sigmoidActivation();
+    hyperneatParam.activationFunction = new linearActivation();
     hyperneatParam.cppnInput = 5;
     hyperneatParam.cppnInputFunction = biasCppnInput;
     hyperneatParam.cppnOutput = 1;
@@ -123,14 +123,14 @@ int launchESHypeneatTest()
     esHyper.addOutput(pos);
 
     pos[0] = 10;
-    pos[1] = 20;
+    pos[1] = 19;
     esHyper.addOutput(pos);
 
     pos[0] = 0;
     pos[1] = 10;
     esHyper.addOutput(pos);
 
-    pos[0] = 20;
+    pos[0] = 19;
     pos[1] = 10;
     esHyper.addOutput(pos);
 
@@ -145,6 +145,8 @@ int launchESHypeneatTest()
 
     NeuralNetwork network;
     esHyper.genomeToNetwork(*esHyper.getGoat(), network);
+
+    snakeTest(&network, true);
 
     for (int i = 0; i < neatparam.activationFunctions.size(); i++)
     {
@@ -180,8 +182,9 @@ bool esHypeneatTest(int popSize, ES_Hyperneat& esHyper)
         float restWorkload = 0;
         int currentWorkload = totalWorkload;
         int startIndex = 0;
+        int count = 0;
 
-        /*while (workload < 1)
+        while (workload < 1)
         {
             cpus--;
             workload = totalWorkload / cpus;
@@ -193,7 +196,9 @@ bool esHypeneatTest(int popSize, ES_Hyperneat& esHyper)
 
         while (cpus > threads.size() + 1)
         {
-            threads.push_back(std::thread(evaluate, test, startIndex, n, currentWorkload + floor(restWorkload), std::ref(grid), std::ref(centers), std::ref(hyper), std::ref(fitness)));
+            threads.push_back(std::thread(snakeEvaluate, startIndex, currentWorkload + floor(restWorkload), std::ref(fitness), std::ref(esHyper)));
+
+            count += currentWorkload + floor(restWorkload);
 
             startIndex += currentWorkload + floor(restWorkload);
 
@@ -205,7 +210,15 @@ bool esHypeneatTest(int popSize, ES_Hyperneat& esHyper)
         {
             restWorkload--;
             currentWorkload++;
-        }*/
+        }
+
+        count += currentWorkload;
+
+        while (count > totalWorkload)
+        {
+            currentWorkload--;
+            count--;
+        }
 
         snakeEvaluate(startIndex, currentWorkload, fitness, esHyper);
 
@@ -226,6 +239,7 @@ bool esHypeneatTest(int popSize, ES_Hyperneat& esHyper)
 
 void snakeEvaluate(int startIndex, int currentWorkload, std::vector<float>& fitness, ES_Hyperneat& esHyper)
 {
+    std::cout << startIndex << " " << currentWorkload << std::endl;
     for (int i = startIndex; i < (startIndex + currentWorkload); i++)
     {
         fitness[i] = snakeTest(esHyper.getNeuralNetwork(i), false);
@@ -237,16 +251,16 @@ int snakeTest(NeuralNetwork* network, bool display)
 {
     char screen[TAILLE_ECRAN][TAILLE_ECRAN];
 
-    char lastDir[TAILLE_SNAKE][2] = { {2,0},{0,4} };
+    char lastDir[TAILLE_SNAKE+1][2] = { {2,0},{0,4} };
 
 
     //tete1 = position y de la tete du snake, tete2 = position x de la tete du snake
     //queue1 = coordon�s y de la case � reset queue2 = coordon�s x de la case � reset
-    int direction = 2, score = 0, input = 0, vie = 1, tete1 = 14, tete2 = 9, queue1 = 10, queue2 = 9, cpt, i, found = 0, decremente, r1, r2, mange = 0, snake = 4;
+    int direction = 2, score = 0, input = 0, vie = 1, tete1 = 14, tete2 = 9, queue1 = 10, queue2 = 9, cpt, found = 0, decremente, r1, r2, mange = 0, snake = 4;
     //srand(time(NULL));//G�n�ration seed al�atoire
 
 
-    for (i = 0; i < TAILLE_ECRAN; i++)//Initialisation de l'�cran "� vide"
+    for (int i = 0; i < TAILLE_ECRAN; i++)//Initialisation de l'�cran "� vide"
     {
         for (cpt = 0; cpt < TAILLE_ECRAN; cpt++)
         {
@@ -254,7 +268,7 @@ int snakeTest(NeuralNetwork* network, bool display)
         }
     }
 
-    for (i = 2; i < TAILLE_SNAKE - 2; i++)//Initialisation de lastDir
+    for (int i = 2; i < TAILLE_SNAKE; i++)//Initialisation de lastDir
     {
         for (cpt = 0; cpt < 2; cpt++)
         {
@@ -282,11 +296,15 @@ int snakeTest(NeuralNetwork* network, bool display)
 
     int timer = 0;
 
+    std::cout << "new snake\n";
+
+    std::vector<float> networkInput, output;
+
     //START MAIN GAME LOOP
     do {
         timer++;
 
-        std::vector<float> networkInput, output;
+        
 
         for (int i = 0; i < TAILLE_ECRAN; i++)
         {
@@ -310,18 +328,28 @@ int snakeTest(NeuralNetwork* network, bool display)
         int directionIndex = 0;
         float outputScore = output[0];
 
+        //std::cout << output[0] << std::endl;
+
         for (int i = 1; i < output.size(); i++)
         {
+            //std::cout << output[i] << std::endl;
+
             if (output[i] > outputScore)
             {
                 directionIndex = i;
                 outputScore = output[i];
+                std::cout << i << std::endl;
             }
         }
+
+        std::cout << "chose " << directionIndex << std::endl;
+
+        //std::cout << std::endl;
 
         switch (directionIndex)//lecture de l'entr� pour savoir quel direction prendre
         {
         case 0:
+            std::cout << "UP\n";
             if (direction == 8)
             {
                 input = 0;
@@ -332,15 +360,18 @@ int snakeTest(NeuralNetwork* network, bool display)
 
             break;
         case 1:
+            std::cout << "DOWN\n";
             if (direction == 2)
             {
                 input = 0;
             }
             else {
                 direction = 2;
+                std::cout << "SET DOWN\n";
             }
             break;
         case 3:
+            std::cout << "RIGHT\n";
             if (direction == 6)
             {
                 input = 0;
@@ -350,6 +381,7 @@ int snakeTest(NeuralNetwork* network, bool display)
             }
             break;
         case 2:
+            std::cout << "LEFT\n";
             if (direction == 4)
             {
                 input = 0;
@@ -363,7 +395,7 @@ int snakeTest(NeuralNetwork* network, bool display)
         if (input != 0)// si il y a eue une entr�
         {
             found = 0;
-            i = 1;
+            int i = 1;
             do
             {
                 if (lastDir[i][0] == 0)//Alors on cherche une place
@@ -378,8 +410,6 @@ int snakeTest(NeuralNetwork* network, bool display)
             lastDir[i][0] = direction;//pour enregistrer cette direction
             input = 0;//reset de l'input
         }
-
-
 
         switch (direction)//D�placement de la tete suivant la direction
         {
@@ -410,7 +440,6 @@ int snakeTest(NeuralNetwork* network, bool display)
                 }
             } while (mange == 0);
 
-            std::cout << "eats a fruit\n";
             score++;
             snake++;//Augmentation de la taille du serpent
         }
@@ -422,7 +451,6 @@ int snakeTest(NeuralNetwork* network, bool display)
         else {
             screen[tete1][tete2] = 0;//placement du nouveau morceau du snake
         }
-
 
         if (mange == 0)//Si le serpent n'est pas en train de manger
         {
@@ -446,7 +474,7 @@ int snakeTest(NeuralNetwork* network, bool display)
             //screen[queue1][queue2] = 5;
             decremente = 0;
             found = 0;
-            i = 1;
+            int i = 1;
 
             do
             {
@@ -476,7 +504,7 @@ int snakeTest(NeuralNetwork* network, bool display)
         else {//Si le serpent est en train de manger alors on n'efface pas de bout su serpent pour cette frame
 
             mange = 0;
-            i = snake + 2;//On part de la fin du tableau
+            int i = snake + 2;//On part de la fin du tableau
             found = 0;
 
             do
@@ -494,7 +522,7 @@ int snakeTest(NeuralNetwork* network, bool display)
 
         if ((lastDir[1][1] == 0) && (lastDir[1][0] != 0))//Si le 1er timer est � 0 tout est d�cal�
         {
-            for (i = 1; i < TAILLE_SNAKE; i++)
+            for (int i = 1; i < TAILLE_SNAKE; i++)
             {
 
                 lastDir[i - 1][0] = lastDir[i][0];
@@ -510,7 +538,7 @@ int snakeTest(NeuralNetwork* network, bool display)
         {
             //system("cls");//Nettoyage juste avant d'afficher une nouvelle frame
             printf("Score : %d\n", score);
-            for (i = 0; i < TAILLE_ECRAN; i++)//Affichage
+            for (int i = 0; i < TAILLE_ECRAN; i++)//Affichage
             {
                 for (cpt = 0; cpt < TAILLE_ECRAN; cpt++)
                 {
@@ -556,6 +584,9 @@ int snakeTest(NeuralNetwork* network, bool display)
             input = _getch();//Lecture de la derniere touche appuy�
             fflush(stdin);
         }*/
+
+        networkInput.clear();
+        output.clear();
 
     } while (vie >= 1 && score < 10 && timer < 200);
     //END MAIN GAME LOOP

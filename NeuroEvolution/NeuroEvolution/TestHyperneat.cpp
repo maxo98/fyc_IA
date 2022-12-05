@@ -120,7 +120,6 @@ int launchHypeneatTest()
 		
 		std::vector<float> output;
 
-		Neat neat;
 		NeuralNetwork network;
 		hyper.genomeToNetwork(*hyper.getGoat(), network);
 

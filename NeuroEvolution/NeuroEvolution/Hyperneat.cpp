@@ -63,7 +63,6 @@ void Hyperneat::clear()
 
 void Hyperneat::generateNetworks()
 {
-	std::cout << "called here !" << std::endl;
 	std::vector<std::thread> threads;
 	unsigned int cpus = std::thread::hardware_concurrency();
 
