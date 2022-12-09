@@ -250,7 +250,6 @@ void snakeEvaluate(int startIndex, int currentWorkload, std::vector<float>& fitn
 
 int snakeTest(NeuralNetwork* network, bool display)
 {
-    return 1;
 
     char screen[TAILLE_ECRAN][TAILLE_ECRAN];
 

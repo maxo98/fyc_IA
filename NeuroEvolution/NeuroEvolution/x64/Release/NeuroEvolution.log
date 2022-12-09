@@ -1,0 +1,55 @@
+﻿  ES_Snake.cpp
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(28,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(63,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(71,69): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(78,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(85,56): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(92,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(99,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(106,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(113,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(127,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(23,37): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(25,38): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(26,39): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.h(90,33): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(24,34): warning C4305: '=' : troncation de 'double' à 'float'
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(25,33): warning C4305: '=' : troncation de 'double' à 'float'
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(28,29): warning C4305: '=' : troncation de 'double' à 'float'
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(29,34): warning C4305: '=' : troncation de 'double' à 'float'
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(33,39): warning C4305: '=' : troncation de 'double' à 'float'
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(37,33): warning C4305: '=' : troncation de 'double' à 'float'
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(40,29): warning C4305: '=' : troncation de 'double' à 'float'
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(47,37): warning C4305: '=' : troncation de 'double' à 'float'
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(49,43): warning C4305: '=' : troncation de 'double' à 'float'
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(53,31): warning C4305: '=' : troncation de 'double' à 'float'
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(58,42): warning C4305: '=' : troncation de 'double' à 'float'
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(77,26): warning C4305: 'initialisation' : troncation de 'double' à 'float'
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(89,32): warning C4305: '=' : troncation de 'double' à 'float'
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(108,18): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(112,22): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(180,29): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(183,29): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(246,31): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(681,41): warning C4244: 'return' : conversion de 'double' en 'int', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(684,42): warning C4244: 'return' : conversion de 'double' en 'int', perte possible de données
+C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(336,22): warning C4390: ';' : une instruction contrôlée a été trouvée vide ; est-ce ce que vous souhaitiez ?
+  Génération de code en cours
+  1 of 3231 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    3 functions had inline decision re-evaluated but remain unchanged
+  Fin de la génération du code
+  NeuroEvolution.vcxproj -> C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\x64\Release\NeuroEvolution.exe
