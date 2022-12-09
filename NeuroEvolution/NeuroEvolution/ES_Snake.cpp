@@ -9,7 +9,7 @@
 
 
 #define TAILLE_ECRAN 20
-#define TAILLE_SNAKE 11 //nombre de direction diff�rente pouvant etre enregistrer + 1
+//#define TAILLE_SNAKE 11 //nombre de direction diff�rente pouvant etre enregistrer + 1
 
 int launchESHypeneatTest()
 {
@@ -94,7 +94,7 @@ int launchESHypeneatTest()
     esParam.center.push_back(10);
     esParam.center.push_back(10);
 
-    int popSize = 20;// 150;
+    int popSize = 150;
 
     std::vector<float> pos;
     pos.resize(2);
@@ -185,33 +185,33 @@ bool esHypeneatTest(int popSize, ES_Hyperneat& esHyper)
         int count = 0;
 
 #ifdef MULTITHREAD
-        //while (workload < 1)
-        //{
-        //    cpus--;
-        //    workload = totalWorkload / cpus;
-        //}
+        while (workload < 1)
+        {
+            cpus--;
+            workload = totalWorkload / cpus;
+        }
 
-        //currentWorkload = floor(workload);
-        //float workloadFrac = fmod(workload, 1.0f);
-        //restWorkload = workloadFrac;
+        currentWorkload = floor(workload);
+        float workloadFrac = fmod(workload, 1.0f);
+        restWorkload = workloadFrac;
 
-        //while (cpus > threads.size() + 1)
-        //{
-        //    threads.push_back(std::thread(snakeEvaluate, startIndex, currentWorkload + floor(restWorkload), std::ref(fitness), std::ref(esHyper)));
+        while (cpus > threads.size() + 1)
+        {
+            threads.push_back(std::thread(snakeEvaluate, startIndex, currentWorkload + floor(restWorkload), std::ref(fitness), std::ref(esHyper)));
 
-        //    count += currentWorkload + floor(restWorkload);
+            count += currentWorkload + floor(restWorkload);
 
-        //    startIndex += currentWorkload + floor(restWorkload);
+            startIndex += currentWorkload + floor(restWorkload);
 
-        //    restWorkload -= floor(restWorkload);
-        //    restWorkload += workloadFrac;
-        //}
+            restWorkload -= floor(restWorkload);
+            restWorkload += workloadFrac;
+        }
 
-        //while (restWorkload > 0)
-        //{
-        //    restWorkload--;
-        //    currentWorkload++;
-        //}
+        while (restWorkload > 0)
+        {
+            restWorkload--;
+            currentWorkload++;
+        }
 #endif //MULTITHREAD
 
         count += currentWorkload;
@@ -250,14 +250,11 @@ void snakeEvaluate(int startIndex, int currentWorkload, std::vector<float>& fitn
 
 int snakeTest(NeuralNetwork* network, bool display)
 {
-
     char screen[TAILLE_ECRAN][TAILLE_ECRAN];
 
-    char lastDir[TAILLE_SNAKE][2] = { {2,0},{0,4} };
+    std::deque<std::pair<int, int>> snake;
 
-    //tete1 = position y de la tete du snake, tete2 = position x de la tete du snake
-    //queue1 = coordon�s y de la case � reset queue2 = coordon�s x de la case � reset
-    int direction = 2, score = 0, input = 0, vie = 1, tete1 = 14, tete2 = 9, queue1 = 10, queue2 = 9, cpt, found = 0, decremente, r1, r2, mange = 0, snake = 4;
+    int direction = 2, score = 0, input = 0, vie = 1, cpt, found = 0, r1, r2, mange = 0;
     //srand(time(NULL));//G�n�ration seed al�atoire
 
     for (int i = 0; i < TAILLE_ECRAN; i++)//Initialisation de l'�cran "� vide"
@@ -268,19 +265,12 @@ int snakeTest(NeuralNetwork* network, bool display)
         }
     }
 
-    for (int i = 2; i < TAILLE_SNAKE; i++)//Initialisation de lastDir
+    //Initialisation du snake
+    for (int i = 0; i < 5; i++)
     {
-        for (cpt = 0; cpt < 2; cpt++)
-        {
-            lastDir[i][cpt] = 0;
-        }
+        screen[10+i][9] = 0;
+        snake.push_back(std::pair<int, int>(10 + i, 9));
     }
-
-    screen[10][9] = 0;//Initialisation du snake
-    screen[11][9] = 0;
-    screen[12][9] = 0;
-    screen[13][9] = 0;
-    screen[14][9] = 0;
 
     do//Apparition du premier fruit
     {
@@ -293,9 +283,6 @@ int snakeTest(NeuralNetwork* network, bool display)
         }
     } while (found == 0);
 
-
-    //std::cout << "new snake \n";
-
     int timer = 0;
 
     std::vector<float> networkInput, output;
@@ -306,11 +293,6 @@ int snakeTest(NeuralNetwork* network, bool display)
 
     //START MAIN GAME LOOP
     do {
-        if (networkInput.size() > 400)
-        {
-            int err = 0;
-        }
-
         timer++;
 
         for (int i = 0; i < TAILLE_ECRAN; i++)
@@ -318,7 +300,7 @@ int snakeTest(NeuralNetwork* network, bool display)
             for (int i2 = 0; i2 < TAILLE_ECRAN; i2++)
             {
                 //Use a special input for the head
-                if (i != tete1 || i2 != tete2)
+                if(snake.back() != std::pair<int, int>(i, i2))
                 {
                     networkInput[i * TAILLE_ECRAN + i2] = screen[i][i2];
                 }
@@ -328,153 +310,76 @@ int snakeTest(NeuralNetwork* network, bool display)
             }
         }
 
-        if (networkInput.size() > 400)
-        {
-            int err = 0;
-        }
-
         network->compute(networkInput, output);
-
-        if (networkInput.size() > 400)
-        {
-            int err = 0;
-        }
 
         //up, down, left, right
         int directionIndex = 0;
         float outputScore = output[0];
 
-        //std::cout << output[0] << std::endl;
-
         for (int i = 1; i < output.size(); i++)
         {
-            //std::cout << output[i] << std::endl;
-
             if (output[i] > outputScore)
             {
                 directionIndex = i;
                 outputScore = output[i];
-                //std::cout << i << std::endl;
             }
-        }
-
-        if (networkInput.size() > 400)
-        {
-            int err = 0;
         }
 
         //Do not change direction by default
         if (outputScore == 0)
         {
             directionIndex = -1;
-            //std::cout << "NO CHANGE IN DIRECTION\n";
         }
-
-        //std::cout << "chose " << directionIndex << std::endl;
-
-        //std::cout << std::endl;
-
-       
 
         switch (directionIndex)//lecture de l'entr� pour savoir quel direction prendre
         {
         case 0:
             //std::cout << "UP\n";
-            if (direction == 8)
-            {
-                input = 0;
-            }
-            else {
-                direction = 8;
-                countChangeDir++;
-            }
-
+            direction = 8;
+            countChangeDir++;
             break;
         case 1:
             //std::cout << "DOWN\n";
-            if (direction == 2)
-            {
-                input = 0;
-            }
-            else {
-                direction = 2;
-                countChangeDir++;
-                //std::cout << "SET DOWN\n";
-            }
-            break;
-        case 3:
-            //std::cout << "RIGHT\n";
-            if (direction == 6)
-            {
-                input = 0;
-            }
-            else {
-                direction = 6;
-                countChangeDir++;
-            }
+            direction = 2;
+            countChangeDir++;
             break;
         case 2:
             //std::cout << "LEFT\n";
-            if (direction == 4)
-            {
-                input = 0;
-            }
-            else {
-                direction = 4;
-                countChangeDir++;
-            }
+            direction = 4;
+            countChangeDir++;
+            break;
+        case 3:
+            //std::cout << "RIGHT\n";
+            direction = 6;
+            countChangeDir++;
             break;
         }
 
-        if (input != 0)// si il y a eue une entr�
-        {
-            found = 0;
-            int i = 1;
-            do
-            {
-                if (lastDir[i][0] == 0)//Alors on cherche une place
-                {
-                    found = 1;
-                }
-                else {
-                    i++;
-                }
+        input = 0;//reset de l'input
 
-            } while (found == 0);
-
-            lastDir[i][0] = direction;//pour enregistrer cette direction
-
-            input = 0;//reset de l'input
-        }
-
-        if (networkInput.size() > 400)
-        {
-            int err = 0;
-        }
-
-        switch (direction)//D�placement de la tete suivant la direction
+        switch (direction)//lecture de l'entr� pour savoir quel direction prendre
         {
         case 8:
-            tete1 -= 1;
+            snake.push_back(std::pair<int, int>(snake.back().first - 1, snake.back().second));
             break;
         case 2:
-            tete1 += 1;
-            break;
-        case 4:
-            tete2 -= 1;
+            snake.push_back(std::pair<int, int>(snake.back().first + 1, snake.back().second));
             break;
         case 6:
-            tete2 += 1;
+            snake.push_back(std::pair<int, int>(snake.back().first, snake.back().second + 1));
+            break;
+        case 4:
+            snake.push_back(std::pair<int, int>(snake.back().first, snake.back().second - 1));
             break;
         }
 
-        if (screen[tete1][tete2] == 2)//Si le serpent mange un fruit
+        if (screen[snake.back().first][snake.back().second] == 2)//Si le serpent mange un fruit
         {
             do//apparition d'un autre autre fruit
             {
                 r1 = rand() % (TAILLE_ECRAN);
                 r2 = rand() % (TAILLE_ECRAN);
-                if (screen[r1][r2] != 0 && abs(tete1 - r1) > 1 && abs(tete2 - r2))
+                if (screen[r1][r2] != 0 && abs(snake.back().first - r1) > 1 && abs(snake.back().second - r2))
                 {
                     screen[r1][r2] = 2;
                     mange = 1;
@@ -482,109 +387,25 @@ int snakeTest(NeuralNetwork* network, bool display)
             } while (mange == 0);
 
             score++;
-            snake++;//Augmentation de la taille du serpent
         }
 
-        if (networkInput.size() > 400)
-        {
-            int err = 0;
-        }
-
-        if ((tete1 >= TAILLE_ECRAN) || (tete1 < 0) || (tete2 >= TAILLE_ECRAN) || (tete2 < 0) || (screen[tete1][tete2] == 0))//si le serpent sort de l'�cran ou se mange lui meme
+        if ((snake.back().first >= TAILLE_ECRAN) || (snake.back().first < 0) || (snake.back().second >= TAILLE_ECRAN) || (snake.back().second < 0)
+            || (screen[snake.back().first][snake.back().second] == 0))//si le serpent sort de l'�cran ou se mange lui meme
         {
             vie = 0;// Alors il meurt
         }
         else {
-            screen[tete1][tete2] = 0;//placement du nouveau morceau du snake
+            screen[snake.back().first][snake.back().second] = 0;//placement du nouveau morceau du snake
 
             if (mange == 0)//Si le serpent n'est pas en train de manger
             {
 
-                screen[queue1][queue2] = 1;//effacement du dernier morceau du serpent
-                switch (lastDir[0][0])//nouvelle position � effacer
-                {
-                case 8:
-                    queue1 -= 1;
-                    break;
-                case 2:
-                    queue1 += 1;
-                    break;
-                case 4:
-                    queue2 -= 1;
-                    break;
-                case 6:
-                    queue2 += 1;
-                    break;
-                }
-                //screen[queue1][queue2] = 5;
-                decremente = 0;
-                found = 0;
-                int i = 1;
-
-                do
-                {
-                    if (lastDir[i][0] == 0)
-                    {
-                        if (lastDir[i][1] < snake)
-                        {
-                            lastDir[i][1]++;//nombre de frame pass� depuis le dernier changement direction, maximum = snake
-                        }
-                        found = 1;//quand on a trouv� partie du tableau qui n'a pas
-                        //direction on lincr�mente et sort de la boucle
-                    }
-                    else {
-
-                        if (decremente == 0)//si on trouve une partie du tableau qui a une direction
-                        {//et que l'on a pas encore d�cr�menter alors on d�crmente le timer de cellle-ci
-                            lastDir[i][1] -= 1;
-                            decremente = 1;
-                        }
-                        i++;
-                    }
-
-                } while (found == 0);//un fois qu'on a trouv� une partie du tableau sans direction alors on sort
-
+                screen[snake[0].first][snake[0].first] = 1;//effacement du dernier morceau du serpent
+                snake.pop_front();
             }
             else {//Si le serpent est en train de manger alors on n'efface pas de bout su serpent pour cette frame
 
                 mange = 0;
-                int i = snake + 2;//On part de la fin du tableau
-                found = 0;
-
-                do
-                {
-                    if (lastDir[i][0] != 0)//On cherche le dernier changement de direction
-                    {
-                        found = 1;
-                        lastDir[i + 1][1]++;//et on augmente de 1 le nombre de frame �coul� depuis celui d'avant
-                    }
-
-                    i--;
-                } while (found == 0);
-                //lastDir[1][1]++;
-
-            }
-
-            if (networkInput.size() > 400)
-            {
-                int err = 0;
-            }
-
-            if ((lastDir[1][1] == 0) && (lastDir[1][0] != 0))//Si le 1er timer est � 0 tout est d�cal�
-            {
-                for (int i = 1; i < TAILLE_SNAKE; i++)
-                {
-                    lastDir[i - 1][0] = lastDir[i][0];
-                    lastDir[i - 1][1] = lastDir[i][1];
-                }
-
-                lastDir[TAILLE_SNAKE - 1][1] = 0;//Et on reset la fin du tableau
-                lastDir[TAILLE_SNAKE - 1][0] = 0;
-            }
-
-            if (networkInput.size() > 400)
-            {
-                int err = 0;
             }
 
             if (display == true)
@@ -614,22 +435,6 @@ int snakeTest(NeuralNetwork* network, bool display)
                     printf("\n");
                 }
             }
-
-            //Affichage pour debuggage
-            /*printf("lastdir[0][0] = %d\n", lastDir[0][0]);
-            printf("lastdir[0][1] = %d\n", lastDir[0][1]);
-            printf("\nlastdir[1][0] = %d\n", lastDir[1][0]);
-            printf("lastdir[1][1] = %d\n", lastDir[1][1]);
-            printf("\nlastdir[2][0] = %d\n", lastDir[2][0]);
-            printf("lastdir[2][1] = %d\n", lastDir[2][1]);
-            printf("\nlastdir[3][0] = %d\n", lastDir[3][0]);
-            printf("lastdir[3][1] = %d\n", lastDir[3][1]);
-            printf("\nlastdir[4][0] = %d\n", lastDir[4][0]);
-            printf("lastdir[4][1] = %d\n", lastDir[4][1]);
-            printf("\nlastdir[5][0] = %d\n", lastDir[5][0]);
-            printf("lastdir[5][1] = %d\n", lastDir[5][1]);
-            printf("\nqueuex = %d\n", queue1);
-            printf("queuey = %d\n", queue2);*/
 
             /*Sleep(500);
             if (_kbhit() != 0)//Detecte si on appuie sur le clavier
