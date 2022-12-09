@@ -3,6 +3,7 @@
 #pragma once
 
 #define DEBUG
+#define MULTITHREAD
 
 #include <vector>
 #include "NeuralNetwork.h"

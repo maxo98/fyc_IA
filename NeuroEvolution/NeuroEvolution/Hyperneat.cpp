@@ -73,6 +73,7 @@ void Hyperneat::generateNetworks()
 	int startIndex = 0;
 	int count = 0;
 
+#ifdef MULTITHREAD
 	while (workload < 1)
 	{
 		cpus--;
@@ -99,6 +100,7 @@ void Hyperneat::generateNetworks()
 		restWorkload--;
 		currentWorkload++;
 	}
+#endif // MULTITHREAD
 
 	count += currentWorkload;
 
@@ -120,6 +122,7 @@ void Hyperneat::generateNetworksThread(int startIndex, int worlkload)
 {
 	for (unsigned int cpt = startIndex; cpt < (startIndex + worlkload); cpt++)
 	{
+		//std::cout << cpt << std::endl;
 		createNetwork(*cppns->getNeuralNetwork(cpt), networks[cpt]);
 	}
 }

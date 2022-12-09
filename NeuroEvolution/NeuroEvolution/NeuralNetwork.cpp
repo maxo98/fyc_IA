@@ -167,7 +167,7 @@ std::pair<unsigned int, unsigned int> NeuralNetwork::addHiddenNode(unsigned int 
 
 	it->push_back(Node(activation));
 
-	return std::pair<unsigned int, unsigned int>(layer, it->size() - 1);
+	return std::pair<unsigned int, unsigned int>(layer+1, it->size() - 1);
 }
 
 std::pair<unsigned int, unsigned int> NeuralNetwork::addInputNode()
@@ -274,14 +274,14 @@ Node* NeuralNetwork::getNodeFromLayer(std::deque<Node>& layer, unsigned int node
 
 void NeuralNetwork::compute(const std::vector<float>& inputs, std::vector<float>& outputs)
 {
-	outputs.clear();
+	//outputs.clear();
 
 	if (inputs.size() >= inputNodes.size())
 	{
 #ifdef WARNING
 		if (inputs.size() > inputNodes.size())
 		{
-			std::cout << "Inputs given larger than expected\n";
+			std::cout << "Inputs given larger than expected, expecting " << inputNodes.size() << ", received " << inputs.size() << std::endl;
 		}
 #endif // WARNING
 
@@ -314,6 +314,8 @@ void NeuralNetwork::compute(const std::vector<float>& inputs, std::vector<float>
 
 			splitLayerComputing(itNode, it->size());
 		}
+
+		//std::cout << outputNodes.size() << std::endl;
 
 		outputs.resize(outputNodes.size(), 0);
 

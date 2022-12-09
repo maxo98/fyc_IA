@@ -38,7 +38,7 @@ int launchHypeneatTest()
 	//neatparam.weightShiftStrength = 2.5;
 	//neatparam.weightRandomStrength = 2.5;
 	neatparam.weightMuteStrength = 3.0;// 2.5;
-	neatparam.pbMutateActivation = 0.9;
+	neatparam.pbMutateActivation = 0.7;
 
 	neatparam.disjointCoeff = 1.0;
 	neatparam.excessCoeff = 1.0;

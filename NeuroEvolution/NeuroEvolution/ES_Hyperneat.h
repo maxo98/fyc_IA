@@ -102,16 +102,8 @@ protected:
 	void prunAndExtract(NeuralNetwork& hypernet, const std::vector<float>& pos, SubstrateTree* tree, bool outgoing, std::unordered_set<Connection, HyperConnectionHash,
 		HyperConnectionEqual>& connections);
 
-	void reachableConnections(const std::unordered_multimap<std::vector<float>, const Connection*, HyperNodeHash>& connections,
-		std::unordered_set<std::vector<float>, HyperNodeHash> nodes,
-		std::unordered_set<Connection, HyperConnectionHash, HyperConnectionEqual>& reachableConn);
-
-	//breadth first search
-	bool bfs(const std::vector<float>& pos, const std::vector<float>& endPos,
-		const std::unordered_multimap<std::vector<float>, const Connection*, HyperNodeHash>& connectionMap);
-
-	void shiftNodes(const std::vector<float>& startPos,
-		const std::unordered_multimap<std::vector<float>, const Connection*, HyperNodeHash>& connectionMap,
-		std::unordered_map<std::vector<float>, int, HyperNodeHash> nodesLayerMap);
+	void connectNodes(std::unordered_map<std::vector<float>, std::pair<unsigned int, unsigned int>, HyperNodeHash>& nodesPos,
+		std::unordered_multimap<std::vector<float>, const Connection*, HyperNodeHash>& connectionMap, NeuralNetwork& hypernet, NeuralNetwork& net,
+		std::unordered_map<std::vector<float>, std::pair<unsigned int, unsigned int>, HyperNodeHash>* prevNodesPos = nullptr);
 };
 

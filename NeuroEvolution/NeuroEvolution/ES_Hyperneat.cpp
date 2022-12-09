@@ -40,12 +40,12 @@ void ES_Hyperneat::divAndInit(NeuralNetwork& hypernet, const std::vector<float>&
 	std::queue<SubstrateTree*> q;
 	q.push(root);
 
+	//std::cout << root->pos << std::endl;
+
 	while (!q.empty())
 	{
 		SubstrateTree* point = q.front();
 		q.pop();
-
-		std::vector<float> newPos;
 
 		float newWidth = point->width / 2;
 
@@ -59,11 +59,11 @@ void ES_Hyperneat::divAndInit(NeuralNetwork& hypernet, const std::vector<float>&
 			if (i == 0)
 			{
 				SubstrateTree first(std::vector<float>(), newWidth, point->level+1);
-				first.pos.push_back(pos[0] + newWidth);
+				first.pos.push_back(point->pos[0] + newWidth);
 				point->leaves.push_back(first);
 
 				SubstrateTree second(std::vector<float>(), newWidth, point->level + 1);
-				second.pos.push_back(pos[0] - newWidth);
+				second.pos.push_back(point->pos[0] - newWidth);
 				point->leaves.push_back(second);
 			}
 			else {
@@ -74,12 +74,15 @@ void ES_Hyperneat::divAndInit(NeuralNetwork& hypernet, const std::vector<float>&
 				{
 					point->leaves.push_back(*leaf);
 
-					leaf->pos.push_back(pos[i] + newWidth);
+					leaf->pos.push_back(point->pos[i] + newWidth);
 
-					point->leaves.back().pos.push_back(pos[i] - newWidth);
+					point->leaves.back().pos.push_back(point->pos[i] - newWidth);
 				}
 			}
 		}
+
+		//std::cout << point->leaves.size() << std::endl;
+		//
 
 		//For each leaf check if the connection is active
 		//And compute weight
@@ -88,6 +91,8 @@ void ES_Hyperneat::divAndInit(NeuralNetwork& hypernet, const std::vector<float>&
 		for (std::list<SubstrateTree>::iterator leaf = point->leaves.begin(); leaf != point->leaves.end(); ++leaf)
 		{
 			std::vector<float> input, output;
+
+			//std::cout << leaf->pos << std::endl;
 
 			//Create input vector
 			if (outgoing == true)
@@ -136,14 +141,17 @@ void ES_Hyperneat::divAndInit(NeuralNetwork& hypernet, const std::vector<float>&
 }
 
 
-void ES_Hyperneat::prunAndExtract(NeuralNetwork& hypernet, const std::vector<float>& pos, SubstrateTree* tree, bool outgoing, std::unordered_set<Connection, HyperConnectionHash, HyperConnectionEqual>& connections)
+void ES_Hyperneat::prunAndExtract(NeuralNetwork& hypernet, const std::vector<float>& pos, SubstrateTree* tree, bool outgoing, 
+	std::unordered_set<Connection, HyperConnectionHash, HyperConnectionEqual>& connections)
 {
+
+	bool done = false;
+
 	//Traverse tree depth-first
 	for (std::list<SubstrateTree>::iterator leaf = tree->leaves.begin(); leaf != tree->leaves.end(); ++leaf)
 	{
 		//std::cout << "variance " << leaf->variance << " " << esParam.varianceThreshold << std::endl;
-
-		if (leaf->variance >= esParam.varianceThreshold)
+		if (leaf->leaves.size() != 0 && leaf->variance >= esParam.varianceThreshold)
 		{
 			prunAndExtract(hypernet, pos, &*leaf, outgoing, connections);
 		}
@@ -176,18 +184,11 @@ void ES_Hyperneat::prunAndExtract(NeuralNetwork& hypernet, const std::vector<flo
 
 				posValue = leaf->pos;
 				posValue[i] -= leaf->width;
-
-				//Start Debug critical part
-				if (&posValue != p1 && outgoing == false)
-				{
-					std::cout << "Error pointer prunnAndExtract" << std::endl;
-				}
-				//End Debug critical part
 				
 				input = hyperParam.cppnInputFunction(hyperParam.inputVariables, *p1, *p2);
 				hypernet.compute(input, output);
 
-				valueA = hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], *p1, *p2);
+				valueA = abs(hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], *p1, *p2));
 
 				posValue = leaf->pos;
 				posValue[i] += leaf->width;
@@ -195,7 +196,7 @@ void ES_Hyperneat::prunAndExtract(NeuralNetwork& hypernet, const std::vector<flo
 				input = hyperParam.cppnInputFunction(hyperParam.inputVariables, *p1, *p2);
 				hypernet.compute(input, output);
 
-				valueB = hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], *p1, *p2);
+				valueB = abs(hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], *p1, *p2));
 
 				value = std::max(value, std::min(valueA, valueB));
 			}
@@ -210,7 +211,10 @@ void ES_Hyperneat::prunAndExtract(NeuralNetwork& hypernet, const std::vector<flo
 				input = hyperParam.cppnInputFunction(hyperParam.inputVariables, *p1, *p2);
 				hypernet.compute(input, output);
 
-				connections.emplace(*p1, *p2, hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], *p1, *p2));
+				if (connections.emplace(*p1, *p2, hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], *p1, *p2)).second == true)
+				{
+					//std::cout << *p1 << " >> " << *p2 << std::endl;
+				}
 			}
 		}
 	}
@@ -220,12 +224,14 @@ void ES_Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 {
 	net.clear();
 
+	//std::cout << "new network\n\n\n";
+
 	std::unordered_set<Connection, HyperConnectionHash, HyperConnectionEqual> connections;
 	std::unordered_set<std::vector<float>, HyperNodeHash> hiddenNodes;//To change to a map with layer index
 	std::queue<std::vector<float>>* unexploredNodes, * futureUnexploredNodes, unexploredNodesA, unexploredNodesB;//Nodes to explore swaped in and out
-	std::unordered_multimap<std::vector<float>, const Connection*, HyperNodeHash> connectionMap;//Links nodes to connections entering them
+	std::unordered_multimap<std::vector<float>, const Connection*, HyperNodeHash> hiddenConnectionMap, outConnectionMap;//Links nodes to connections entering them
 	std::unordered_map<std::vector<float>, unsigned int, HyperNodeHash> nodesLayerMap;//Holds the layer of each node
-	std::unordered_map<std::vector<float>, std::pair<unsigned int, unsigned int>, HyperNodeHash> nodesPos;//Holds the layer and pos of each node
+	std::unordered_map<std::vector<float>, std::pair<unsigned int, unsigned int>, HyperNodeHash> nodesPosInput, nodesPosOutput, nodesPosHidden;//Holds the layer and pos of each node
 
 	//Input to hidden nodes connections
 	for (std::unordered_set<std::vector<float>, HyperNodeHash>::iterator itSubstrate = inputSubstrate.begin(); itSubstrate != inputSubstrate.end(); ++itSubstrate)
@@ -236,15 +242,19 @@ void ES_Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 		divAndInit(hypernet, *itSubstrate, &root, true);
 		prunAndExtract(hypernet, *itSubstrate, &root, true, connections);
 
-		nodesLayerMap.emplace(*itSubstrate, 0);
-		nodesPos.emplace(*itSubstrate, net.addInputNode());
+		//std::cout << esParam.center << std::endl;
+
+		//nodesLayerMap.emplace(*itSubstrate, 0);
+		nodesPosInput.emplace(*itSubstrate, net.addInputNode());
 	}
 
 	//std::cout << "conn " << connections.size() << std::endl;
 
 	for (std::unordered_set<Connection, HyperConnectionHash, HyperConnectionEqual>::iterator itConnection = connections.begin(); itConnection != connections.end(); ++itConnection)
 	{
-		connectionMap.emplace(itConnection->pos2, &*itConnection);
+		//std::cout << itConnection->pos1 << std::endl;
+
+		hiddenConnectionMap.emplace(itConnection->pos2, &*itConnection);
 
 		if (nodesLayerMap.emplace(itConnection->pos2, 1).second == true)
 		{
@@ -258,7 +268,7 @@ void ES_Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 	//Hidden to hidden nodes connections
 	for (int level = 1; level < esParam.iterationLevel; level++)
 	{
-		//std::cout << "unexplored " << unexploredNodes.size() << std::endl;
+		//std::cout << "unexplored " << unexploredNodes->size() << std::endl;
 
 		while (unexploredNodes->empty() == false)
 		{
@@ -273,18 +283,21 @@ void ES_Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 			{
 				Connection connTmp = *itConnection;//We cannot change value of keys inside an unordered set
 
-				if (nodesLayerMap.emplace(connTmp.pos2, level + 1).second == true)
+				//if (nodesPosInput.find(connTmp.pos2) != nodesPosInput.end())
 				{
-					futureUnexploredNodes->push(connTmp.pos2);
-				}
-				else if (nodesLayerMap[connTmp.pos2] <= level)
-				{
-					connTmp.recursive = true;
-				}
+					if (nodesLayerMap.emplace(connTmp.pos2, level + 1).second == true)
+					{
+						futureUnexploredNodes->push(connTmp.pos2);
+					}
+					else if (nodesLayerMap[connTmp.pos2] <= level)
+					{
+						connTmp.recursive = true;
+					}
 
-				std::pair<std::unordered_set<Connection, HyperConnectionHash, HyperConnectionEqual>::iterator, bool> result = connections.emplace(*itConnection);
+					std::pair<std::unordered_set<Connection, HyperConnectionHash, HyperConnectionEqual>::iterator, bool> result = connections.emplace(*itConnection);
 
-				connectionMap.emplace(result.first->pos2, &*result.first);
+					hiddenConnectionMap.emplace(result.first->pos2, &*result.first);
+				}
 			}
 
 			unexploredNodes->pop();
@@ -315,7 +328,7 @@ void ES_Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 		divAndInit(hypernet, *itSubstrate, &root, false);
 		prunAndExtract(hypernet, *itSubstrate, &root, false, newConnections);
 
-		nodesPos.emplace(*itSubstrate, net.addOutputNode(hyperParam.activationFunction));
+		nodesPosOutput.emplace(*itSubstrate, net.addOutputNode(hyperParam.activationFunction));
 
 		//Nodes not created here because all the hidden nodes that are connected to an output node are already expressed
 	}
@@ -323,40 +336,44 @@ void ES_Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 	//Search for nodes connecting the output and existing in our list of nodes, before graph traversal
 	for (std::unordered_set<Connection, HyperConnectionHash, HyperConnectionEqual>::iterator itConnection = newConnections.begin(); itConnection != newConnections.end(); ++itConnection)
 	{
-		std::pair<std::unordered_set<Connection, HyperConnectionHash, HyperConnectionEqual>::iterator, bool> result = connections.emplace(*itConnection);
+		std::unordered_map<std::vector<float>, unsigned int, HyperNodeHash>::iterator itNode = nodesLayerMap.find(itConnection->pos1);
 
-		if (result.second == true)
+		if (itNode != nodesLayerMap.end()/* && itNode->second != 0*/)
 		{
-			connectionMap.emplace(result.first->pos2, &*result.first);
+			std::pair<std::unordered_set<Connection, HyperConnectionHash, HyperConnectionEqual>::iterator, bool> result = connections.emplace(*itConnection);
+			outConnectionMap.emplace(result.first->pos2, &*result.first);
 
-			std::unordered_map<std::vector<float>, unsigned int, HyperNodeHash>::iterator itNode = nodesLayerMap.find(result.first->pos1);
-
-			if (itNode != nodesLayerMap.end() && itNode->second != 0)
+			if (nodesPosHidden.emplace(itNode->first, net.addHiddenNode(itNode->second, hyperParam.activationFunction)).second == true)
 			{
-				if (nodesPos.emplace(itNode->first, net.addHiddenNode(itNode->second, hyperParam.activationFunction)).second == true)
-				{
-					//std::cout << result.first->pos2 << std::endl;
+				//std::cout << result.first->pos1 << std::endl;
 
-					unexploredNodes->push(result.first->pos1);
-				}
+				unexploredNodes->push(result.first->pos1);
 			}
 		}
 	}
 
-	//Graph traversal, add nodes found in nodePos
+	//for (std::unordered_multimap<std::vector<float>, const Connection*, HyperNodeHash>::const_iterator it = hiddenConnectionMap.begin(); it != hiddenConnectionMap.end(); ++it)
+	//{
+	//	std::cout << it->second->pos1 << " >> " << it->second->pos2 << std::endl;
+	//}
+
+	//Graph traversal, add hidden nodes found in nodePosHidden
 	while (unexploredNodes->empty() == false)
 	{
 		std::pair<std::unordered_multimap<std::vector<float>, const Connection*, HyperNodeHash>::const_iterator,
 			std::unordered_multimap<std::vector<float>, const Connection*, HyperNodeHash>::const_iterator>
-			range = connectionMap.equal_range(unexploredNodes->front());
+			range = hiddenConnectionMap.equal_range(unexploredNodes->front());
 
 		while (range.first != range.second)
 		{
-			unsigned int layer = nodesLayerMap.find(range.first->second->pos1)->second;
+			//std::cout << range.first->second->pos1 << std::endl;
+			//std::cout << range.first->second->pos2 << std::endl;
 
-			if (layer != 0 && range.first->second->recursive == false)
+			std::unordered_map<std::vector<float>, unsigned int, HyperNodeHash>::iterator layer = nodesLayerMap.find(range.first->second->pos1);
+
+			if (layer != nodesLayerMap.end() && range.first->second->recursive == false)
 			{
-				if (nodesPos.emplace(range.first->second->pos1, net.addHiddenNode(layer, hyperParam.activationFunction)).second == true)
+				if (nodesPosHidden.emplace(range.first->second->pos1, net.addHiddenNode(layer->second, hyperParam.activationFunction)).second == true)
 				{
 					unexploredNodes->push(range.first->second->pos1);
 				}
@@ -369,8 +386,24 @@ void ES_Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 	}
 
 	//Connect the nodes
+	connectNodes(nodesPosOutput, outConnectionMap, hypernet, net, &nodesPosHidden);
+	
+	connectNodes(nodesPosHidden, hiddenConnectionMap, hypernet, net, &nodesPosInput);
+
+}
+
+void ES_Hyperneat::connectNodes(std::unordered_map<std::vector<float>, std::pair<unsigned int, unsigned int>, HyperNodeHash>& nodesPos,
+	std::unordered_multimap<std::vector<float>, const Connection*, HyperNodeHash>& connectionMap, NeuralNetwork& hypernet, NeuralNetwork& net,
+	std::unordered_map<std::vector<float>, std::pair<unsigned int, unsigned int>, HyperNodeHash>* prevNodesPos)
+{
+	if (prevNodesPos == nullptr)
+	{
+		prevNodesPos = &nodesPos;
+	}
+
 	for (std::unordered_map<std::vector<float>, std::pair<unsigned int, unsigned int>, HyperNodeHash>::iterator itNodes = nodesPos.begin(); itNodes != nodesPos.end(); ++itNodes)
 	{
+
 		if (itNodes->second.first != 0)
 		{
 			std::pair<std::unordered_multimap<std::vector<float>, const Connection*, HyperNodeHash>::const_iterator,
@@ -386,8 +419,18 @@ void ES_Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 					std::vector<float> input, output;
 					input = hyperParam.cppnInputFunction(hyperParam.inputVariables, range.first->second->pos1, itNodes->first);
 					hypernet.compute(input, output);
-					net.connectNodes(nodesPos[range.first->second->pos1], itNodes->second, hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], range.first->second->pos1, itNodes->first));
 
+					std::unordered_map<std::vector<float>, std::pair<unsigned int, unsigned int>, HyperNodeHash>::iterator pos = prevNodesPos->find(range.first->second->pos1);
+
+					if (pos == prevNodesPos->end())
+					{
+						pos = nodesPos.find(range.first->second->pos1);
+						//std::cout << "check it out \n";
+					}
+
+					net.connectNodes(pos->second, itNodes->second, hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], range.first->second->pos1, itNodes->first));
+
+					//std::cout << range.first->second->pos1 << " >> " << itNodes->first << std::endl;
 				}
 
 				++range.first;

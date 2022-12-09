@@ -528,6 +528,7 @@ void Neat::evolve()
 	int currentWorkload = totalWorkload;
 	int count = 0;
 
+#ifdef MULTITHREAD
 	while (workload < 1)
 	{
 		cpus--;
@@ -538,7 +539,7 @@ void Neat::evolve()
 	float workloadFrac = fmod(workload, 1.0f);
 	float restWorkload = workloadFrac;
 
-	while (cpus > threads.size()+1)
+	while (cpus > threads.size() + 1)
 	{
 
 		threads.push_back(std::thread(&Neat::reproduce, this, currentWorkload + floor(restWorkload), itSortedSpecies, newBornIndex, std::ref(sortedSpecies), futureGen, &lock));
@@ -560,6 +561,7 @@ void Neat::evolve()
 		restWorkload--;
 		currentWorkload++;
 	}
+#endif // MULTITHREAD
 
 	count += currentWorkload;
 
@@ -729,18 +731,21 @@ void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBorn
 				{//Mate within Species
 					
 					index = -1;
-
-					if (neatParam.elistism == true)
-					{
-						index = randGeoDist(std::min(neatParam.rouletteMultiplier / curSpecies->getSpecies()->size(), 1.f), curSpecies->getSpecies()->size() - 1);
-					}
-					else {
-						index = randInt(0, curSpecies->getSpecies()->size() - 1);
-					}
+					int giveUp = 0;
 
 					do {
+						if (neatParam.elistism == true)
+						{
+							index = randGeoDist(std::min(neatParam.rouletteMultiplier / curSpecies->getSpecies()->size(), 1.f), curSpecies->getSpecies()->size() - 1);
+						}
+						else {
+							index = randInt(0, curSpecies->getSpecies()->size() - 1);
+						}
+
+					
 						gen2 = (*curSpecies->getSpecies())[index];
-					} while (gen2 == gen1);
+						giveUp++;
+					} while (gen2 == gen1 && giveUp < 10);
 
 				}
 				else {
@@ -783,17 +788,22 @@ void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBorn
 					gen2 = (*randspecies->getSpecies())[index];
 				}
 
-				//Perform mating based on probabilities of differrent mating types
-				if (randFloat() < neatParam.pbMateMultipoint) 
+				if (gen2 != gen1)
 				{
-					newPop[newBornIndex].crossover(*gen1, *gen2, Genome::CROSSOVER::RANDOM);
-				}
-				else if (randFloat() <= neatParam.pbMateMultipoint / (neatParam.pbMateMultipoint + neatParam.pbMateSinglepoint))
-				{
-					newPop[newBornIndex].crossover(*gen1, *gen2, Genome::CROSSOVER::AVERAGE);
-				}
-				else {
-					newPop[newBornIndex].crossover(*gen1, *gen2, Genome::CROSSOVER::SINGLE_POINT);
+					//Perform mating based on probabilities of differrent mating types
+					if (randFloat() < neatParam.pbMateMultipoint)
+					{
+						newPop[newBornIndex].crossover(*gen1, *gen2, Genome::CROSSOVER::RANDOM);
+					}
+					else if (randFloat() <= neatParam.pbMateMultipoint / (neatParam.pbMateMultipoint + neatParam.pbMateSinglepoint))
+					{
+						newPop[newBornIndex].crossover(*gen1, *gen2, Genome::CROSSOVER::AVERAGE);
+					}
+					else {
+						newPop[newBornIndex].crossover(*gen1, *gen2, Genome::CROSSOVER::SINGLE_POINT);
+					}
+				}else{
+					newPop[newBornIndex] = *gen1;
 				}
 
 				//Determine whether to mutate the baby's Genome

@@ -83,3 +83,10 @@ std::ostream& operator<<(std::ostream& os, const std::vector<float>& dt)
 	
 	return os;
 }
+
+std::ostream& operator<<(std::ostream& os, const std::pair<int, int>& dt)
+{
+	os << "first: " << dt.first << " second " << dt.second;
+
+	return os;
+}

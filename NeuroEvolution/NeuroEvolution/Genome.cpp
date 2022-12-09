@@ -237,21 +237,28 @@ void Genome::mutateLinkToggle()
 
 void Genome::mutateActivation(std::vector<Activation*>& activationFunctions)
 {
-    int indexNode = 1;
-        
-    if (nodes.size() - input > 1)
+    if (nodes.size() != 0)
     {
-        randGeoDist(0.1, (nodes.size() - input - 1)) + 1;
-    }
-        
-    unsigned int index = randInt(0, activationFunctions.size() - 1);
-    nodes[nodes.size() - indexNode].setActivation(activationFunctions[index]);
+        int indexNode = 1;
 
-    /*for (int i = input; i < nodes.size(); i++)
-    {
+        if (nodes.size() - input > 1)
+        {
+            indexNode = randGeoDist(0.1, (nodes.size() - input - 1)) + 1;
+        }
+
         unsigned int index = randInt(0, activationFunctions.size() - 1);
-        nodes[i].setActivation(activationFunctions[index]);
-    }*/
+        nodes[nodes.size() - indexNode].setActivation(activationFunctions[index]);
+
+        /*for (int i = input; i < nodes.size(); i++)
+        {
+            unsigned int index = randInt(0, activationFunctions.size() - 1);
+            nodes[i].setActivation(activationFunctions[index]);
+        }*/
+    }
+    else {
+        std::cout << "Error mutating genome with 0 nodes\n";
+    }
+
 }
 
 //Slightly modified version of mutate_link_weights from official implementation
