@@ -10,7 +10,7 @@ int main()
 
 	std::cout << "seed " << seed << std::endl;
 
-	srand(1670602038);//Some random parts don't use this seed 
+	srand(seed);//Some random parts don't use this seed 
 
 	//return launchXor();
 	//return launchHypeneatTest();
