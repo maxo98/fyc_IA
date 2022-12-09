@@ -253,7 +253,7 @@ int snakeTest(NeuralNetwork* network, bool display)
 
     char screen[TAILLE_ECRAN][TAILLE_ECRAN];
 
-    char lastDir[TAILLE_SNAKE+1][2] = { {2,0},{0,4} };
+    char lastDir[TAILLE_SNAKE][2] = { {2,0},{0,4} };
 
     //tete1 = position y de la tete du snake, tete2 = position x de la tete du snake
     //queue1 = coordon�s y de la case � reset queue2 = coordon�s x de la case � reset
@@ -268,7 +268,7 @@ int snakeTest(NeuralNetwork* network, bool display)
         }
     }
 
-    for (int i = 2; i <= TAILLE_SNAKE; i++)//Initialisation de lastDir
+    for (int i = 2; i < TAILLE_SNAKE; i++)//Initialisation de lastDir
     {
         for (cpt = 0; cpt < 2; cpt++)
         {
@@ -440,16 +440,9 @@ int snakeTest(NeuralNetwork* network, bool display)
                     i++;
                 }
 
-                std::cout << "i " << i << std::endl;
-            } while (found == 0 && i <= TAILLE_SNAKE);
+            } while (found == 0);
 
-            if (i <= TAILLE_SNAKE)
-            {
-                lastDir[i][0] = direction;//pour enregistrer cette direction
-            }
-            else {
-                std::cerr << "ERROR SNAKE\n";
-            }
+            lastDir[i][0] = direction;//pour enregistrer cette direction
 
             input = 0;//reset de l'input
         }
@@ -490,8 +483,6 @@ int snakeTest(NeuralNetwork* network, bool display)
 
             score++;
             snake++;//Augmentation de la taille du serpent
-
-            std::cout << "snake " << snake << std::endl;
         }
 
         if (networkInput.size() > 400)
@@ -505,160 +496,148 @@ int snakeTest(NeuralNetwork* network, bool display)
         }
         else {
             screen[tete1][tete2] = 0;//placement du nouveau morceau du snake
-        }
 
-        if (mange == 0)//Si le serpent n'est pas en train de manger
-        {
-
-            screen[queue1][queue2] = 1;//effacement du dernier morceau du serpent
-            switch (lastDir[0][0])//nouvelle position � effacer
+            if (mange == 0)//Si le serpent n'est pas en train de manger
             {
-            case 8:
-                queue1 -= 1;
-                break;
-            case 2:
-                queue1 += 1;
-                break;
-            case 4:
-                queue2 -= 1;
-                break;
-            case 6:
-                queue2 += 1;
-                break;
-            }
-            //screen[queue1][queue2] = 5;
-            decremente = 0;
-            found = 0;
-            int i = 1;
 
-            do
-            {
-                if (lastDir[i][0] == 0)
+                screen[queue1][queue2] = 1;//effacement du dernier morceau du serpent
+                switch (lastDir[0][0])//nouvelle position � effacer
                 {
-                    if (lastDir[i][1] < snake)
+                case 8:
+                    queue1 -= 1;
+                    break;
+                case 2:
+                    queue1 += 1;
+                    break;
+                case 4:
+                    queue2 -= 1;
+                    break;
+                case 6:
+                    queue2 += 1;
+                    break;
+                }
+                //screen[queue1][queue2] = 5;
+                decremente = 0;
+                found = 0;
+                int i = 1;
+
+                do
+                {
+                    if (lastDir[i][0] == 0)
                     {
-                        lastDir[i][1]++;//nombre de frame pass� depuis le dernier changement direction, maximum = snake
+                        if (lastDir[i][1] < snake)
+                        {
+                            lastDir[i][1]++;//nombre de frame pass� depuis le dernier changement direction, maximum = snake
+                        }
+                        found = 1;//quand on a trouv� partie du tableau qui n'a pas
+                        //direction on lincr�mente et sort de la boucle
                     }
-                    found = 1;//quand on a trouv� partie du tableau qui n'a pas
-                    //direction on lincr�mente et sort de la boucle
-                }
-                else {
+                    else {
 
-                    if (decremente == 0)//si on trouve une partie du tableau qui a une direction
-                    {//et que l'on a pas encore d�cr�menter alors on d�crmente le timer de cellle-ci
-                        lastDir[i][1] -= 1;
-                        decremente = 1;
+                        if (decremente == 0)//si on trouve une partie du tableau qui a une direction
+                        {//et que l'on a pas encore d�cr�menter alors on d�crmente le timer de cellle-ci
+                            lastDir[i][1] -= 1;
+                            decremente = 1;
+                        }
+                        i++;
                     }
-                    i++;
-                }
 
-                std::cout << "i " << i << std::endl;
-            } while (found == 0 && i <= TAILLE_SNAKE);//un fois qu'on a trouv� une partie du tableau sans direction alors on sort
+                } while (found == 0);//un fois qu'on a trouv� une partie du tableau sans direction alors on sort
 
-            if(i > TAILLE_SNAKE)
-            {
-                std::cerr << "ERROR SNAKE\n";
             }
-        }
-        else {//Si le serpent est en train de manger alors on n'efface pas de bout su serpent pour cette frame
+            else {//Si le serpent est en train de manger alors on n'efface pas de bout su serpent pour cette frame
 
-            mange = 0;
-            int i = snake + 2;//On part de la fin du tableau
-            found = 0;
+                mange = 0;
+                int i = snake + 2;//On part de la fin du tableau
+                found = 0;
 
-            do
-            {
-                if (lastDir[i][0] != 0)//On cherche le dernier changement de direction
+                do
                 {
-                    found = 1;
-                    lastDir[i + 1][1]++;//et on augmente de 1 le nombre de frame �coul� depuis celui d'avant
-                }
-
-                i--;
-                std::cout << "i " << i << std::endl;
-            } while (found == 0 && i <= TAILLE_SNAKE);
-            //lastDir[1][1]++;
-
-            if (i > TAILLE_SNAKE)
-            {
-                std::cerr << "ERROR SNAKE\n";
-            }
-        }
-
-        if (networkInput.size() > 400)
-        {
-            int err = 0;
-        }
-
-        if ((lastDir[1][1] == 0) && (lastDir[1][0] != 0))//Si le 1er timer est � 0 tout est d�cal�
-        {
-            for (int i = 1; i <= TAILLE_SNAKE; i++)
-            {
-                std::cout << "i " << i << std::endl;
-                lastDir[i - 1][0] = lastDir[i][0];
-                lastDir[i - 1][1] = lastDir[i][1];
-            }
-
-            lastDir[TAILLE_SNAKE][1] = 0;//Et on reset la fin du tableau
-            lastDir[TAILLE_SNAKE][0] = 0;
-        }
-
-        if (networkInput.size() > 400)
-        {
-            int err = 0;
-        }
-
-
-        if (display == true)
-        {
-            //system("cls");//Nettoyage juste avant d'afficher une nouvelle frame
-            printf("Score : %d\n", score);
-            for (int i = 0; i < TAILLE_ECRAN; i++)//Affichage
-            {
-                for (cpt = 0; cpt < TAILLE_ECRAN; cpt++)
-                {
-                    switch (screen[i][cpt])
+                    if (lastDir[i][0] != 0)//On cherche le dernier changement de direction
                     {
-                    case 1:
-                        printf("_");
-                        break;
-                    case 0:
-                        printf("o");
-                        break;
-                    case 2:
-                        printf("X");
-                        break;
-                        /*case 5 :
-                            printf("5");
-                            break;*/
+                        found = 1;
+                        lastDir[i + 1][1]++;//et on augmente de 1 le nombre de frame �coul� depuis celui d'avant
                     }
-                }
-                printf("\n");
+
+                    i--;
+                } while (found == 0);
+                //lastDir[1][1]++;
+
             }
+
+            if (networkInput.size() > 400)
+            {
+                int err = 0;
+            }
+
+            if ((lastDir[1][1] == 0) && (lastDir[1][0] != 0))//Si le 1er timer est � 0 tout est d�cal�
+            {
+                for (int i = 1; i < TAILLE_SNAKE; i++)
+                {
+                    lastDir[i - 1][0] = lastDir[i][0];
+                    lastDir[i - 1][1] = lastDir[i][1];
+                }
+
+                lastDir[TAILLE_SNAKE - 1][1] = 0;//Et on reset la fin du tableau
+                lastDir[TAILLE_SNAKE - 1][0] = 0;
+            }
+
+            if (networkInput.size() > 400)
+            {
+                int err = 0;
+            }
+
+            if (display == true)
+            {
+                //system("cls");//Nettoyage juste avant d'afficher une nouvelle frame
+                printf("Score : %d\n", score);
+                for (int i = 0; i < TAILLE_ECRAN; i++)//Affichage
+                {
+                    for (cpt = 0; cpt < TAILLE_ECRAN; cpt++)
+                    {
+                        switch (screen[i][cpt])
+                        {
+                        case 1:
+                            printf("_");
+                            break;
+                        case 0:
+                            printf("o");
+                            break;
+                        case 2:
+                            printf("X");
+                            break;
+                            /*case 5 :
+                                printf("5");
+                                break;*/
+                        }
+                    }
+                    printf("\n");
+                }
+            }
+
+            //Affichage pour debuggage
+            /*printf("lastdir[0][0] = %d\n", lastDir[0][0]);
+            printf("lastdir[0][1] = %d\n", lastDir[0][1]);
+            printf("\nlastdir[1][0] = %d\n", lastDir[1][0]);
+            printf("lastdir[1][1] = %d\n", lastDir[1][1]);
+            printf("\nlastdir[2][0] = %d\n", lastDir[2][0]);
+            printf("lastdir[2][1] = %d\n", lastDir[2][1]);
+            printf("\nlastdir[3][0] = %d\n", lastDir[3][0]);
+            printf("lastdir[3][1] = %d\n", lastDir[3][1]);
+            printf("\nlastdir[4][0] = %d\n", lastDir[4][0]);
+            printf("lastdir[4][1] = %d\n", lastDir[4][1]);
+            printf("\nlastdir[5][0] = %d\n", lastDir[5][0]);
+            printf("lastdir[5][1] = %d\n", lastDir[5][1]);
+            printf("\nqueuex = %d\n", queue1);
+            printf("queuey = %d\n", queue2);*/
+
+            /*Sleep(500);
+            if (_kbhit() != 0)//Detecte si on appuie sur le clavier
+            {
+                input = _getch();//Lecture de la derniere touche appuy�
+                fflush(stdin);
+            }*/
         }
-
-        //Affichage pour debuggage
-        /*printf("lastdir[0][0] = %d\n", lastDir[0][0]);
-        printf("lastdir[0][1] = %d\n", lastDir[0][1]);
-        printf("\nlastdir[1][0] = %d\n", lastDir[1][0]);
-        printf("lastdir[1][1] = %d\n", lastDir[1][1]);
-        printf("\nlastdir[2][0] = %d\n", lastDir[2][0]);
-        printf("lastdir[2][1] = %d\n", lastDir[2][1]);
-        printf("\nlastdir[3][0] = %d\n", lastDir[3][0]);
-        printf("lastdir[3][1] = %d\n", lastDir[3][1]);
-        printf("\nlastdir[4][0] = %d\n", lastDir[4][0]);
-        printf("lastdir[4][1] = %d\n", lastDir[4][1]);
-        printf("\nlastdir[5][0] = %d\n", lastDir[5][0]);
-        printf("lastdir[5][1] = %d\n", lastDir[5][1]);
-        printf("\nqueuex = %d\n", queue1);
-        printf("queuey = %d\n", queue2);*/
-
-        /*Sleep(500);
-        if (_kbhit() != 0)//Detecte si on appuie sur le clavier
-        {
-            input = _getch();//Lecture de la derniere touche appuy�
-            fflush(stdin);
-        }*/
 
     } while (vie >= 1 && score < 10 && timer < 200);
     //END MAIN GAME LOOP
