@@ -21,8 +21,8 @@ int launchESHypeneatTest()
     neatparam.activationFunctions.push_back(new gaussianActivation());
     neatparam.activationFunctions.push_back(new absActivation());
 
-    neatparam.pbMutateLink = 0.15;// 0.05;
-    neatparam.pbMutateNode = 0.1;//0.03;
+    neatparam.pbMutateLink = 0.1;// 0.05;
+    neatparam.pbMutateNode = 0.06;//0.03;
     //neatparam.pbWeightShift = 0.7;
     //neatparam.pbWeightRandom = 0.2;
     neatparam.pbWeight = 0.9;// 0.9;
@@ -261,14 +261,14 @@ int snakeTest(NeuralNetwork* network, bool display)
     {
         for (cpt = 0; cpt < TAILLE_ECRAN; cpt++)
         {
-            screen[i][cpt] = 1;
+            screen[i][cpt] = 0;
         }
     }
 
     //Initialisation du snake
     for (int i = 0; i < 5; i++)
     {
-        screen[10+i][9] = 0;
+        screen[10+i][9] = -1;
         snake.push_back(std::pair<int, int>(10 + i, 9));
     }
 
@@ -276,9 +276,9 @@ int snakeTest(NeuralNetwork* network, bool display)
     {
         r1 = rand() % (TAILLE_ECRAN);
         r2 = rand() % (TAILLE_ECRAN);
-        if (screen[r1][r2] != 0)//on s'assure qu'il napparait pas sur le snake
+        if (screen[r1][r2] != -1)//on s'assure qu'il napparait pas sur le snake
         {
-            screen[r1][r2] = 2;
+            screen[r1][r2] = 5;
             found = 1;
         }
     } while (found == 0);
@@ -373,15 +373,15 @@ int snakeTest(NeuralNetwork* network, bool display)
             break;
         }
 
-        if (screen[snake.back().first][snake.back().second] == 2)//Si le serpent mange un fruit
+        if (screen[snake.back().first][snake.back().second] == 5)//Si le serpent mange un fruit
         {
             do//apparition d'un autre autre fruit
             {
                 r1 = rand() % (TAILLE_ECRAN);
                 r2 = rand() % (TAILLE_ECRAN);
-                if (screen[r1][r2] != 0 && abs(snake.back().first - r1) > 1 && abs(snake.back().second - r2))
+                if (screen[r1][r2] != -1 && abs(snake.back().first - r1) > 1 && abs(snake.back().second - r2))
                 {
-                    screen[r1][r2] = 2;
+                    screen[r1][r2] = 5;
                     mange = 1;
                 }
             } while (mange == 0);
@@ -390,17 +390,17 @@ int snakeTest(NeuralNetwork* network, bool display)
         }
 
         if ((snake.back().first >= TAILLE_ECRAN) || (snake.back().first < 0) || (snake.back().second >= TAILLE_ECRAN) || (snake.back().second < 0)
-            || (screen[snake.back().first][snake.back().second] == 0))//si le serpent sort de l'�cran ou se mange lui meme
+            || (screen[snake.back().first][snake.back().second] == -1))//si le serpent sort de l'�cran ou se mange lui meme
         {
             vie = 0;// Alors il meurt
         }
         else {
-            screen[snake.back().first][snake.back().second] = 0;//placement du nouveau morceau du snake
+            screen[snake.back().first][snake.back().second] = -1;//placement du nouveau morceau du snake
 
             if (mange == 0)//Si le serpent n'est pas en train de manger
             {
 
-                screen[snake[0].first][snake[0].first] = 1;//effacement du dernier morceau du serpent
+                screen[snake[0].first][snake[0].second] = 0;//effacement du dernier morceau du serpent
                 snake.pop_front();
             }
             else {//Si le serpent est en train de manger alors on n'efface pas de bout su serpent pour cette frame
@@ -418,13 +418,13 @@ int snakeTest(NeuralNetwork* network, bool display)
                     {
                         switch (screen[i][cpt])
                         {
-                        case 1:
+                        case 0:
                             printf("_");
                             break;
-                        case 0:
+                        case -1:
                             printf("o");
                             break;
-                        case 2:
+                        case 5:
                             printf("X");
                             break;
                             /*case 5 :
@@ -451,10 +451,10 @@ int snakeTest(NeuralNetwork* network, bool display)
         return 0;
     }else if (score < 10)
     {
-        return pow(score * 5, 2) / 10.f + timer;
+        return pow(score, 4) / 10.f + timer;
     }
     else {
-        return pow(score * 50, 2) / 10.f + 200;
+        return pow(score, 6) / 10.f + 200;
     }
     
 }
