@@ -300,13 +300,13 @@ int snakeTest(NeuralNetwork* network, bool display)
             for (int i2 = 0; i2 < TAILLE_ECRAN; i2++)
             {
                 //Use a special input for the head
-                if(snake.back() != std::pair<int, int>(i, i2))
-                {
+                //if(snake.back() != std::pair<int, int>(i, i2))
+                //{
                     networkInput[i * TAILLE_ECRAN + i2] = screen[i][i2];
-                }
-                else {
-                    networkInput[i * TAILLE_ECRAN + i2] = 5;
-                }
+                //}
+                //else {
+                //    networkInput[i * TAILLE_ECRAN + i2] = 5;
+                //}
             }
         }
 
