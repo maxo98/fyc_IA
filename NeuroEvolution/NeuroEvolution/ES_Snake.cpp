@@ -7,6 +7,7 @@
 #include <time.h>
 #include <iostream>
 
+#define TEST2
 
 #define TAILLE_ECRAN 20
 //#define TAILLE_SNAKE 11 //nombre de direction diff�rente pouvant etre enregistrer + 1
@@ -91,18 +92,24 @@ int launchESHypeneatTest()
     esParam.varianceThreshold = 2;
     esParam.allowRecurisvity = false;
 
+#ifdef TEST1
     esParam.center.push_back(10);
     esParam.center.push_back(10);
+#endif // TEST1
+
+#ifdef TEST2
+    esParam.center.push_back(0);
+    esParam.center.push_back(0);
+#endif // TEST2
 
     int popSize = 150;
 
     std::vector<float> pos;
     pos.resize(2);
 
-    int count = 0;
-
     ES_Hyperneat esHyper(popSize, neatparam, hyperneatParam, esParam);
 
+#ifdef TEST1
     for (int i = 1; i <= 20; i++)
     {
         pos[0] = i;
@@ -111,8 +118,7 @@ int launchESHypeneatTest()
         {
             pos[1] = j;
 
-            esHyper.addInput(pos);       
-            count++;
+            esHyper.addInput(pos);
         }
     }
 
@@ -133,6 +139,42 @@ int launchESHypeneatTest()
     pos[0] = 19;
     pos[1] = 10;
     esHyper.addOutput(pos);
+#endif // TEST1
+
+#ifdef TEST2
+    for (int i = -20; i <= 20; i++)
+    {
+        pos[0] = i;
+
+        for (int j = -20; j <= 20; j++)
+        {
+            pos[1] = j;
+
+            if (i != 0 || j != 0)
+            {
+                esHyper.addInput(pos);
+            }
+        }
+    }
+
+    //Set network output, up, down, left, right
+
+    pos[0] = 0;
+    pos[1] = 1;
+    esHyper.addOutput(pos);
+
+    pos[0] = 0;
+    pos[1] = -1;
+    esHyper.addOutput(pos);
+
+    pos[0] = -1;
+    pos[1] = 0;
+    esHyper.addOutput(pos);
+
+    pos[0] = 1;
+    pos[1] = 0;
+    esHyper.addOutput(pos);
+#endif // TEST2
 
     esHyper.generateNetworks();
 
@@ -185,33 +227,33 @@ bool esHypeneatTest(int popSize, ES_Hyperneat& esHyper)
         int count = 0;
 
 #ifdef MULTITHREAD
-        while (workload < 1)
-        {
-            cpus--;
-            workload = totalWorkload / cpus;
-        }
+        //while (workload < 1)
+        //{
+        //    cpus--;
+        //    workload = totalWorkload / cpus;
+        //}
 
-        currentWorkload = floor(workload);
-        float workloadFrac = fmod(workload, 1.0f);
-        restWorkload = workloadFrac;
+        //currentWorkload = floor(workload);
+        //float workloadFrac = fmod(workload, 1.0f);
+        //restWorkload = workloadFrac;
 
-        while (cpus > threads.size() + 1)
-        {
-            threads.push_back(std::thread(snakeEvaluate, startIndex, currentWorkload + floor(restWorkload), std::ref(fitness), std::ref(esHyper)));
+        //while (cpus > threads.size() + 1)
+        //{
+        //    threads.push_back(std::thread(snakeEvaluate, startIndex, currentWorkload + floor(restWorkload), std::ref(fitness), std::ref(esHyper)));
 
-            count += currentWorkload + floor(restWorkload);
+        //    count += currentWorkload + floor(restWorkload);
 
-            startIndex += currentWorkload + floor(restWorkload);
+        //    startIndex += currentWorkload + floor(restWorkload);
 
-            restWorkload -= floor(restWorkload);
-            restWorkload += workloadFrac;
-        }
+        //    restWorkload -= floor(restWorkload);
+        //    restWorkload += workloadFrac;
+        //}
 
-        while (restWorkload > 0)
-        {
-            restWorkload--;
-            currentWorkload++;
-        }
+        //while (restWorkload > 0)
+        //{
+        //    restWorkload--;
+        //    currentWorkload++;
+        //}
 #endif //MULTITHREAD
 
         count += currentWorkload;
@@ -288,27 +330,47 @@ int snakeTest(NeuralNetwork* network, bool display)
     std::vector<float> networkInput, output;
     int countChangeDir = 0;
 
-
+#ifdef TEST1
     networkInput.resize(sizeof(screen));
+#endif // TEST1
 
     //START MAIN GAME LOOP
     do {
         timer++;
-
+#ifdef TEST1
         for (int i = 0; i < TAILLE_ECRAN; i++)
         {
             for (int i2 = 0; i2 < TAILLE_ECRAN; i2++)
             {
-                //Use a special input for the head
-                //if(snake.back() != std::pair<int, int>(i, i2))
-                //{
-                    networkInput[i * TAILLE_ECRAN + i2] = screen[i][i2];
-                //}
-                //else {
-                //    networkInput[i * TAILLE_ECRAN + i2] = 5;
-                //}
+                networkInput[i * TAILLE_ECRAN + i2] = screen[i][i2];
             }
         }
+#endif // TEST1
+
+#ifdef TEST2
+        std::pair<int, int> pos;
+
+        for (int i = 0; i <= (TAILLE_ECRAN * 2); i++)
+        {
+            for (int i2 = 0; i2 <= (TAILLE_ECRAN * 2); i2++)
+            {
+                if (i != 0 || i2 != 0)
+                {
+                    pos.first = i - snake.back().first;
+                    pos.second = i2 - snake.back().second;
+
+                    if (pos.first >= 0 && pos.first < 20 && pos.second >= 0 && pos.second < 20)
+                    {
+                        networkInput.push_back(screen[pos.first][pos.second]);
+                    }
+                    else {
+                        networkInput.push_back(-1);
+                    }
+                }
+            }
+        }
+
+#endif // TEST2
 
         network->compute(networkInput, output);
 
@@ -444,8 +506,13 @@ int snakeTest(NeuralNetwork* network, bool display)
             }*/
         }
 
-    } while (vie >= 1 && score < 10 && timer < 200);
+#ifdef TEST2
+        networkInput.clear();
+#endif TEST2
+
+    } while (vie >= 1 && score < 10 && timer < 200 && timer < (20 * (score + 1)));
     //END MAIN GAME LOOP
+
     if (countChangeDir == 0)
     {
         return 0;
@@ -456,5 +523,4 @@ int snakeTest(NeuralNetwork* network, bool display)
     else {
         return pow(score, 6) / 10.f + 200;
     }
-    
 }
