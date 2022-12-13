@@ -7,47 +7,13 @@
 
 NeuralNetwork::NeuralNetwork()
 {
-	//Just for testing purpose
-	//addInputNode();
-	//addInputNode();
-	//addInputNode();
-
-	//addOutputNode();
-	//addOutputNode();
-	//addOutputNode();
-
-	//addHiddenNode(0);
-	//addHiddenNode(0);
-	//addHiddenNode(1);
-	//addHiddenNode(1);
-	//addHiddenNode(1);
-
-	/*connectNodes(0, 0, 1, 1, 0.5);
-	connectNodes(0, 1, 1, 1, 0.5);
-	connectNodes(1, 1, 2, 0, 1.5);
-	connectNodes(2, 0, 3, 2, 1);
-
-	connectNodes(0, 2, 1, 0, 1.5);
-	connectNodes(1, 0, 2, 2, 0.75);
-	connectNodes(2, 2, 3, 0, 3);
-
-	connectNodes(0, 2, 3, 0, 1.5);
-
-	std::vector<float> inputs, ouputs;
-
-	inputs.push_back(1);
-	inputs.push_back(1);
-	inputs.push_back(2);
-
-	compute(inputs, ouputs);*/
-
-	//fullyConnect();
 }
 
 NeuralNetwork::~NeuralNetwork()
 {
 }
 
+//Might be deprecated
 void NeuralNetwork::fullyConnect()
 {
 	//Connect ouput nodes to previous layer
@@ -272,7 +238,7 @@ Node* NeuralNetwork::getNodeFromLayer(std::deque<Node>& layer, unsigned int node
 	}
 }
 
-void NeuralNetwork::compute(const std::vector<float>& inputs, std::vector<float>& outputs)
+bool NeuralNetwork::compute(const std::vector<float>& inputs, std::vector<float>& outputs)
 {
 	//outputs.clear();
 
@@ -321,9 +287,13 @@ void NeuralNetwork::compute(const std::vector<float>& inputs, std::vector<float>
 
 		//Compute the result
 		splitLayerComputing(outputNodes.begin(), outputNodes.size(), true, &outputs);
+
+		return true;
 	}
 	else {
 		std::cout << "Inputs given smaller than expected\n";
+
+		return false;
 	}
 }
 
@@ -415,6 +385,66 @@ void NeuralNetwork::concurrentComputing(int workload, int startIndex, std::deque
 			//std::cout << i << " " << it->compute();
 		}else{
 			(*outputs)[i] = it->compute();
+		}
+	}
+}
+
+void NeuralNetwork::backprop(const std::vector<float>& inputs, const std::vector<float>& outputs, float learnRate)
+{
+	std::vector<float> tmp;
+
+	if (compute(inputs, tmp) == true)
+	{
+		//Compute error and update weight
+		int i = 0;
+		for (std::deque<Node>::iterator it = outputNodes.begin(); it != outputNodes.end(); ++it, ++i)
+		{
+			it->delta = (it->value - outputs[i]) * it->activation->derivate(it->value);
+
+			for (int cpt = 0; cpt < it->previousNodes.size(); cpt++)
+			{
+				it->previousNodes[cpt].first->delta += it->previousNodes[cpt].second * it->delta;
+				it->previousNodes[cpt].second -= learnRate * it->delta * it->previousNodes[cpt].first->value;//Update weights
+			}
+		}
+
+		for (std::deque<std::deque<Node>>::iterator itLayer = hiddenNodes.begin(); itLayer != hiddenNodes.end(); ++itLayer)
+		{
+			for (std::deque<Node>::iterator itNode = itLayer->begin(); itNode != itLayer->end(); ++itNode)
+			{
+				itNode->delta *= itNode->activation->derivate(itNode->value);
+
+				for (int cpt = 0; cpt < itNode->previousNodes.size(); cpt++)
+				{
+					itNode->previousNodes[cpt].first->delta += itNode->previousNodes[cpt].second * itNode->delta;
+					itNode->previousNodes[cpt].second -= learnRate * itNode->delta * itNode->previousNodes[cpt].first->value;//Update weights
+				}
+			}
+		}
+	}
+}
+
+bool NeuralNetwork::applyBackprop(Genome& gen)
+{
+	std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>* map = gen.getNodesToConn();
+	std::map<unsigned int, GeneConnection>* conn = gen.getConnections();
+
+	for (std::deque<Node>::iterator it = outputNodes.begin(); it != outputNodes.end(); ++it)
+	{
+		for (int cpt = 0; cpt < it->previousNodes.size(); cpt++)
+		{
+			(*conn)[(*map)[std::pair<unsigned int, unsigned int>(it->previousNodes[cpt].first->id, it->id)]].setWeight(it->previousNodes[cpt].second);
+		}
+	}
+
+	for (std::deque<std::deque<Node>>::iterator itLayer = hiddenNodes.begin(); itLayer != hiddenNodes.end(); ++itLayer)
+	{
+		for (std::deque<Node>::iterator itNode = itLayer->begin(); itNode != itLayer->end(); ++itNode)
+		{
+			for (int cpt = 0; cpt < itNode->previousNodes.size(); cpt++)
+			{
+				(*conn)[(*map)[std::pair<unsigned int, unsigned int>(itNode->previousNodes[cpt].first->id, itNode->id)]].setWeight(itNode->previousNodes[cpt].second);
+			}
 		}
 	}
 }

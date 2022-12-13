@@ -3,6 +3,7 @@
 #include "XorTask.h"
 #include "TestHyperneat.h"
 #include "ES_Snake.h"
+#include "BackpropTest.h"
 
 int main()
 {
@@ -14,6 +15,8 @@ int main()
 
 	//return launchXor();
 	//return launchHypeneatTest();
-	return launchESHypeneatTest();
+	//return launchESHypeneatTest();
+	backpropTest();
+	return 1;
 }
 

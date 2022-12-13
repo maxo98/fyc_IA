@@ -1,55 +1,53 @@
-﻿  ES_Snake.cpp
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(28,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(63,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(71,69): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(78,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(85,56): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(92,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(99,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(106,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(113,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(127,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(23,37): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(25,38): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(26,39): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.h(90,33): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(24,34): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(25,33): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(28,29): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(29,34): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(33,39): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(37,33): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(40,29): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(47,37): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(49,43): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(53,31): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(58,42): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(77,26): warning C4305: 'initialisation' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(89,32): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(108,18): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(112,22): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(180,29): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(183,29): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(246,31): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(681,41): warning C4244: 'return' : conversion de 'double' en 'int', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(684,42): warning C4244: 'return' : conversion de 'double' en 'int', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(336,22): warning C4390: ';' : une instruction contrôlée a été trouvée vide ; est-ce ce que vous souhaitiez ?
-  Génération de code en cours
-  1 of 3231 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    3 functions had inline decision re-evaluated but remain unchanged
-  Fin de la génération du code
-  NeuroEvolution.vcxproj -> C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\x64\Release\NeuroEvolution.exe
+﻿  Genome.cpp
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(41,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(59,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(84,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(111,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(120,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(127,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(136,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(28,72): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(59,49): warning C4267: '=' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(91,44): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(92,44): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(96,17): warning C4101: 'err' : variable locale non référencée
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(138,64): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(159,40): warning C4267: 'initialisation' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(231,73): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(246,68): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(246,68): warning C4305: 'argument' : troncation de 'double' à 'float'
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(249,71): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(287,33): warning C4244: '=' : conversion de 'unsigned __int64' en 'float', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(288,25): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(317,29): warning C4305: '=' : troncation de 'double' à 'float'
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(318,33): warning C4305: '=' : troncation de 'double' à 'float'
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(323,33): warning C4305: '=' : troncation de 'double' à 'float'
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(329,34): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(330,45): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(333,34): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(334,38): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(383,73): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(386,73): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(556,22): error C2429: fonctionnalité de langage 'liaisons structurées' exige l'indicateur de compilateur '/std:c++17'
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(566,21): error C2679: '<<' binaire : aucun opérateur trouvé qui accepte un opérande de partie droite de type 'Genome::DataToSaveStruct' (ou il n'existe pas de conversion acceptable)
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\ostream(465,39): message : est peut-être 'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(std::basic_streambuf<char,std::char_traits<char>> *)'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\ostream(440,39): message : ou       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(const void *)'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\ostream(422,39): message : ou       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(long double)'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\ostream(404,39): message : ou       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(double)'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\ostream(386,39): message : ou       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(float)'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\ostream(368,39): message : ou       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(unsigned __int64)'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\ostream(350,39): message : ou       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(__int64)'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\ostream(332,39): message : ou       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(unsigned long)'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\ostream(314,39): message : ou       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(long)'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\ostream(295,39): message : ou       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(unsigned int)'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\ostream(269,39): message : ou       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(int)'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\ostream(250,39): message : ou       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(unsigned short)'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\ostream(216,39): message : ou       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(short)'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\ostream(198,39): message : ou       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(bool)'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\ostream(193,39): message : ou       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(std::ios_base &(__cdecl *)(std::ios_base &))'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\ostream(188,39): message : ou       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(std::basic_ios<char,std::char_traits<char>> &(__cdecl *)(std::basic_ios<char,std::char_traits<char>> &))'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\ostream(183,39): message : ou       'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(std::basic_ostream<char,std::char_traits<char>> &(__cdecl *)(std::basic_ostream<char,std::char_traits<char>> &))'
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Utils.h(31,15): message : ou       'std::ostream &operator <<(std::ostream &,const std::pair<int,int> &)'
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Utils.h(30,15): message : ou       'std::ostream &operator <<(std::ostream &,const std::vector<float,std::allocator<float>> &)'
+C:\Users\bossC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(566,21): message : lors de la tentative de mise en correspondance de la liste des arguments '(std::fstream, Genome::DataToSaveStruct)'

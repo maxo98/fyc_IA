@@ -13,7 +13,7 @@
 class Node
 {
 public:
-	Node(Activation* activation);
+	Node(Activation* activation, int _id = -1);
 	~Node();
 
 	void wipeConnections();
@@ -23,11 +23,11 @@ public:
 
 	inline float getOldValue() { return oldValue; }
 
-	inline void setValue(float x) { value = x; computed = true; };
+	inline void setValue(float x) { value = x; computed = true; delta = 0; };
 
 	float compute();
-	inline void reset() { computed = false; oldValue = 0; value = 0; };
-	inline void next() { computed = false; oldValue = value; };
+	inline void reset() { computed = false; oldValue = 0; value = 0; delta = 0; };
+	inline void next() { computed = false; oldValue = value; delta = 0; };
 
 	friend class ANeuralNetworkDisplayHUD;
 	friend class NeuralNetwork;
@@ -42,4 +42,6 @@ private:
 	bool computed = false;
 	float value;
 	float oldValue;
+	int id;
+	float delta = 0;//Error bakcprop
 };

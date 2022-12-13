@@ -22,6 +22,8 @@ public:
 	inline float getWeight() const { return weight; };
 	inline bool isEnabled() const { return enabled; };
 
+	inline void setWeight(float _weight) { weight = _weight; };
+
 	friend class Genome;
 	friend class CPPN_Neat;
 

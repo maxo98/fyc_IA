@@ -8,6 +8,7 @@
 #include "Node.h"
 #include <utility>
 #include <deque>
+#include "Genome.h"
 
 /**
  * Refer to the nodes by there index starting from 0
@@ -18,7 +19,7 @@ public:
 	NeuralNetwork();
 	~NeuralNetwork();
 
-	void fullyConnect();
+	void fullyConnect();//Might be deprecated
 
 	inline unsigned int getLayerSize() { return hiddenNodes.size() + 2; };
 	unsigned int getNHiddenNode(unsigned int layer);
@@ -38,9 +39,12 @@ public:
 	void connectNodes(unsigned int layerA, unsigned int nodeA, unsigned int layerB, unsigned int nodeB, float weight);
 	void connectNodes(std::pair<unsigned int, unsigned int> nodeA, std::pair<unsigned int, unsigned int> nodeB, float weight);
 
-	void compute(const std::vector<float> &inputs , std::vector<float> &outputs);
+	bool compute(const std::vector<float> &inputs , std::vector<float> &outputs);
 	void splitLayerComputing(std::deque<Node>::iterator it, int size, bool output = false, std::vector<float>* outputs = nullptr);
 	void concurrentComputing(int workload, int startIndex, std::deque<Node>::iterator it, bool output, std::vector<float>* outputs);
+
+	void backprop(const std::vector<float>& inputs, const std::vector<float>& outputs, float learnRate);
+	bool applyBackprop(Genome& gen);
 
 	void clear();
 
