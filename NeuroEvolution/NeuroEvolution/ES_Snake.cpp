@@ -142,11 +142,11 @@ int launchESHypeneatTest()
 #endif // TEST1
 
 #ifdef TEST2
-    for (int i = -10; i <= 10; i++)
+    for (int i = -20; i <= 20; i++)
     {
         pos[0] = i;
 
-        for (int j = -10; j <= 10; j++)
+        for (int j = -20; j <= 20; j++)
         {
             pos[1] = j;
 
@@ -350,9 +350,9 @@ int snakeTest(NeuralNetwork* network, bool display)
 #ifdef TEST2
         std::pair<int, int> pos;
 
-        for (int i = 0; i <= TAILLE_ECRAN; i++)
+        for (int i = 0; i <= (TAILLE_ECRAN * 2); i++)
         {
-            for (int i2 = 0; i2 <= TAILLE_ECRAN; i2++)
+            for (int i2 = 0; i2 <= (TAILLE_ECRAN * 2); i2++)
             {
                 if (i != 0 || i2 != 0)
                 {
