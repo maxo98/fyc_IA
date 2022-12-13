@@ -142,11 +142,11 @@ int launchESHypeneatTest()
 #endif // TEST1
 
 #ifdef TEST2
-    for (int i = -20; i <= 20; i++)
+    for (int i = -10; i <= 10; i++)
     {
         pos[0] = i;
 
-        for (int j = -20; j <= 20; j++)
+        for (int j = -10; j <= 10; j++)
         {
             pos[1] = j;
 
@@ -227,33 +227,33 @@ bool esHypeneatTest(int popSize, ES_Hyperneat& esHyper)
         int count = 0;
 
 #ifdef MULTITHREAD
-        //while (workload < 1)
-        //{
-        //    cpus--;
-        //    workload = totalWorkload / cpus;
-        //}
+        while (workload < 1)
+        {
+            cpus--;
+            workload = totalWorkload / cpus;
+        }
 
-        //currentWorkload = floor(workload);
-        //float workloadFrac = fmod(workload, 1.0f);
-        //restWorkload = workloadFrac;
+        currentWorkload = floor(workload);
+        float workloadFrac = fmod(workload, 1.0f);
+        restWorkload = workloadFrac;
 
-        //while (cpus > threads.size() + 1)
-        //{
-        //    threads.push_back(std::thread(snakeEvaluate, startIndex, currentWorkload + floor(restWorkload), std::ref(fitness), std::ref(esHyper)));
+        while (cpus > threads.size() + 1)
+        {
+            threads.push_back(std::thread(snakeEvaluate, startIndex, currentWorkload + floor(restWorkload), std::ref(fitness), std::ref(esHyper)));
 
-        //    count += currentWorkload + floor(restWorkload);
+            count += currentWorkload + floor(restWorkload);
 
-        //    startIndex += currentWorkload + floor(restWorkload);
+            startIndex += currentWorkload + floor(restWorkload);
 
-        //    restWorkload -= floor(restWorkload);
-        //    restWorkload += workloadFrac;
-        //}
+            restWorkload -= floor(restWorkload);
+            restWorkload += workloadFrac;
+        }
 
-        //while (restWorkload > 0)
-        //{
-        //    restWorkload--;
-        //    currentWorkload++;
-        //}
+        while (restWorkload > 0)
+        {
+            restWorkload--;
+            currentWorkload++;
+        }
 #endif //MULTITHREAD
 
         count += currentWorkload;
@@ -350,9 +350,9 @@ int snakeTest(NeuralNetwork* network, bool display)
 #ifdef TEST2
         std::pair<int, int> pos;
 
-        for (int i = 0; i <= (TAILLE_ECRAN * 2); i++)
+        for (int i = 0; i <= TAILLE_ECRAN; i++)
         {
-            for (int i2 = 0; i2 <= (TAILLE_ECRAN * 2); i2++)
+            for (int i2 = 0; i2 <= TAILLE_ECRAN; i2++)
             {
                 if (i != 0 || i2 != 0)
                 {
