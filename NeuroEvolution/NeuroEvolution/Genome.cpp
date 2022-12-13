@@ -546,27 +546,27 @@ void Genome::shiftNodes(unsigned int node, unsigned int layerMin)
 
 void Genome::saveCurrentGenome() 
 {
-    std::set<DataToSaveStruct> saveBuffer;
+    //std::set<DataToSaveStruct> saveBuffer;
 
-    for (const auto node : nodes)
-    {
-        saveBuffer.insert(DataToSaveStruct(&node));
-    }
+    //for (const auto node : nodes)
+    //{
+    //    saveBuffer.insert(DataToSaveStruct(&node));
+    //}
 
-    for (const auto [id, connection] : connections)
-    {
-        saveBuffer.insert(DataToSaveStruct(&connection, id));
-    }
+    //for (const auto [id, connection] : connections)
+    //{
+    //    saveBuffer.insert(DataToSaveStruct(&connection, id));
+    //}
 
-    std::fstream file;
-    file.open("test.txt", std::fstream::in | std::fstream::out | std::fstream::trunc);
+    //std::fstream file;
+    //file.open("test.txt", std::fstream::in | std::fstream::out | std::fstream::trunc);
 
-    for (auto data : saveBuffer)
-    {
-        file << data;
-    }
+    //for (auto data : saveBuffer)
+    //{
+    //    file << data;
+    //}
 
-    file.close();
+    //file.close();
 }
 
 void Genome::loadGenome()
@@ -583,4 +583,9 @@ std::string Genome::toString()
         + " orderAddedCon size " + std::to_string(orderAddedCon.size()) + " nodes size " + std::to_string(nodes.size());
 
     return str;
+}
+
+void Genome::addHiddenNode(Activation* activation, unsigned int layer)
+{
+    nodes.push_back(GeneNode(NODE_TYPE::HIDDEN, activation, layer));
 }

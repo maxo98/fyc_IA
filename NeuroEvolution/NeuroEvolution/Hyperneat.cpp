@@ -139,7 +139,7 @@ void Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 	net.clear();
 
 	//Add the input layer
-	net.addInputNode(inputSubstrate.size());
+	net.addMultipleInputNode(inputSubstrate.size());
 
 	std::unordered_set<std::vector<float>, HyperNodeHash>::iterator beginPreviousLayer = inputSubstrate.begin();
 	std::unordered_set<std::vector<float>, HyperNodeHash>::iterator endPreviousLayer = inputSubstrate.end();

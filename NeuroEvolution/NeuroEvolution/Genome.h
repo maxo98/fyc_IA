@@ -54,6 +54,8 @@ public:
 	inline void setEliminate(bool value) { eliminate = value; };
 	inline bool getEliminate() { return eliminate; };
 
+	void addHiddenNode(Activation* activation, unsigned int layer);
+
 	void saveCurrentGenome();
 	static void loadGenome();
 

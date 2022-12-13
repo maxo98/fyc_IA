@@ -26,11 +26,11 @@ public:
 	inline unsigned int getNInputNode() { return inputNodes.size(); }
 	inline unsigned int getNOutputNode() { return outputNodes.size(); }
 
-	std::pair<unsigned int, unsigned int> addHiddenNode(unsigned int layer, Activation* activation);
+	std::pair<unsigned int, unsigned int> addHiddenNode(unsigned int layer, Activation* activation, int id = -1);
 	void addHiddenNode(int n, unsigned int layer, Activation* activation);
-	std::pair<unsigned int, unsigned int> addInputNode();
-	void addInputNode(int n);
-	std::pair<unsigned int, unsigned int> addOutputNode(Activation* activation);
+	std::pair<unsigned int, unsigned int> addInputNode(int id = -1);
+	void addMultipleInputNode(int n);
+	std::pair<unsigned int, unsigned int> addOutputNode(Activation* activation, int id = -1);
 	void addOutputNode(int n, Activation* activation);
 	void removeHiddenNode(unsigned int layer);
 	inline void removeInputNode() { inputNodes.pop_back(); };
@@ -44,7 +44,7 @@ public:
 	void concurrentComputing(int workload, int startIndex, std::deque<Node>::iterator it, bool output, std::vector<float>* outputs);
 
 	void backprop(const std::vector<float>& inputs, const std::vector<float>& outputs, float learnRate);
-	bool applyBackprop(Genome& gen);
+	void applyBackprop(Genome& gen);
 
 	void clear();
 

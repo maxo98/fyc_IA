@@ -15,8 +15,8 @@ int main()
 
 	//return launchXor();
 	//return launchHypeneatTest();
-	//return launchESHypeneatTest();
-	backpropTest();
+	return launchESHypeneatTest();
+	//backpropTest();
 	return 1;
 }
 

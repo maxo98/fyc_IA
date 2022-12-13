@@ -111,7 +111,7 @@ void NeuralNetwork::addHiddenNode(int n, unsigned int layer, Activation* activat
 	}
 }
 
-std::pair<unsigned int, unsigned int> NeuralNetwork::addHiddenNode(unsigned int layer, Activation* activation)
+std::pair<unsigned int, unsigned int> NeuralNetwork::addHiddenNode(unsigned int layer, Activation* activation, int id)
 {
 	if (layer > hiddenNodes.size())
 	{
@@ -120,7 +120,7 @@ std::pair<unsigned int, unsigned int> NeuralNetwork::addHiddenNode(unsigned int 
 			hiddenNodes.push_back(std::deque<Node>());
 		}
 		
-		hiddenNodes.back().push_back(Node(activation));
+		hiddenNodes.back().push_back(Node(activation, id));
 
 		return std::pair<unsigned int, unsigned int>(layer, hiddenNodes.back().size()-1);
 	}
@@ -131,25 +131,25 @@ std::pair<unsigned int, unsigned int> NeuralNetwork::addHiddenNode(unsigned int 
 	std::deque<std::deque<Node>>::iterator it;
 	for (it = hiddenNodes.begin(); it != hiddenNodes.end() && i != layer; ++it, ++i);
 
-	it->push_back(Node(activation));
+	it->push_back(Node(activation, id));
 
 	return std::pair<unsigned int, unsigned int>(layer+1, it->size() - 1);
 }
 
-std::pair<unsigned int, unsigned int> NeuralNetwork::addInputNode()
+std::pair<unsigned int, unsigned int> NeuralNetwork::addInputNode(int id)
 { 
-	inputNodes.push_back(Node(&dummyActivation));
+	inputNodes.push_back(Node(&dummyActivation, id));
 	return std::pair<unsigned int, unsigned int>(0, inputNodes.size() - 1);
 }
 
-void NeuralNetwork::addInputNode(int n)
+void NeuralNetwork::addMultipleInputNode(int n)
 {
 	inputNodes.resize(inputNodes.size() + n, Node(&dummyActivation));
 }
 
-std::pair<unsigned int, unsigned int> NeuralNetwork::addOutputNode(Activation* activation)
+std::pair<unsigned int, unsigned int> NeuralNetwork::addOutputNode(Activation* activation, int id)
 { 
-	outputNodes.push_back(Node(activation)); 
+	outputNodes.push_back(Node(activation, id)); 
 	return std::pair<unsigned int, unsigned int>(std::numeric_limits<unsigned int>::max(), outputNodes.size() - 1);
 }
 
@@ -424,7 +424,7 @@ void NeuralNetwork::backprop(const std::vector<float>& inputs, const std::vector
 	}
 }
 
-bool NeuralNetwork::applyBackprop(Genome& gen)
+void NeuralNetwork::applyBackprop(Genome& gen)
 {
 	std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>* map = gen.getNodesToConn();
 	std::map<unsigned int, GeneConnection>* conn = gen.getConnections();
