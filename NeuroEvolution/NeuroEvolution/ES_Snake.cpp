@@ -17,10 +17,10 @@ int launchESHypeneatTest()
     NeatParameters neatparam;
 
     //neatparam.activationFunctions.push_back(new thresholdActivation());
-    neatparam.activationFunctions.push_back(new sigmoidActivation());
-    neatparam.activationFunctions.push_back(new sinActivation());
-    neatparam.activationFunctions.push_back(new gaussianActivation());
-    neatparam.activationFunctions.push_back(new absActivation());
+    neatparam.activationFunctions.push_back(new SigmoidActivation());
+    neatparam.activationFunctions.push_back(new SinActivation());
+    neatparam.activationFunctions.push_back(new GaussianActivation());
+    neatparam.activationFunctions.push_back(new AbsActivation());
 
     neatparam.pbMutateLink = 0.1;// 0.05;
     neatparam.pbMutateNode = 0.06;//0.03;
@@ -67,7 +67,7 @@ int launchESHypeneatTest()
 
     HyperneatParameters hyperneatParam;
 
-    hyperneatParam.activationFunction = new linearActivation();
+    hyperneatParam.activationFunction = new LinearActivation();
     hyperneatParam.cppnInput = 5;
     hyperneatParam.cppnInputFunction = biasCppnInput;
     hyperneatParam.cppnOutput = 1;
