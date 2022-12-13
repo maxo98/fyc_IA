@@ -6,7 +6,7 @@ int launchXor()
 	NeatParameters neatparam;
 
 	//neatparam.activationFunctions.push_back(new thresholdActivation());
-	neatparam.activationFunctions.push_back(new sigmoidActivation());
+	neatparam.activationFunctions.push_back(new SigmoidActivation());
 
 	neatparam.pbMutateLink = 0.5;// 0.05;
 	neatparam.pbMutateNode = 0.3;//0.03;
