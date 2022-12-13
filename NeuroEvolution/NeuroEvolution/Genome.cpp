@@ -357,7 +357,7 @@ void Genome::mutateWeights(float power, float rate, WEIGHT_MUTATOR mutType)
         }
         else if (mutType == WEIGHT_MUTATOR::COLDGAUSSIAN)
         {
-        connections[orderAddedCon[i]].weight = randNum;
+            connections[orderAddedCon[i]].weight = randNum;
         }
 
         num += 1.0;
@@ -542,6 +542,36 @@ void Genome::shiftNodes(unsigned int node, unsigned int layerMin)
             }
         }
     }
+}
+
+void Genome::saveCurrentGenome() 
+{
+    std::set<DataToSaveStruct> saveBuffer;
+
+    for (const auto node : nodes)
+    {
+        saveBuffer.insert(DataToSaveStruct(&node));
+    }
+
+    for (const auto [id, connection] : connections)
+    {
+        saveBuffer.insert(DataToSaveStruct(&connection, id));
+    }
+
+    std::fstream file;
+    file.open("test.txt", std::fstream::in | std::fstream::out | std::fstream::trunc);
+
+    for (auto data : saveBuffer)
+    {
+        file << data;
+    }
+
+    file.close();
+}
+
+void Genome::loadGenome()
+{
+
 }
 
 std::string Genome::toString()

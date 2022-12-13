@@ -2,18 +2,22 @@
 
 #pragma once
 
-#include "GeneConnection.h"
-#include "GeneNode.h"
 #include <map>
-#include <unordered_map>
+#include <set>
 #include <mutex>
+#include <fstream>
+#include <unordered_map>
+
 #include "Utils.h"
+#include "GeneNode.h"
+#include "GeneConnection.h"
 
 class CPPN_Neat;
 
 /**
  * 
  */
+
 class Genome
 {
 public:
@@ -49,6 +53,9 @@ public:
 	inline void setEliminate(bool value) { eliminate = value; };
 	inline bool getEliminate() { return eliminate; };
 
+	void saveCurrentGenome();
+	static void loadGenome();
+
 	//Parent A should be the fittest
 	void crossover(Genome& parentA, Genome& parentB, CROSSOVER type);
 
@@ -57,6 +64,50 @@ public:
 	std::string toString();
 
 private:
+
+	enum class DataToSaveEnum {
+		geneConnection,
+		geneNode
+	};
+
+	struct DataToSaveStruct {
+		DataToSaveEnum dataTypeEnum;
+		const GeneNode* geneNode;
+		const GeneConnection* geneConnection;
+		int idGeneConnection;
+
+		DataToSaveStruct(const GeneNode* geneNode)
+			: geneNode(geneNode),
+			dataTypeEnum(DataToSaveEnum::geneNode),
+			idGeneConnection(-1),
+			geneConnection(nullptr)
+		{};
+
+		DataToSaveStruct(const GeneConnection* geneConnection, const unsigned int id)
+			: geneConnection(geneConnection),
+			dataTypeEnum(DataToSaveEnum::geneConnection),
+			idGeneConnection(id),
+			geneNode(nullptr)
+		{};
+
+		std::ostream& operator<<(std::ostream& os) 
+		{
+			os << (int)dataTypeEnum;
+
+			if (dataTypeEnum == DataToSaveEnum::geneConnection)
+				os << geneConnection;
+			else
+				os << geneNode;
+
+			if (idGeneConnection >= 0)
+				os << idGeneConnection;
+
+			os << '\t';
+
+			return os;
+		};
+	};
+
 	void shiftNodes(unsigned int node, unsigned int layerMin);
 
 	unsigned int input;
