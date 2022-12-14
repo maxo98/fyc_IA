@@ -3,9 +3,10 @@
 
 #include "Node.h"
 
-Node::Node(Activation* _activation)
+Node::Node(Activation* _activation, int _id)
 {
 	activation = _activation;
+	id = _id;
 }
 
 Node::~Node()

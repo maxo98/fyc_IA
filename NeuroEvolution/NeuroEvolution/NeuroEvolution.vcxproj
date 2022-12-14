@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Activation.cpp" />
+    <ClCompile Include="BackpropTest.cpp" />
     <ClCompile Include="CPPN_Neat.cpp" />
     <ClCompile Include="ES_Hyperneat.cpp" />
     <ClCompile Include="ES_Snake.cpp" />
@@ -162,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Activation.h" />
+    <ClInclude Include="BackpropTest.h" />
     <ClInclude Include="CPPN_Neat.h" />
     <ClInclude Include="ES_Hyperneat.h" />
     <ClInclude Include="ES_Snake.h" />

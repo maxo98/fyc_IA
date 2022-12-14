@@ -185,7 +185,8 @@ void Neat::genomeToNetwork(Genome& genome, NeuralNetwork& network)
 	nodePosition.reserve(nodes->size());
 
 	//Add the nodes to the layer
-	for (std::vector<GeneNode>::iterator node = nodes->begin(); node != nodes->end(); ++node)
+	int i = 0;
+	for (std::vector<GeneNode>::iterator node = nodes->begin(); node != nodes->end(); ++node, ++i)
 	{
 		unsigned int layer = node->getLayer();
 
@@ -193,17 +194,17 @@ void Neat::genomeToNetwork(Genome& genome, NeuralNetwork& network)
 		{
 		case NODE_TYPE::HIDDEN:
 			nodePosition.push_back(std::pair<unsigned int, unsigned int>(layer, network.getNHiddenNode(layer)));
-			network.addHiddenNode(layer, node->getActivation());
+			network.addHiddenNode(layer, node->getActivation(), i);
 			break;
 
 		case NODE_TYPE::INPUT:
 			nodePosition.push_back(std::pair<unsigned int, unsigned int>(0, network.getNInputNode()));
-			network.addInputNode();
+			network.addInputNode(i);
 			break;
 
 		case NODE_TYPE::OUTPUT:
 			nodePosition.push_back(std::pair<unsigned int, unsigned int>(-1, network.getNOutputNode()));
-			network.addOutputNode(node->getActivation());
+			network.addOutputNode(node->getActivation(), i);
 			break;
 		}
 	}

@@ -46,6 +46,7 @@ public:
 	void mutateWeights(float power, float rate, WEIGHT_MUTATOR mutType);
 
 	inline std::map<unsigned int, GeneConnection>* const getConnections() { return &connections; };
+	inline std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>* getNodesToConn() { return &nodesToConnection; };
 	inline std::vector<GeneNode>* const getNodes() { return &nodes; };
 	inline void setScore(float _score) { score = _score; };
 	inline float getScore() { return score; };

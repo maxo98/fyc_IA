@@ -3,6 +3,7 @@
 #include "XorTask.h"
 #include "TestHyperneat.h"
 #include "ES_Snake.h"
+#include "BackpropTest.h"
 
 int main()
 {
@@ -12,8 +13,10 @@ int main()
 
 	srand(seed);//Some random parts don't use this seed 
 
-	return launchXor();
+	//return launchXor();
 	//return launchHypeneatTest();
-	//return launchESHypeneatTest();
+	return launchESHypeneatTest();
+	//backpropTest();
+	return 1;
 }
 

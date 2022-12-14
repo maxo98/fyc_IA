@@ -142,11 +142,11 @@ int launchESHypeneatTest()
 #endif // TEST1
 
 #ifdef TEST2
-    for (int i = -20; i <= 20; i++)
+    for (int i = -10; i < 10; i++)
     {
         pos[0] = i;
 
-        for (int j = -20; j <= 20; j++)
+        for (int j = -10; j < 10; j++)
         {
             pos[1] = j;
 
@@ -292,235 +292,242 @@ void snakeEvaluate(int startIndex, int currentWorkload, std::vector<float>& fitn
 
 int snakeTest(NeuralNetwork* network, bool display)
 {
-    char screen[TAILLE_ECRAN][TAILLE_ECRAN];
+    float totalScore = 0;
 
-    std::deque<std::pair<int, int>> snake;
-
-    int direction = 2, score = 0, input = 0, vie = 1, cpt, found = 0, r1, r2, mange = 0;
-    //srand(time(NULL));//G�n�ration seed al�atoire
-
-    for (int i = 0; i < TAILLE_ECRAN; i++)//Initialisation de l'�cran "� vide"
+    for(int test = 0; test < 3; test++)
     {
-        for (cpt = 0; cpt < TAILLE_ECRAN; cpt++)
+
+        char screen[TAILLE_ECRAN][TAILLE_ECRAN];
+
+        std::deque<std::pair<int, int>> snake;
+
+        int direction = 2, score = 0, input = 0, vie = 1, cpt, found = 0, r1, r2, mange = 0;
+        //srand(time(NULL));//G�n�ration seed al�atoire
+
+        for (int i = 0; i < TAILLE_ECRAN; i++)//Initialisation de l'�cran "� vide"
         {
-            screen[i][cpt] = 0;
-        }
-    }
-
-    //Initialisation du snake
-    for (int i = 0; i < 5; i++)
-    {
-        screen[10+i][9] = -1;
-        snake.push_back(std::pair<int, int>(10 + i, 9));
-    }
-
-    do//Apparition du premier fruit
-    {
-        r1 = rand() % (TAILLE_ECRAN);
-        r2 = rand() % (TAILLE_ECRAN);
-        if (screen[r1][r2] != -1)//on s'assure qu'il napparait pas sur le snake
-        {
-            screen[r1][r2] = 5;
-            found = 1;
-        }
-    } while (found == 0);
-
-    int timer = 0;
-
-    std::vector<float> networkInput, output;
-    int countChangeDir = 0;
-
-#ifdef TEST1
-    networkInput.resize(sizeof(screen));
-#endif // TEST1
-
-    //START MAIN GAME LOOP
-    do {
-        timer++;
-#ifdef TEST1
-        for (int i = 0; i < TAILLE_ECRAN; i++)
-        {
-            for (int i2 = 0; i2 < TAILLE_ECRAN; i2++)
+            for (cpt = 0; cpt < TAILLE_ECRAN; cpt++)
             {
-                networkInput[i * TAILLE_ECRAN + i2] = screen[i][i2];
+                screen[i][cpt] = 0;
             }
         }
-#endif // TEST1
 
-#ifdef TEST2
-        std::pair<int, int> pos;
-
-        for (int i = 0; i <= (TAILLE_ECRAN * 2); i++)
+        //Initialisation du snake
+        for (int i = 0; i < 5; i++)
         {
-            for (int i2 = 0; i2 <= (TAILLE_ECRAN * 2); i2++)
-            {
-                if (i != 0 || i2 != 0)
-                {
-                    pos.first = i - snake.back().first;
-                    pos.second = i2 - snake.back().second;
+            screen[10+i][9] = -1;
+            snake.push_back(std::pair<int, int>(10 + i, 9));
+        }
 
-                    if (pos.first >= 0 && pos.first < 20 && pos.second >= 0 && pos.second < 20)
-                    {
-                        networkInput.push_back(screen[pos.first][pos.second]);
-                    }
-                    else {
-                        networkInput.push_back(-1);
-                    }
+        do//Apparition du premier fruit
+        {
+            r1 = rand() % (TAILLE_ECRAN);
+            r2 = rand() % (TAILLE_ECRAN);
+            if (screen[r1][r2] != -1)//on s'assure qu'il napparait pas sur le snake
+            {
+                screen[r1][r2] = 5;
+                found = 1;
+            }
+        } while (found == 0);
+
+        int timer = 0;
+
+        std::vector<float> networkInput, output;
+        int countChangeDir = 0;
+
+    #ifdef TEST1
+        networkInput.resize(sizeof(screen));
+    #endif // TEST1
+
+        //START MAIN GAME LOOP
+        do {
+            timer++;
+    #ifdef TEST1
+            for (int i = 0; i < TAILLE_ECRAN; i++)
+            {
+                for (int i2 = 0; i2 < TAILLE_ECRAN; i2++)
+                {
+                    networkInput[i * TAILLE_ECRAN + i2] = screen[i][i2];
                 }
             }
-        }
+    #endif // TEST1
 
-#endif // TEST2
+    #ifdef TEST2
+            std::pair<int, int> pos;
 
-        network->compute(networkInput, output);
+            int count = 0;
 
-        //up, down, left, right
-        int directionIndex = 0;
-        float outputScore = output[0];
-
-        for (int i = 1; i < output.size(); i++)
-        {
-            if (output[i] > outputScore)
+            for (int i = -TAILLE_ECRAN/2; i < TAILLE_ECRAN/2; i++)
             {
-                directionIndex = i;
-                outputScore = output[i];
-            }
-        }
-
-        //Do not change direction by default
-        if (outputScore == 0)
-        {
-            directionIndex = -1;
-        }
-
-        switch (directionIndex)//lecture de l'entr� pour savoir quel direction prendre
-        {
-        case 0:
-            //std::cout << "UP\n";
-            direction = 8;
-            countChangeDir++;
-            break;
-        case 1:
-            //std::cout << "DOWN\n";
-            direction = 2;
-            countChangeDir++;
-            break;
-        case 2:
-            //std::cout << "LEFT\n";
-            direction = 4;
-            countChangeDir++;
-            break;
-        case 3:
-            //std::cout << "RIGHT\n";
-            direction = 6;
-            countChangeDir++;
-            break;
-        }
-
-        input = 0;//reset de l'input
-
-        switch (direction)//lecture de l'entr� pour savoir quel direction prendre
-        {
-        case 8:
-            snake.push_back(std::pair<int, int>(snake.back().first - 1, snake.back().second));
-            break;
-        case 2:
-            snake.push_back(std::pair<int, int>(snake.back().first + 1, snake.back().second));
-            break;
-        case 6:
-            snake.push_back(std::pair<int, int>(snake.back().first, snake.back().second + 1));
-            break;
-        case 4:
-            snake.push_back(std::pair<int, int>(snake.back().first, snake.back().second - 1));
-            break;
-        }
-
-        if (screen[snake.back().first][snake.back().second] == 5)//Si le serpent mange un fruit
-        {
-            do//apparition d'un autre autre fruit
-            {
-                r1 = rand() % (TAILLE_ECRAN);
-                r2 = rand() % (TAILLE_ECRAN);
-                if (screen[r1][r2] != -1 && abs(snake.back().first - r1) > 1 && abs(snake.back().second - r2))
+                count++;
+                for (int i2 = -TAILLE_ECRAN/2; i2 < TAILLE_ECRAN/2; i2++)
                 {
-                    screen[r1][r2] = 5;
-                    mange = 1;
-                }
-            } while (mange == 0);
-
-            score++;
-        }
-
-        if ((snake.back().first >= TAILLE_ECRAN) || (snake.back().first < 0) || (snake.back().second >= TAILLE_ECRAN) || (snake.back().second < 0)
-            || (screen[snake.back().first][snake.back().second] == -1))//si le serpent sort de l'�cran ou se mange lui meme
-        {
-            vie = 0;// Alors il meurt
-        }
-        else {
-            screen[snake.back().first][snake.back().second] = -1;//placement du nouveau morceau du snake
-
-            if (mange == 0)//Si le serpent n'est pas en train de manger
-            {
-
-                screen[snake[0].first][snake[0].second] = 0;//effacement du dernier morceau du serpent
-                snake.pop_front();
-            }
-            else {//Si le serpent est en train de manger alors on n'efface pas de bout su serpent pour cette frame
-
-                mange = 0;
-            }
-
-            if (display == true)
-            {
-                //system("cls");//Nettoyage juste avant d'afficher une nouvelle frame
-                printf("Score : %d\n", score);
-                for (int i = 0; i < TAILLE_ECRAN; i++)//Affichage
-                {
-                    for (cpt = 0; cpt < TAILLE_ECRAN; cpt++)
+                    if (i != 0 || i2 != 0)
                     {
-                        switch (screen[i][cpt])
+                        pos.first = i + snake.back().first;
+                        pos.second = i2 + snake.back().second;
+
+                        if (pos.first >= 0 && pos.first < 20 && pos.second >= 0 && pos.second < 20)
                         {
-                        case 0:
-                            printf("_");
-                            break;
-                        case -1:
-                            printf("o");
-                            break;
-                        case 5:
-                            printf("X");
-                            break;
-                            /*case 5 :
-                                printf("5");
-                                break;*/
+                            networkInput.push_back(screen[pos.first][pos.second]);
+                        }
+                        else {
+                            networkInput.push_back(-1);
                         }
                     }
-                    printf("\n");
+                    else {
+                        pos.first = i + snake.back().first;
+                        pos.second = i2 + snake.back().second;
+                        std::cout << (int)screen[pos.first][pos.second] << std::endl;
+                    }
                 }
             }
 
-            /*Sleep(500);
-            if (_kbhit() != 0)//Detecte si on appuie sur le clavier
+    #endif // TEST2
+
+            network->compute(networkInput, output);
+
+            //up, down, left, right
+            int directionIndex = 0;
+            float outputScore = output[0];
+
+            for (int i = 1; i < output.size(); i++)
             {
-                input = _getch();//Lecture de la derniere touche appuy�
-                fflush(stdin);
-            }*/
-        }
+                if (output[i] > outputScore)
+                {
+                    directionIndex = i;
+                    outputScore = output[i];
+                }
+            }
+
+            //Do not change direction by default
+            if (outputScore == 0)
+            {
+                directionIndex = -1;
+            }
+
+            switch (directionIndex)//lecture de l'entr� pour savoir quel direction prendre
+            {
+            case 0:
+                //std::cout << "UP\n";
+                direction = 8;
+                countChangeDir++;
+                break;
+            case 1:
+                //std::cout << "DOWN\n";
+                direction = 2;
+                countChangeDir++;
+                break;
+            case 2:
+                //std::cout << "LEFT\n";
+                direction = 4;
+                countChangeDir++;
+                break;
+            case 3:
+                //std::cout << "RIGHT\n";
+                direction = 6;
+                countChangeDir++;
+                break;
+            }
+
+            input = 0;//reset de l'input
+
+            switch (direction)//lecture de l'entr� pour savoir quel direction prendre
+            {
+            case 8:
+                snake.push_back(std::pair<int, int>(snake.back().first - 1, snake.back().second));
+                break;
+            case 2:
+                snake.push_back(std::pair<int, int>(snake.back().first + 1, snake.back().second));
+                break;
+            case 6:
+                snake.push_back(std::pair<int, int>(snake.back().first, snake.back().second + 1));
+                break;
+            case 4:
+                snake.push_back(std::pair<int, int>(snake.back().first, snake.back().second - 1));
+                break;
+            }
+
+            if (screen[snake.back().first][snake.back().second] == 5)//Si le serpent mange un fruit
+            {
+                do//apparition d'un autre autre fruit
+                {
+                    r1 = rand() % (TAILLE_ECRAN);
+                    r2 = rand() % (TAILLE_ECRAN);
+                    if (screen[r1][r2] != -1 && abs(snake.back().first - r1) > 1 && abs(snake.back().second - r2))
+                    {
+                        screen[r1][r2] = 5;
+                        mange = 1;
+                    }
+                } while (mange == 0);
+
+                score++;
+            }
+
+            if ((snake.back().first >= TAILLE_ECRAN) || (snake.back().first < 0) || (snake.back().second >= TAILLE_ECRAN) || (snake.back().second < 0)
+                || (screen[snake.back().first][snake.back().second] == -1))//si le serpent sort de l'�cran ou se mange lui meme
+            {
+                vie = 0;// Alors il meurt
+            }
+            else {
+                screen[snake.back().first][snake.back().second] = -1;//placement du nouveau morceau du snake
+
+                if (mange == 0)//Si le serpent n'est pas en train de manger
+                {
+
+                    screen[snake[0].first][snake[0].second] = 0;//effacement du dernier morceau du serpent
+                    snake.pop_front();
+                }
+                else {//Si le serpent est en train de manger alors on n'efface pas de bout su serpent pour cette frame
+
+                    mange = 0;
+                }
+
+                if (display == true)
+                {
+                    //system("cls");//Nettoyage juste avant d'afficher une nouvelle frame
+                    printf("Score : %d\n", score);
+                    for (int i = 0; i < TAILLE_ECRAN; i++)//Affichage
+                    {
+                        for (cpt = 0; cpt < TAILLE_ECRAN; cpt++)
+                        {
+                            switch (screen[i][cpt])
+                            {
+                            case 0:
+                                printf("_");
+                                break;
+                            case -1:
+                                printf("o");
+                                break;
+                            case 5:
+                                printf("X");
+                                break;
+                                /*case 5 :
+                                    printf("5");
+                                    break;*/
+                            }
+                        }
+                        printf("\n");
+                    }
+                }
+
+                /*Sleep(500);
+                if (_kbhit() != 0)//Detecte si on appuie sur le clavier
+                {
+                    input = _getch();//Lecture de la derniere touche appuy�
+                    fflush(stdin);
+                }*/
+            }
 
 #ifdef TEST2
-        networkInput.clear();
+            networkInput.clear();
 #endif TEST2
 
-    } while (vie >= 1 && score < 10 && timer < 200 && timer < (20 * (score + 1)));
-    //END MAIN GAME LOOP
+        } while (vie >= 1 && score < 10 && timer < 200 && timer < (20 * (score + 1)));
+        //END MAIN GAME LOOP
 
-    if (countChangeDir == 0)
-    {
-        return 0;
-    }else if (score < 10)
-    {
-        return pow(score, 4) / 10.f + timer;
+        totalScore += pow(score, 3);
     }
-    else {
-        return pow(score, 6) / 10.f + 200;
-    }
+
+    return totalScore + 1;
 }
