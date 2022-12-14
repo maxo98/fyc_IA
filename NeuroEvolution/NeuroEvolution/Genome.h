@@ -3,7 +3,6 @@
 #pragma once
 
 #include <map>
-#include <set>
 #include <mutex>
 #include <fstream>
 #include <unordered_map>
@@ -31,6 +30,11 @@ public:
 		COLDGAUSSIAN = 1
 	};
 
+	enum class DataToSaveEnum {
+		GENECONNECTION = 0,
+		GENENODE = 1
+	};
+
 	enum class CROSSOVER { RANDOM, AVERAGE, SINGLE_POINT };
 
 	bool mutateLink(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, std::mutex* lock = nullptr);
@@ -52,8 +56,7 @@ public:
 	inline void decrementSuperChampOffspring() { superChampOffspring--; };
 	inline void setEliminate(bool value) { eliminate = value; };
 	inline bool getEliminate() { return eliminate; };
-
-	void saveCurrentGenome();
+	void saveCurrentGenome(const std::string& fileName = "saveGenome.txt");
 	static void loadGenome();
 
 	//Parent A should be the fittest
@@ -65,11 +68,6 @@ public:
 
 private:
 
-	enum class DataToSaveEnum {
-		geneConnection,
-		geneNode
-	};
-
 	struct DataToSaveStruct {
 		DataToSaveEnum dataTypeEnum;
 		const GeneNode* geneNode;
@@ -78,31 +76,33 @@ private:
 
 		DataToSaveStruct(const GeneNode* geneNode)
 			: geneNode(geneNode),
-			dataTypeEnum(DataToSaveEnum::geneNode),
+			dataTypeEnum(DataToSaveEnum::GENENODE),
 			idGeneConnection(-1),
 			geneConnection(nullptr)
 		{};
 
 		DataToSaveStruct(const GeneConnection* geneConnection, const unsigned int id)
 			: geneConnection(geneConnection),
-			dataTypeEnum(DataToSaveEnum::geneConnection),
+			dataTypeEnum(DataToSaveEnum::GENECONNECTION),
 			idGeneConnection(id),
 			geneNode(nullptr)
 		{};
 
-		std::ostream& operator<<(std::ostream& os) 
+		friend std::ostream& operator<<(std::ostream& os, const DataToSaveStruct& data)
 		{
-			os << (int)dataTypeEnum;
+			os << (int)data.dataTypeEnum;
+			os << " ";
 
-			if (dataTypeEnum == DataToSaveEnum::geneConnection)
-				os << geneConnection;
+			if (data.dataTypeEnum == Genome::DataToSaveEnum::GENECONNECTION)
+				os << *data.geneConnection;
 			else
-				os << geneNode;
+				os << *data.geneNode;
 
-			if (idGeneConnection >= 0)
-				os << idGeneConnection;
-
-			os << '\t';
+			os << "  ";
+			if (data.idGeneConnection >= 0)
+				os << data.idGeneConnection;
+			os << " ";
+			os << '\t' << '\n';
 
 			return os;
 		};

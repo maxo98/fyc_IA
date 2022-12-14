@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <iostream>
 
 #include "GeneNode.h"
 
@@ -24,6 +25,19 @@ public:
 
 	friend class Genome;
 	friend class CPPN_Neat;
+
+	friend std::ostream& operator<<(std::ostream& os, const GeneConnection& geneConnection) {
+		os << geneConnection.innovation;
+		os << " ";
+		os << geneConnection.nodeA;
+		os << " ";
+		os << geneConnection.nodeB;
+		os << " ";
+		os << geneConnection.enabled;
+		os << " ";
+		os << geneConnection.weight;
+		return os;
+	};
 
 private:
 	unsigned int innovation;

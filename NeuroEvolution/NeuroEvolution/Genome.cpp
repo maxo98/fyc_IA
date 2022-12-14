@@ -4,7 +4,6 @@
 #include "Genome.h"
 #include <stack>
 
-
 Genome::Genome()
 {
     input = 0;
@@ -544,24 +543,25 @@ void Genome::shiftNodes(unsigned int node, unsigned int layerMin)
     }
 }
 
-void Genome::saveCurrentGenome() 
+void Genome::saveCurrentGenome(const std::string& fileName) 
 {
-    std::set<DataToSaveStruct> saveBuffer;
+    std::list<DataToSaveStruct> saveBuffer;
 
-    for (const auto node : nodes)
+    for (const auto& node : nodes)
     {
-        saveBuffer.insert(DataToSaveStruct(&node));
+        saveBuffer.push_back(DataToSaveStruct(&node));
     }
 
-    for (const auto [id, connection] : connections)
+    for (const auto& connection : connections)
     {
-        saveBuffer.insert(DataToSaveStruct(&connection, id));
+        // first is the id from the map, second is GeneConnection
+        saveBuffer.push_back(DataToSaveStruct(&connection.second, connection.first));
     }
 
     std::fstream file;
-    file.open("test.txt", std::fstream::in | std::fstream::out | std::fstream::trunc);
+    file.open(fileName, std::fstream::in | std::fstream::out | std::fstream::trunc);
 
-    for (auto data : saveBuffer)
+    for (const auto& data : saveBuffer)
     {
         file << data;
     }

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -18,6 +19,12 @@ public:
 	inline static bool isInitialized() { return Activation::init; };
 
 	inline static std::vector<Activation> getRegister() { return Activation::activationRegister; };
+
+	friend std::ostream& operator<<(std::ostream& os, const Activation& activation)
+	{
+		os << activation.getId();
+		return os;
+	}
 
 private:
 	static std::vector<Activation> activationRegister;

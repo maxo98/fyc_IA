@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <iostream>
 
 #include "Activation.h"
 
@@ -27,6 +28,17 @@ public:
 	inline Activation* const getActivation() const { return activationFunction; };
 
 	friend class Genome;
+
+	friend std::ostream& operator<<(std::ostream& os, const GeneNode& geneNode) 
+	{	
+		os << *geneNode.activationFunction;
+		os << " ";
+		os << geneNode.layer;
+		os << " ";
+		os << (int)geneNode.type;
+
+		return os;
+	};
 
 private:
 

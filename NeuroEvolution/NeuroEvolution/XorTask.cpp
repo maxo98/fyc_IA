@@ -87,13 +87,15 @@ int launchXor()
 	{
 		Neat neat(popSize, n * 2 + 1, n, neatparam, Neat::INIT::ONE);
 
+		//! faire le test ici 
+		std::cout << "iteration : " << i << std::endl;
+		neat.getGenomes()->saveCurrentGenome();
+		//float leastMistake = 999999;
 
-		float leastMistake = 999999;
-
-		if (xorTask(neat, n, popSize, leastMistake, inputs, outputs) == true)
-		{
-			result++;
-		}
+		//if (xorTask(neat, n, popSize, leastMistake, inputs, outputs) == true)
+		//{
+		//	result++;
+		//}
 	}
 
 	std::cout << result << std::endl;

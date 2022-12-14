@@ -1,49 +1,453 @@
-﻿  ES_Snake.cpp
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(28,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(63,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(71,69): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(78,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(85,56): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(92,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(99,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(106,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(113,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(127,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(23,37): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(25,38): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(26,39): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.h(90,33): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(24,34): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(25,33): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(28,29): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(29,34): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(33,39): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(37,33): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(40,29): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(47,37): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(49,43): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(53,31): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(58,42): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(77,26): warning C4305: 'initialisation' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(89,32): warning C4305: '=' : troncation de 'double' à 'float'
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(108,18): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
+﻿  CPPN_Neat.cpp
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(30,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(41,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(59,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(73,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(75,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(82,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(84,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(91,56): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(93,58): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(100,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(102,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(109,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(111,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(118,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(120,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(127,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(136,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(143,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(23,37): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(25,38): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(26,39): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.h(90,33): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\CPPN_Neat.cpp(10,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\CPPN_Neat.cpp(32,75): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+  ES_Hyperneat.cpp
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(30,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(41,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(59,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(73,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(75,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(82,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(84,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(91,56): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(93,58): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(100,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(102,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(109,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(111,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(118,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(120,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(127,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(136,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(143,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(23,37): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(25,38): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(26,39): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.h(90,33): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Hyperneat.cpp(70,36): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Hyperneat.cpp(292,43): warning C4018: '<=' : incompatibilité signed/unsigned
+  ES_Snake.cpp
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(30,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(41,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(59,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(73,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(75,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(82,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(84,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(91,56): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(93,58): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(100,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(102,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(109,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(111,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(118,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(120,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(127,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(136,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(143,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(23,37): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(25,38): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(26,39): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.h(90,33): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(25,33): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(26,34): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(29,29): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(30,34): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(34,39): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(38,33): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(41,29): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(48,37): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(50,43): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(54,31): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(59,42): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(78,26): warning C4305: 'initialisation' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(90,32): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(147,18): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
           with
           [
               _Ty=float
           ]
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(112,22): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(151,22): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
           with
           [
               _Ty=float
           ]
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(180,29): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(183,29): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(246,31): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(222,29): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(225,29): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(288,31): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
           with
           [
               _Ty=float
           ]
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(679,41): warning C4244: 'return' : conversion de 'double' en 'int', perte possible de données
-C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(682,42): warning C4244: 'return' : conversion de 'double' en 'int', perte possible de données
-  NeuroEvolution.vcxproj -> C:\Users\CC\Documents\Unreal Projects\fyc_IA\NeuroEvolution\x64\Debug\NeuroEvolution.exe
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(521,37): warning C4244: 'return' : conversion de 'double' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\ES_Snake.cpp(524,37): warning C4244: 'return' : conversion de 'double' en 'int', perte possible de données
+  GeneConnection.cpp
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(41,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(59,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(84,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(111,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(120,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(127,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(136,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+  GeneNode.cpp
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(41,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(59,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(84,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(111,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(120,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(127,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(136,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\GeneNode.cpp(14,7): warning C4101: 'err' : variable locale non référencée
+  Genome.cpp
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(41,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(59,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(84,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(111,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(120,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(127,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(136,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(28,72): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(59,49): warning C4267: '=' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(91,44): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(92,44): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(96,17): warning C4101: 'err' : variable locale non référencée
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(138,64): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(159,40): warning C4267: 'initialisation' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(231,73): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(246,68): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(246,68): warning C4305: 'argument' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(249,71): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(287,33): warning C4244: '=' : conversion de 'unsigned __int64' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(288,25): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(317,29): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(318,33): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(323,33): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(329,34): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(330,45): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(333,34): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(334,38): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(383,73): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(386,73): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstddef(117,1): error C2678: '<' binaire : aucun opérateur trouvé qui accepte un opérande de partie gauche de type 'const _Ty' (ou il n'existe pas de conversion acceptable)
+          with
+          [
+              _Ty=Genome::DataToSaveStruct
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\thread(257,24): message : est peut-être 'bool std::operator <(std::thread::id,std::thread::id) noexcept'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstddef(117,1): message : lors de la tentative de mise en correspondance de la liste des arguments '(const _Ty, const _Ty)'
+          with
+          [
+              _Ty=Genome::DataToSaveStruct
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstddef(116): message : pendant la compilation de la fonction membre classe modèle 'bool std::less<Genome::DataToSaveStruct>::operator ()(const _Ty &,const _Ty &) const'
+          with
+          [
+              _Ty=Genome::DataToSaveStruct
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xutility(1457): message : voir la référence à l'instanciation de la fonction modèle 'bool std::less<Genome::DataToSaveStruct>::operator ()(const _Ty &,const _Ty &) const' en cours de compilation
+          with
+          [
+              _Ty=Genome::DataToSaveStruct
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xmemory(1321): message : voir la référence à l'instanciation classe modèle 'std::less<Genome::DataToSaveStruct>' en cours de compilation
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xmemory(1321): message : voir les informations de référence sur le modèle de variable 'const bool is_empty_v<std::less<Genome::DataToSaveStruct> >' en cours de compilation
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\set(52): message : voir la référence à l'instanciation classe modèle 'std::_Tree<std::_Tset_traits<_Kty,_Pr,_Alloc,false>>' en cours de compilation
+          with
+          [
+              _Kty=Genome::DataToSaveStruct,
+              _Pr=std::less<Genome::DataToSaveStruct>,
+              _Alloc=std::allocator<Genome::DataToSaveStruct>
+          ]
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Genome.cpp(549): message : voir la référence à l'instanciation classe modèle 'std::set<Genome::DataToSaveStruct,std::less<Genome::DataToSaveStruct>,std::allocator<Genome::DataToSaveStruct>>' en cours de compilation
+  Hyperneat.cpp
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(30,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(41,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(59,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(73,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(75,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(82,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(84,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(91,56): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(93,58): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(100,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(102,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(109,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(111,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(118,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(120,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(127,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(136,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(143,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(23,37): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(25,38): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(26,39): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.h(90,33): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Hyperneat.cpp(69,22): warning C4244: 'initialisation' : conversion de 'unsigned __int64' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Hyperneat.cpp(72,22): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Hyperneat.cpp(83,25): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Hyperneat.cpp(91,49): warning C4244: '+=' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Hyperneat.cpp(92,54): warning C4244: '+=' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Hyperneat.cpp(123,42): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Hyperneat.cpp(142,40): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Hyperneat.cpp(152,67): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Hyperneat.cpp(163,73): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\type_traits(1540,77): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\thread(51): message : voir la référence à l'instanciation de la fonction modèle 'void std::invoke<void(__cdecl Hyperneat::* )(int,int),Hyperneat*,int,float>(_Callable &&,_Ty1 &&,int &&,float &&) noexcept(false)' en cours de compilation
+          with
+          [
+              _Callable=void (__cdecl Hyperneat::* )(int,int),
+              _Ty1=Hyperneat *
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\thread(61): message : voir la référence à l'instanciation de la fonction modèle 'unsigned int std::thread::_Invoke<_Tuple,0,1,2,3>(void *) noexcept' en cours de compilation
+          with
+          [
+              _Tuple=_Tuple
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\thread(66): message : voir la référence à l'instanciation de la fonction modèle 'unsigned int (__cdecl *std::thread::_Get_invoke<_Tuple,0,1,2,3>(std::integer_sequence<size_t,0,1,2,3>) noexcept)(void *) noexcept' en cours de compilation
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\thread(89): message : voir la référence à l'instanciation de la fonction modèle 'void std::thread::_Start<_Ty,Hyperneat*,int&,float>(_Fn &&,Hyperneat *&&,int &,float &&)' en cours de compilation
+          with
+          [
+              _Ty=void (__cdecl Hyperneat::* )(int,int),
+              _Fn=void (__cdecl Hyperneat::* )(int,int)
+          ]
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Hyperneat.cpp(89): message : voir la référence à l'instanciation de la fonction modèle 'std::thread::thread<void(__cdecl Hyperneat::* )(int,int),Hyperneat*,int&,float,0>(_Fn &&,Hyperneat *&&,int &,float &&)' en cours de compilation
+          with
+          [
+              _Fn=void (__cdecl Hyperneat::* )(int,int)
+          ]
+  TestHyperneat.cpp
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(41,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(59,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(84,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(111,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(120,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(127,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(136,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(23,37): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(25,38): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(26,39): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.h(90,33): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(32,30): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(33,31): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(36,26): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(37,31): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(41,36): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(45,30): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(48,26): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(55,34): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(57,40): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(61,28): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(66,39): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(100,13): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(104,14): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(151,12): warning C4244: '=' : conversion de 'double' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(180,20): warning C4244: '=' : conversion de 'double' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(186,23): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(189,23): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(261,28): warning C4244: '=' : conversion de 'double' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(277,17): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\TestHyperneat.cpp(278,17): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+  Neat.cpp
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(30,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(41,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(59,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(73,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(75,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(82,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(84,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(91,56): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(93,58): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(100,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(102,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(109,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(111,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(118,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(120,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(127,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(136,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(143,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(23,37): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(25,38): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(26,39): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.h(90,33): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(65,16): warning C4244: 'initialisation' : conversion de '_Rep' en 'unsigned int', perte possible de données
+          with
+          [
+              _Rep=std::chrono::system_clock::rep
+          ]
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(138,75): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(256,123): warning C4244: '+=' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(258,77): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(305,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(325,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(335,35): warning C4018: '>=' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(354,21): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(366,25): warning C4018: '>' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(379,26): warning C4018: '>' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(400,102): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(451,25): warning C4018: '>=' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(494,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(526,22): warning C4244: 'initialisation' : conversion de 'unsigned __int64' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(528,22): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(538,25): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(547,49): warning C4244: '+=' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(592,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(665,29): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(720,142): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(723,61): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(739,144): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(742,63): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(782,145): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(785,63): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(861,54): warning C4244: 'argument' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(982,45): warning C4244: '=' : conversion de 'unsigned __int64' en 'float', perte possible de données
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\type_traits(1540,77): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\thread(51): message : voir la référence à l'instanciation de la fonction modèle 'void std::invoke<void(__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>,int,std::list<_Ty,std::allocator<_Ty>> &,Genome *,std::mutex *),Neat*,float,std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>,int,std::reference_wrapper<std::list<_Ty,std::allocator<_Ty>>>,Genome*,std::mutex*>(_Callable &&,_Ty1 &&,float &&,std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &&,int &&,std::reference_wrapper<std::list<_Ty,std::allocator<_Ty>>> &&,Genome *&&,std::mutex *&&) noexcept(false)' en cours de compilation
+          with
+          [
+              _Ty=Species *,
+              _Callable=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *),
+              _Ty1=Neat *
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\thread(61): message : voir la référence à l'instanciation de la fonction modèle 'unsigned int std::thread::_Invoke<_Tuple,0,1,2,3,4,5,6,7>(void *) noexcept' en cours de compilation
+          with
+          [
+              _Tuple=_Tuple
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\thread(66): message : voir la référence à l'instanciation de la fonction modèle 'unsigned int (__cdecl *std::thread::_Get_invoke<_Tuple,0,1,2,3,4,5,6,7>(std::integer_sequence<size_t,0,1,2,3,4,5,6,7>) noexcept)(void *) noexcept' en cours de compilation
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\thread(89): message : voir la référence à l'instanciation de la fonction modèle 'void std::thread::_Start<_Ty,Neat*,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species*>>>&,int&,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome*&,std::mutex*>(_Fn &&,Neat *&&,float &&,std::_List_iterator<std::_List_val<std::_List_simple_types<Species*>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>> &&,Genome *&,std::mutex *&&)' en cours de compilation
+          with
+          [
+              _Ty=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *),
+              _Fn=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *)
+          ]
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.cpp(545): message : voir la référence à l'instanciation de la fonction modèle 'std::thread::thread<void(__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>,int,std::list<_Ty,std::allocator<_Ty>> &,Genome *,std::mutex *),Neat*,float,std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>&,int&,std::reference_wrapper<std::list<_Ty,std::allocator<_Ty>>>,Genome*&,std::mutex*,0>(_Fn &&,Neat *&&,float &&,std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &,int &,std::reference_wrapper<std::list<_Ty,std::allocator<_Ty>>> &&,Genome *&,std::mutex *&&)' en cours de compilation
+          with
+          [
+              _Ty=Species *,
+              _Fn=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *)
+          ]
+  NeuroEvolution.cpp
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(30,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(41,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(59,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(73,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(75,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(82,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(84,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(91,56): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(93,58): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(100,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(102,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(109,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(111,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(118,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(120,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(127,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(136,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(143,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(23,37): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(25,38): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(26,39): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.h(90,33): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuroEvolution.cpp(13,8): warning C4244: 'argument' : conversion de 'time_t' en 'unsigned int', perte possible de données
+  Species.cpp
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(41,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(59,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(84,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(111,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(120,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(127,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(136,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Species.cpp(68,17): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Species.cpp(69,20): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Species.cpp(78,23): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+  XorTask.cpp
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(30,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(41,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(59,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(73,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(75,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(82,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(84,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(91,56): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(93,58): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(100,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(102,53): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(109,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(111,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(118,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(120,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(127,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(136,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Activation.h(143,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(23,37): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(25,38): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\NeuralNetwork.h(26,39): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\Neat.h(90,33): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\XorTask.cpp(12,30): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\XorTask.cpp(16,31): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\XorTask.cpp(23,30): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\XorTask.cpp(25,26): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\XorTask.cpp(36,34): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\XorTask.cpp(38,40): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\XorTask.cpp(42,28): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\XorTask.cpp(45,39): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\fyc_IA\NeuroEvolution\NeuroEvolution\XorTask.cpp(207,20): warning C4244: '=' : conversion de 'double' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+  Génération de code en cours...

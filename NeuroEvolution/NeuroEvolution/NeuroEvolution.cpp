@@ -12,8 +12,8 @@ int main()
 
 	srand(seed);//Some random parts don't use this seed 
 
-	//return launchXor();
+	return launchXor();
 	//return launchHypeneatTest();
-	return launchESHypeneatTest();
+	//return launchESHypeneatTest();
 }
 
