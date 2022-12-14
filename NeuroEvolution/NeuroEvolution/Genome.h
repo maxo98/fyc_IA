@@ -58,6 +58,7 @@ public:
 	inline void setEliminate(bool value) { eliminate = value; };
 	inline bool getEliminate() { return eliminate; };
 	void saveCurrentGenome(const std::string& fileName = "saveGenome.txt");
+	void addHiddenNode(Activation* activation, unsigned int layer);
 	static void loadGenome();
 
 	//Parent A should be the fittest

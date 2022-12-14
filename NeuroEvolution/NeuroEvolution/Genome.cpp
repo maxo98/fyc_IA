@@ -585,7 +585,7 @@ std::string Genome::toString()
     return str;
 }
 
-//void Genome::addHiddenNode(Activation* activation, unsigned int layer)
-//{
-//    nodes.push_back(GeneNode(NODE_TYPE::HIDDEN, activation, layer));
-//}
+void Genome::addHiddenNode(Activation* activation, unsigned int layer)
+{
+    nodes.push_back(GeneNode(NODE_TYPE::HIDDEN, activation, layer));
+}
