@@ -102,6 +102,15 @@ public:
 	inline virtual std::string getId() const { return "sinc"; };
 };
 
+class PosSincActivation : public Activation {
+public:
+	virtual float activate(float x) const { return sin(x) / x + 0.25; };
+
+	virtual float derivate(float x) const { return cos(x) / x - sin(x) / (x * x); };
+
+	inline virtual std::string getId() const { return "sinc"; };
+};
+
 class GaussianActivation : public Activation {
 public:
 	virtual float activate(float x) const { return exp(-(x * x)); };
@@ -136,6 +145,7 @@ public:
 	inline virtual std::string getId() const { return "cedricSpike"; };
 };
 
+//Not sure what this is, I think there's an error here
 class InvPyramidActivation : public Activation {
 public:
 	virtual float activate(float x) const { return (abs(x) < 1 ? 1 / (-abs(x)) + 1 : 0); };

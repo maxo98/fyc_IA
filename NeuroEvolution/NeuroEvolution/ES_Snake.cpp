@@ -17,10 +17,10 @@ int launchESHypeneatTest()
     NeatParameters neatparam;
 
     //neatparam.activationFunctions.push_back(new thresholdActivation());
-    neatparam.activationFunctions.push_back(new SigmoidActivation());
-    neatparam.activationFunctions.push_back(new SinActivation());
-    neatparam.activationFunctions.push_back(new GaussianActivation());
     neatparam.activationFunctions.push_back(new AbsActivation());
+    neatparam.activationFunctions.push_back(new PosSincActivation());
+    neatparam.activationFunctions.push_back(new HyperbolSecantActivation());
+    //neatparam.activationFunctions.push_back(new AbsActivation());
 
     neatparam.pbMutateLink = 0.1;// 0.05;
     neatparam.pbMutateNode = 0.06;//0.03;
@@ -227,33 +227,33 @@ bool esHypeneatTest(int popSize, ES_Hyperneat& esHyper)
         int count = 0;
 
 #ifdef MULTITHREAD
-        //while (workload < 1)
-        //{
-        //    cpus--;
-        //    workload = totalWorkload / cpus;
-        //}
+        while (workload < 1)
+        {
+            cpus--;
+            workload = totalWorkload / cpus;
+        }
 
-        //currentWorkload = floor(workload);
-        //float workloadFrac = fmod(workload, 1.0f);
-        //restWorkload = workloadFrac;
+        currentWorkload = floor(workload);
+        float workloadFrac = fmod(workload, 1.0f);
+        restWorkload = workloadFrac;
 
-        //while (cpus > threads.size() + 1)
-        //{
-        //    threads.push_back(std::thread(snakeEvaluate, startIndex, currentWorkload + floor(restWorkload), std::ref(fitness), std::ref(esHyper)));
+        while (cpus > threads.size() + 1)
+        {
+            threads.push_back(std::thread(snakeEvaluate, startIndex, currentWorkload + floor(restWorkload), std::ref(fitness), std::ref(esHyper)));
 
-        //    count += currentWorkload + floor(restWorkload);
+            count += currentWorkload + floor(restWorkload);
 
-        //    startIndex += currentWorkload + floor(restWorkload);
+            startIndex += currentWorkload + floor(restWorkload);
 
-        //    restWorkload -= floor(restWorkload);
-        //    restWorkload += workloadFrac;
-        //}
+            restWorkload -= floor(restWorkload);
+            restWorkload += workloadFrac;
+        }
 
-        //while (restWorkload > 0)
-        //{
-        //    restWorkload--;
-        //    currentWorkload++;
-        //}
+        while (restWorkload > 0)
+        {
+            restWorkload--;
+            currentWorkload++;
+        }
 #endif //MULTITHREAD
 
         count += currentWorkload;
@@ -374,11 +374,6 @@ int snakeTest(NeuralNetwork* network, bool display)
                         else {
                             networkInput.push_back(-1);
                         }
-                    }
-                    else {
-                        pos.first = i + snake.back().first;
-                        pos.second = i2 + snake.back().second;
-                        std::cout << (int)screen[pos.first][pos.second] << std::endl;
                     }
                 }
             }
@@ -526,7 +521,12 @@ int snakeTest(NeuralNetwork* network, bool display)
         } while (vie >= 1 && score < 10 && timer < 200 && timer < (20 * (score + 1)));
         //END MAIN GAME LOOP
 
-        totalScore += pow(score, 3);
+        totalScore += pow(score, 3)/3;
+    
+        if (countChangeDir > 0)
+        {
+            totalScore += (timer / 4) / 3;
+        }
     }
 
     return totalScore + 1;
