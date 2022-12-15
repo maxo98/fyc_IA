@@ -234,7 +234,7 @@ void ES_Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 	std::unordered_map<std::vector<float>, std::pair<unsigned int, unsigned int>, HyperNodeHash> nodesPosInput, nodesPosOutput, nodesPosHidden;//Holds the layer and pos of each node
 
 	//Input to hidden nodes connections
-	for (std::unordered_set<std::vector<float>, HyperNodeHash>::iterator itSubstrate = inputSubstrate.begin(); itSubstrate != inputSubstrate.end(); ++itSubstrate)
+	for (std::vector<std::vector<float>>::iterator itSubstrate = inputSubstrate.begin(); itSubstrate != inputSubstrate.end(); ++itSubstrate)
 	{
 		SubstrateTree root(esParam.center, esParam.width, 1);
 		//SubstrateTree root(*itSubstrate, esParam.width, 1);
@@ -320,7 +320,7 @@ void ES_Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 	std::unordered_set<Connection, HyperConnectionHash, HyperConnectionEqual> newConnections;
 
 	//Hidden to output nodes connections
-	for (std::unordered_set<std::vector<float>, HyperNodeHash>::iterator itSubstrate = outputSubstrate.begin(); itSubstrate != outputSubstrate.end(); ++itSubstrate)
+	for (std::vector<std::vector<float>>::iterator itSubstrate = outputSubstrate.begin(); itSubstrate != outputSubstrate.end(); ++itSubstrate)
 	{
 		SubstrateTree root(esParam.center, esParam.width, 1);
 		//SubstrateTree root(*itSubstrate, esParam.width, 1);

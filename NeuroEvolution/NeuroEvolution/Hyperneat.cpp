@@ -27,7 +27,7 @@ void Hyperneat::addInput(const std::vector<float>& node)
 		return;
 	}
 
-	inputSubstrate.emplace(node); 
+	inputSubstrate.push_back(node); 
 }
 
 void Hyperneat::addOutput(const std::vector<float>& node)
@@ -39,7 +39,7 @@ void Hyperneat::addOutput(const std::vector<float>& node)
 		return;
 	}
 
-	outputSubstrate.emplace(node);
+	outputSubstrate.push_back(node);
 }
 
 void Hyperneat::addHiddenNode(unsigned int layer, const std::vector<float>& node)
@@ -51,7 +51,7 @@ void Hyperneat::addHiddenNode(unsigned int layer, const std::vector<float>& node
 		return;
 	}
 
-	hiddenSubstrates[layer].emplace(node);
+	hiddenSubstrates[layer].push_back(node);
 };
 
 void Hyperneat::clear()
@@ -141,13 +141,13 @@ void Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 	//Add the input layer
 	net.addMultipleInputNode(inputSubstrate.size());
 
-	std::unordered_set<std::vector<float>, HyperNodeHash>::iterator beginPreviousLayer = inputSubstrate.begin();
-	std::unordered_set<std::vector<float>, HyperNodeHash>::iterator endPreviousLayer = inputSubstrate.end();
+	std::vector<std::vector<float>>::iterator beginPreviousLayer = inputSubstrate.begin();
+	std::vector<std::vector<float>>::iterator endPreviousLayer = inputSubstrate.end();
 
 	int layer = 1;
 
 	//Add and connect the hidden layers
-	for (std::deque<std::unordered_set<std::vector<float>, HyperNodeHash>>::iterator itLayer = hiddenSubstrates.begin(); itLayer != hiddenSubstrates.end(); ++itLayer)
+	for (std::vector<std::vector<std::vector<float>>>::iterator itLayer = hiddenSubstrates.begin(); itLayer != hiddenSubstrates.end(); ++itLayer)
 	{
 		net.addOutputNode(itLayer->size(), hyperParam.activationFunction);
 
@@ -168,16 +168,16 @@ void Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 /**
 * Connect layer to the previous layer
 */
-void Hyperneat::connectLayer(unsigned int layer, NeuralNetwork& hypernet, NeuralNetwork& net, std::unordered_set<std::vector<float>, HyperNodeHash>::iterator itNode,
-	std::unordered_set<std::vector<float>, HyperNodeHash>::iterator itNodeEnd,
-	std::unordered_set<std::vector<float>, HyperNodeHash>::iterator beginPreviousLayer, const std::unordered_set<std::vector<float>, HyperNodeHash>::iterator endPreviousLayer)
+void Hyperneat::connectLayer(unsigned int layer, NeuralNetwork& hypernet, NeuralNetwork& net, std::vector<std::vector<float>>::iterator itNode,
+	std::vector<std::vector<float>>::iterator itNodeEnd,
+	std::vector<std::vector<float>>::iterator beginPreviousLayer, const std::vector<std::vector<float>>::iterator endPreviousLayer)
 {
 	int nodeB = 0;
 
 	//For each node in the layer to add
 	for (itNode; itNode != itNodeEnd; ++itNode)
 	{
-		std::unordered_set<std::vector<float>, HyperNodeHash>::iterator prevLayer = beginPreviousLayer;
+		std::vector<std::vector<float>>::iterator prevLayer = beginPreviousLayer;
 
 		int nodeA = 0;
 		std::vector<float> p2 = std::vector<float>(itNode->begin(), itNode->end());

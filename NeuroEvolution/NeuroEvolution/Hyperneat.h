@@ -88,13 +88,13 @@ protected:
 	/**
 	* Connect layer to the previous layer
 	*/
-	void connectLayer(unsigned int layer, NeuralNetwork& hypernet, NeuralNetwork& net, std::unordered_set<std::vector<float>, HyperNodeHash>::iterator itNode,
-		std::unordered_set<std::vector<float>, HyperNodeHash>::iterator itNodeEnd,
-		std::unordered_set<std::vector<float>, HyperNodeHash>::iterator beginPreviousLayer, std::unordered_set<std::vector<float>, HyperNodeHash>::iterator endPreviousLayer);
+	void connectLayer(unsigned int layer, NeuralNetwork& hypernet, NeuralNetwork& net, std::vector<std::vector<float>>::iterator itNode,
+		std::vector<std::vector<float>>::iterator itNodeEnd,
+		std::vector<std::vector<float>>::iterator beginPreviousLayer, std::vector<std::vector<float>>::iterator endPreviousLayer);
 
-	std::unordered_set<std::vector<float>, HyperNodeHash> inputSubstrate;
-	std::unordered_set<std::vector<float>, HyperNodeHash> outputSubstrate;
-	std::deque<std::unordered_set<std::vector<float>, HyperNodeHash>> hiddenSubstrates;
+	std::vector<std::vector<float>> inputSubstrate;
+	std::vector<std::vector<float>> outputSubstrate;
+	std::vector<std::vector<std::vector<float>>> hiddenSubstrates;
 
 	std::vector<NeuralNetwork> networks;
 
