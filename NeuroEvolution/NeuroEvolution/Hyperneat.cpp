@@ -232,6 +232,21 @@ std::vector<float> sqrDistCppnInput(std::vector<void*> variables, std::vector<fl
 	return p1;
 }
 
+std::vector<float> invDistCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2)
+{
+	p1.insert(p1.end(), p2.begin(), p2.end());
+	p1.push_back(0);
+
+	for (int i = 0; i < p1.size(); i++)
+	{
+		p1[p1.size() - 1] += (p2[i] - p1[i]) * (p2[i] - p1[i]);
+	}
+
+	p1[p1.size() - 1] = *((float *)variables[0]) - sqrt(p1[p1.size() - 1]);
+
+	return p1;
+}
+
 std::vector<float> deltaDistCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2)
 {
 	p1.insert(p1.end(), p1.begin(), p1.end());
