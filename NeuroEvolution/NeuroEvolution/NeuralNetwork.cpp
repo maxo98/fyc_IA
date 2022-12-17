@@ -304,6 +304,35 @@ void NeuralNetwork::clear()
 	outputNodes.clear();
 }
 
+void NeuralNetwork::clearConnections()
+{
+	for (std::deque<std::deque<Node>>::iterator itLayer = hiddenNodes.begin(); itLayer != hiddenNodes.end(); ++itLayer)
+	{
+		for (std::deque<Node>::iterator itNode = itLayer->begin(); itNode != itLayer->end(); ++itNode)
+		{
+			itNode->previousNodes.clear();
+			itNode->recursionNodes.clear();
+		}
+	}
+
+	for (std::deque<Node>::iterator itNode = inputNodes.begin(); itNode != inputNodes.end(); ++itNode)
+	{
+		itNode->previousNodes.clear();
+		itNode->recursionNodes.clear();
+	}
+
+	for (std::deque<Node>::iterator itNode = outputNodes.begin(); itNode != outputNodes.end(); ++itNode)
+	{
+		itNode->previousNodes.clear();
+		itNode->recursionNodes.clear();
+	}
+}
+
+void NeuralNetwork::clearHidden()
+{
+	hiddenNodes.clear();
+}
+
 void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size, bool output, std::vector<float>* outputs)
 {
 	std::vector<std::thread> threads;

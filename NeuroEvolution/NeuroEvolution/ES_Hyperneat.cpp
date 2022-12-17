@@ -222,9 +222,23 @@ void ES_Hyperneat::prunAndExtract(NeuralNetwork& hypernet, const std::vector<flo
 	}
 }
 
+void ES_Hyperneat::initNetwork(NeuralNetwork& net)
+{
+	for (std::vector<std::vector<float>>::iterator itSubstrate = inputSubstrate.begin(); itSubstrate != inputSubstrate.end(); ++itSubstrate)
+	{
+		nodesPosInput.emplace(*itSubstrate, net.addInputNode());
+	}
+
+	for (std::vector<std::vector<float>>::iterator itSubstrate = outputSubstrate.begin(); itSubstrate != outputSubstrate.end(); ++itSubstrate)
+	{
+		nodesPosOutput.emplace(*itSubstrate, net.addOutputNode(hyperParam.activationFunction));
+	}
+}
+
 void ES_Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 {
-	net.clear();
+	net.clearHidden();
+	net.clearConnections();
 
 	//std::cout << "new network\n\n\n";
 
@@ -233,7 +247,7 @@ void ES_Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 	std::queue<std::vector<float>>* unexploredNodes, * futureUnexploredNodes, unexploredNodesA, unexploredNodesB;//Nodes to explore swaped in and out
 	std::unordered_multimap<std::vector<float>, const Connection*, HyperNodeHash> hiddenConnectionMap, outConnectionMap;//Links nodes to connections entering them
 	std::unordered_map<std::vector<float>, unsigned int, HyperNodeHash> nodesLayerMap;//Holds the layer of each node
-	std::unordered_map<std::vector<float>, std::pair<unsigned int, unsigned int>, HyperNodeHash> nodesPosInput, nodesPosOutput, nodesPosHidden;//Holds the layer and pos of each node
+	std::unordered_map<std::vector<float>, std::pair<unsigned int, unsigned int>, HyperNodeHash> nodesPosHidden;//Holds the layer and pos of each node
 
 	//Input to hidden nodes connections
 	for (std::vector<std::vector<float>>::iterator itSubstrate = inputSubstrate.begin(); itSubstrate != inputSubstrate.end(); ++itSubstrate)
@@ -247,7 +261,7 @@ void ES_Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 		//std::cout << esParam.center << std::endl;
 
 		//nodesLayerMap.emplace(*itSubstrate, 0);
-		nodesPosInput.emplace(*itSubstrate, net.addInputNode());
+		//nodesPosInput.emplace(*itSubstrate, net.addInputNode());
 	}
 
 	//std::cout << "conn " << connections.size() << std::endl;
@@ -330,7 +344,7 @@ void ES_Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 		divAndInit(hypernet, *itSubstrate, &root, false);
 		prunAndExtract(hypernet, *itSubstrate, &root, false, newConnections);
 
-		nodesPosOutput.emplace(*itSubstrate, net.addOutputNode(hyperParam.activationFunction));
+		//nodesPosOutput.emplace(*itSubstrate, net.addOutputNode(hyperParam.activationFunction));
 
 		//Nodes not created here because all the hidden nodes that are connected to an output node are already expressed
 	}

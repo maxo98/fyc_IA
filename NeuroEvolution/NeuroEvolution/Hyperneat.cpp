@@ -131,25 +131,45 @@ void Hyperneat::genomeToNetwork(Genome& gen, NeuralNetwork& net)
 {
 	NeuralNetwork hyperNet;
 	cppns->genomeToNetwork(gen, hyperNet);
+	initNetwork(net);
 	createNetwork(hyperNet, net);
+}
+
+void Hyperneat::initNetworks()
+{
+	for (int i = 0; i < networks.size(); i++)
+	{
+		initNetwork(networks[i]);
+	}
+}
+
+void Hyperneat::initNetwork(NeuralNetwork& net)
+{
+	//Add the input layer
+	net.addMultipleInputNode(inputSubstrate.size());
+
+	for (std::vector<std::vector<std::vector<float>>>::iterator itLayer = hiddenSubstrates.begin(); itLayer != hiddenSubstrates.end(); ++itLayer)
+	{
+		net.addHiddenNode(itLayer->size(), hyperParam.activationFunction);
+	}
+
+	//Add and connect the output layer
+	net.addOutputNode(outputSubstrate.size(), hyperParam.activationFunction);
 }
 
 void Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 {
-	net.clear();
-
-	//Add the input layer
-	net.addMultipleInputNode(inputSubstrate.size());
+	net.clearConnections();
 
 	std::vector<std::vector<float>>::iterator beginPreviousLayer = inputSubstrate.begin();
 	std::vector<std::vector<float>>::iterator endPreviousLayer = inputSubstrate.end();
 
 	int layer = 1;
 
-	//Add and connect the hidden layers
+	//Connect the hidden layers
 	for (std::vector<std::vector<std::vector<float>>>::iterator itLayer = hiddenSubstrates.begin(); itLayer != hiddenSubstrates.end(); ++itLayer)
 	{
-		net.addOutputNode(itLayer->size(), hyperParam.activationFunction);
+		
 
 		connectLayer(layer, hypernet, net, itLayer->begin(), itLayer->end(), beginPreviousLayer, endPreviousLayer);
 
@@ -159,7 +179,6 @@ void Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 		layer++;
 	}
 
-	//Add and connect the output layer
 	net.addOutputNode(outputSubstrate.size(), hyperParam.activationFunction);
 
 	connectLayer(layer, hypernet, net, outputSubstrate.begin(), outputSubstrate.end(), beginPreviousLayer, endPreviousLayer);

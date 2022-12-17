@@ -37,7 +37,10 @@ public:
 	inline void setWidth(float _width) { esParam.width = _width; }
 
 protected:
+	virtual void initNetwork(NeuralNetwork& net);
+
 	ES_Parameters esParam;
+	std::unordered_map<std::vector<float>, std::pair<unsigned int, unsigned int>, HyperNodeHash> nodesPosInput, nodesPosOutput;
 
 	class Connection {
 	public:

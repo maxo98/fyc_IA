@@ -47,6 +47,8 @@ public:
 	void applyBackprop(Genome& gen);
 
 	void clear();
+	void clearConnections();
+	void clearHidden();
 
 	inline void setRecursion(bool value) { recursive = value; };
 	inline bool isRecursive() { return recursive; }

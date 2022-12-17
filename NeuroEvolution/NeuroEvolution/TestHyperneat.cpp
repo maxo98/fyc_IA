@@ -109,6 +109,8 @@ int launchHypeneatTest()
 			}
 		}
 
+		hyper.initNetworks();
+
 		hyper.generateNetworks();
 
 		if (hypeneatTest(popSize, test, n, grid, centers, hyper) == true)

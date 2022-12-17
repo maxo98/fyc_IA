@@ -81,10 +81,13 @@ public:
 	void generateNetworksThread(int startIndex, int worlkload);
 	void genomeToNetwork(Genome& gen, NeuralNetwork& net);
 	virtual void createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net);
+	void initNetworks();
 
 	inline NeuralNetwork* getNeuralNetwork(int i) { return &networks[i]; };
 
 protected:
+	virtual void initNetwork(NeuralNetwork& net);
+
 	/**
 	* Connect layer to the previous layer
 	*/
