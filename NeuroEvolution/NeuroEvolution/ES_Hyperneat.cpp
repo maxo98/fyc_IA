@@ -119,7 +119,8 @@ void ES_Hyperneat::divAndInit(NeuralNetwork& hypernet, const std::vector<float>&
 				p2 = &pos;
 			}
 
-			point->weight = hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], *p1, *p2);
+			//point->weight = hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], *p1, *p2);
+			point->weight = output[0];
 
 			if (hyperParam.thresholdFunction(hyperParam.thresholdVariables, output, *p1, *p2) == true)
 			{
@@ -183,20 +184,21 @@ void ES_Hyperneat::prunAndExtract(NeuralNetwork& hypernet, const std::vector<flo
 				float valueA, valueB;
 
 				posValue = leaf->pos;
-				posValue[i] -= leaf->width;
+				posValue[i] -= tree->width;
 				
 				input = hyperParam.cppnInputFunction(hyperParam.inputVariables, *p1, *p2);
 				hypernet.compute(input, output);
 
-				valueA = abs(hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], *p1, *p2));
+				valueA = abs(leaf->weight - output[0]);
 
 				posValue = leaf->pos;
-				posValue[i] += leaf->width;
+				posValue[i] += tree->width;
 
 				input = hyperParam.cppnInputFunction(hyperParam.inputVariables, *p1, *p2);
 				hypernet.compute(input, output);
 
-				valueB = abs(hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], *p1, *p2));
+				//valueB = abs(leaf->weight - hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], *p1, *p2));
+				valueB = abs(leaf->weight - output[0]);
 
 				value = std::max(value, std::min(valueA, valueB));
 			}

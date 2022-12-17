@@ -6,10 +6,11 @@
 //#include <conio.h>
 #include <time.h>
 #include <iostream>
+#include <algorithm> 
 
 #define TEST2
 
-#define TAILLE_ECRAN 20
+#define TAILLE_ECRAN 10
 //#define TAILLE_SNAKE 11 //nombre de direction diff�rente pouvant etre enregistrer + 1
 
 int launchESHypeneatTest()
@@ -22,15 +23,15 @@ int launchESHypeneatTest()
     neatparam.activationFunctions.push_back(new HyperbolSecantActivation());
     //neatparam.activationFunctions.push_back(new AbsActivation());
 
-    neatparam.pbMutateLink = 0.1;// 0.05;
-    neatparam.pbMutateNode = 0.06;//0.03;
+    neatparam.pbMutateLink = 0.05;// 0.05;
+    neatparam.pbMutateNode = 0.03;//0.03;
     //neatparam.pbWeightShift = 0.7;
     //neatparam.pbWeightRandom = 0.2;
     neatparam.pbWeight = 0.9;// 0.9;
     neatparam.pbToggleLink = 0.05;// 0.05;
     //neatparam.weightShiftStrength = 2.5;
     //neatparam.weightRandomStrength = 2.5;
-    neatparam.weightMuteStrength = 3.0;// 2.5;
+    neatparam.weightMuteStrength = 1.3;// 2.5;
     neatparam.pbMutateActivation = 0.7;
 
     neatparam.disjointCoeff = 1.0;
@@ -83,7 +84,7 @@ int launchESHypeneatTest()
     ES_Parameters esParam;
 
     esParam.bandThreshold = 2;
-    esParam.width = 10;
+    esParam.width = 5;
 
     esParam.initialDepth = 1;
     esParam.maxDepth = 3;
@@ -292,16 +293,25 @@ void snakeEvaluate(int startIndex, int currentWorkload, std::vector<float>& fitn
 
 int snakeTest(NeuralNetwork* network, bool display)
 {
-    float totalScore = 0;
+    std::vector<float> scoreArray;
 
-    for(int test = 0; test < 3; test++)
+    scoreArray.resize(10);
+
+    float fruitScore = pow(TAILLE_ECRAN, 4) * 2;
+
+    for(int test = 0; test < 10; test++)
     {
+        if (display == true)
+        {
+            std::cout << "new snake\n";
+        }
 
+        std::pair<int, int> fruit;
         char screen[TAILLE_ECRAN][TAILLE_ECRAN];
 
         std::deque<std::pair<int, int>> snake;
 
-        int direction = 2, score = 0, input = 0, vie = 1, cpt, found = 0, r1, r2, mange = 0;
+        int direction = 2, score = 0, input = 0, vie = 1, cpt, found = 0, mange = 0;
         //srand(time(NULL));//G�n�ration seed al�atoire
 
         for (int i = 0; i < TAILLE_ECRAN; i++)//Initialisation de l'�cran "� vide"
@@ -313,19 +323,19 @@ int snakeTest(NeuralNetwork* network, bool display)
         }
 
         //Initialisation du snake
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 3; i++)
         {
-            screen[10+i][9] = -1;
-            snake.push_back(std::pair<int, int>(10 + i, 9));
+            screen[5+i][4] = -1;
+            snake.push_back(std::pair<int, int>(5 + i, 4));
         }
 
         do//Apparition du premier fruit
         {
-            r1 = rand() % (TAILLE_ECRAN);
-            r2 = rand() % (TAILLE_ECRAN);
-            if (screen[r1][r2] != -1)//on s'assure qu'il napparait pas sur le snake
+            fruit.first = rand() % (TAILLE_ECRAN);
+            fruit.second = rand() % (TAILLE_ECRAN);
+            if (screen[fruit.first][fruit.second] != -1)//on s'assure qu'il napparait pas sur le snake
             {
-                screen[r1][r2] = 5;
+                screen[fruit.first][fruit.second] = 5;
                 found = 1;
             }
         } while (found == 0);
@@ -357,22 +367,27 @@ int snakeTest(NeuralNetwork* network, bool display)
 
             int count = 0;
 
-            for (int i = -TAILLE_ECRAN/2; i < TAILLE_ECRAN/2; i++)
+            for (int i = -TAILLE_ECRAN; i < TAILLE_ECRAN; i++)
             {
                 count++;
-                for (int i2 = -TAILLE_ECRAN/2; i2 < TAILLE_ECRAN/2; i2++)
+                for (int i2 = -TAILLE_ECRAN; i2 < TAILLE_ECRAN; i2++)
                 {
                     if (i != 0 || i2 != 0)
                     {
                         pos.first = i + snake.back().first;
                         pos.second = i2 + snake.back().second;
 
-                        if (pos.first >= 0 && pos.first < 20 && pos.second >= 0 && pos.second < 20)
+                        if (pos.first >= 0 && pos.first < TAILLE_ECRAN && pos.second >= 0 && pos.second < TAILLE_ECRAN)
                         {
                             networkInput.push_back(screen[pos.first][pos.second]);
                         }
-                        else {
+                        else if( ((pos.first == -1 || pos.first == TAILLE_ECRAN) && pos.second >= 0 && pos.second < TAILLE_ECRAN) || 
+                            ((pos.second == -1 || pos.second == TAILLE_ECRAN) && pos.first >= 0 && pos.first < TAILLE_ECRAN) )
+                        {
                             networkInput.push_back(-1);
+                        }
+                        else {
+                            networkInput.push_back(0);
                         }
                     }
                 }
@@ -447,11 +462,11 @@ int snakeTest(NeuralNetwork* network, bool display)
             {
                 do//apparition d'un autre autre fruit
                 {
-                    r1 = rand() % (TAILLE_ECRAN);
-                    r2 = rand() % (TAILLE_ECRAN);
-                    if (screen[r1][r2] != -1 && abs(snake.back().first - r1) > 1 && abs(snake.back().second - r2))
+                    fruit.first = rand() % (TAILLE_ECRAN);
+                    fruit.second = rand() % (TAILLE_ECRAN);
+                    if (screen[fruit.first][fruit.second] != -1 && abs(snake.back().first - fruit.first) > 1 && abs(snake.back().second - fruit.second))
                     {
-                        screen[r1][r2] = 5;
+                        screen[fruit.first][fruit.second] = 5;
                         mange = 1;
                     }
                 } while (mange == 0);
@@ -512,22 +527,31 @@ int snakeTest(NeuralNetwork* network, bool display)
                     input = _getch();//Lecture de la derniere touche appuy�
                     fflush(stdin);
                 }*/
+
+                scoreArray[test] = fruitScore - (pow(snake.back().first - fruit.first, 2) + pow(snake.back().second - fruit.second, 2)) * 2 + fruitScore * score;
             }
 
 #ifdef TEST2
             networkInput.clear();
 #endif TEST2
 
-        } while (vie >= 1 && score < 10 && timer < 200 && timer < (20 * (score + 1)));
+        } while (vie >= 1 && score < 10 && timer < 200 && timer < (15 * (score + 1)));
         //END MAIN GAME LOOP
 
-        totalScore += pow(score, 3)/3;
-    
-        if (countChangeDir > 0)
-        {
-            totalScore += (timer / 4) / 3;
-        }
     }
 
-    return totalScore + 1;
+    //float finalScore = 0;
+
+    //for (int i = 0; i < scoreArray.size(); i++)
+    //{
+    //    finalScore += scoreArray[i];
+    //}
+
+    //finalScore /= scoreArray.size();
+
+    //return finalScore;
+
+    std::sort(scoreArray.begin(), scoreArray.end());
+
+    return (scoreArray[2] + scoreArray[4]);
 }
