@@ -22,7 +22,6 @@ void Species::computeScore()
 		if ((*it)->getScore() < 0) continue;
 
 		totalFitness += (*it)->getScore();
-		avgFitness = totalFitness / genomes.size();
 
 		if ((*it)->getScore() > maxFitness)
 		{
@@ -35,6 +34,8 @@ void Species::computeScore()
 			}
 		}
 	}
+
+	avgFitness = totalFitness / genomes.size();
 
 	if (improved == true)
 	{

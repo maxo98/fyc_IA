@@ -184,8 +184,6 @@ void Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 		layer++;
 	}
 
-	net.addOutputNode(outputSubstrate.size(), hyperParam.activationFunction);
-
 	connectLayer(layer, hypernet, net, outputSubstrate.begin(), outputSubstrate.end(), beginPreviousLayer, endPreviousLayer);
 }
 
@@ -246,28 +244,34 @@ std::vector<float> biasCppnInput(std::vector<void*> variables, std::vector<float
 
 std::vector<float> sqrDistCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2)
 {
-	p1.insert(p1.end(), p2.begin(), p2.end());
-	p1.push_back(0);
+	float dist = 0;
 
 	for (int i = 0; i < p1.size(); i++)
 	{
-		p1[p1.size() - 1] += (p2[i] - p1[i]) * (p2[i] - p1[i]);
+		
+		dist += (p2[i] - p1[i]) * (p2[i] - p1[i]);
 	}
+
+	p1.insert(p1.end(), p2.begin(), p2.end());
+	p1.push_back(dist);
 
 	return p1;
 }
 
 std::vector<float> invDistCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2)
 {
-	p1.insert(p1.end(), p2.begin(), p2.end());
-	p1.push_back(0);
+	float dist = 0;
 
 	for (int i = 0; i < p1.size(); i++)
 	{
-		p1[p1.size() - 1] += (p2[i] - p1[i]) * (p2[i] - p1[i]);
+		dist += (p2[i] - p1[i]) * (p2[i] - p1[i]);
 	}
 
-	p1[p1.size() - 1] = *((float *)variables[0]) - sqrt(p1[p1.size() - 1]);
+	p1.insert(p1.end(), p2.begin(), p2.end());
+
+	dist = *((float *)variables[0]) - sqrt(dist);
+
+	p1.push_back(dist);
 
 	return p1;
 }
@@ -276,7 +280,7 @@ std::vector<float> deltaDistCppnInput(std::vector<void*> variables, std::vector<
 {
 	p1.insert(p1.end(), p1.begin(), p1.end());
 
-	for (int i = 0; i < p1.size(); i++)
+	for (int i = 0; i < p2.size(); i++)
 	{
 		p1.push_back((p2[i] - p1[i]));
 	}

@@ -266,20 +266,18 @@ void ES_Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 			{
 				Connection connTmp = *itConnection;//We cannot change value of keys inside an unordered set
 
+				if (nodesLayerMap.emplace(connTmp.pos2, level + 1).second == true)
 				{
-					if (nodesLayerMap.emplace(connTmp.pos2, level + 1).second == true)
-					{
-						futureUnexploredNodes->push(connTmp.pos2);
-					}
-					else if (nodesLayerMap[connTmp.pos2] <= level)
-					{
-						connTmp.recursive = true;
-					}
-
-					std::pair<std::unordered_set<Connection, HyperConnectionHash, HyperConnectionEqual>::iterator, bool> result = connections.emplace(*itConnection);
-
-					hiddenConnectionMap.emplace(result.first->pos2, &*result.first);
+					futureUnexploredNodes->push(connTmp.pos2);
 				}
+				else if (nodesLayerMap[connTmp.pos2] < level)
+				{
+					connTmp.recursive = true;
+				}
+
+				std::pair<std::unordered_set<Connection, HyperConnectionHash, HyperConnectionEqual>::iterator, bool> result = connections.emplace(*itConnection);
+
+				hiddenConnectionMap.emplace(result.first->pos2, &*result.first);
 			}
 
 			unexploredNodes->pop();

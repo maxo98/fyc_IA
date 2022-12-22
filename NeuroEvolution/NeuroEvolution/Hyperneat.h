@@ -123,5 +123,11 @@ inline float proportionnalWeight (std::vector<void*> variables, float weight, co
 
 inline float substractWeight(std::vector<void*> variables, float weight, const std::vector<float>& p1, const std::vector<float>& p2)
 {
-	return weight - *(float*)variables[0];
+	float tmp = (abs(weight) - abs(*(float*)variables[0]));
+	return (tmp > 0 ? tmp * (signbit(weight) == true ? 1 : -1) : 0);
+}
+
+inline float absWeight(std::vector<void*> variables, float weight, const std::vector<float>& p1, const std::vector<float>& p2)
+{
+	return abs(weight);
 }
