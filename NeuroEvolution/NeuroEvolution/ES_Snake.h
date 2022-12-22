@@ -3,8 +3,8 @@
 
 int launchESHypeneatTest();
 
-bool esHypeneatTest(int popSize, ES_Hyperneat& esHyper);
+bool esHypeneatTest(int popSize, Hyperneat& esHyper);
 
-int snakeTest(NeuralNetwork* network, bool display);
+int snakeTest(NeuralNetwork* network, bool display, bool& validated);
 
-void snakeEvaluate(int startIndex, int currentWorkload, std::vector<float>& fitness, ES_Hyperneat& esHyper);
+void snakeEvaluate(int startIndex, int currentWorkload, std::vector<float>& fitness, Hyperneat& esHyper, bool& validated);

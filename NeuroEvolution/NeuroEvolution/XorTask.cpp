@@ -8,15 +8,16 @@ int launchXor()
 	//neatparam.activationFunctions.push_back(new thresholdActivation());
 	neatparam.activationFunctions.push_back(new SigmoidActivation());
 
-	neatparam.pbMutateLink = 0.5;// 0.05;
-	neatparam.pbMutateNode = 0.3;//0.03;
+	neatparam.pbMutateLink = 0.05;// 0.05;
+	neatparam.pbMutateNode = 0.03;//0.03;
 	neatparam.pbWeight = 1;// 0.9;
 	neatparam.pbToggleLink = 0.05;// 0.05;
-	neatparam.weightMuteStrength = 5;// 2.5;
+	neatparam.weightMuteStrength = 2.5;// 2.5;
 
 	neatparam.disjointCoeff = 1.0;
 	neatparam.excessCoeff = 1.0;
 	neatparam.mutDiffCoeff = 0.4;
+	neatparam.weightCoeff = 0.5;
 
 	neatparam.killRate = 0.2;
 

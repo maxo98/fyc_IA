@@ -7,6 +7,13 @@
 #include <time.h>
 #include <iostream>
 #include <algorithm> 
+#include <time.h>
+#include <iomanip>
+
+
+//#define HELP
+//#define ES_HYPER
+#define TROLLOLOL
 
 #define TAILLE_ECRAN 20
 
@@ -14,23 +21,33 @@ int launchESHypeneatTest()
 {
     NeatParameters neatparam;
 
+#ifndef TROLLOLOL
     //neatparam.activationFunctions.push_back(new thresholdActivation());
     neatparam.activationFunctions.push_back(new AbsActivation());
     neatparam.activationFunctions.push_back(new SinActivation());
     neatparam.activationFunctions.push_back(new HyperbolSecantActivation());
     neatparam.activationFunctions.push_back(new TanhActivation());
+    neatparam.activationFunctions.push_back(new LinearActivation());
+#endif // !TROLLOLOL
+
+
+#ifdef TROLLOLOL
+    neatparam.activationFunctions.push_back(new SquareActivation());
+    neatparam.activationFunctions.push_back(new SquareRootActivation());
+#endif // TROLLOLOL
 
     neatparam.pbMutateLink = 0.05;// 0.05;
     neatparam.pbMutateNode = 0.03;//0.03;
     neatparam.pbWeight = 0.9;// 0.9;
-    neatparam.pbToggleLink = 0.05;// 0.05;
-    neatparam.weightMuteStrength = 1.3;// 2.5;
+    neatparam.pbToggleLink = 0.01;// 0.05;
+    neatparam.weightMuteStrength = 0.5;// 2.5;
     neatparam.pbMutateActivation = 0.7;
 
     neatparam.disjointCoeff = 1.0;
     neatparam.excessCoeff = 1.0;
     neatparam.mutDiffCoeff = 0.4;
     neatparam.activationDiffCoeff = 1.0;
+    neatparam.weightCoeff = 0;
 
     neatparam.killRate = 0.2;
 
@@ -47,13 +64,13 @@ int launchESHypeneatTest()
     neatparam.pbMutateOnly = 0.25;
     neatparam.pbMateOnly = 0.2;
 
-    neatparam.speciationDistance = 2.0;
+    neatparam.speciationDistance = 3;
 
 
     neatparam.speciationDistanceMod = 0.3;
-    neatparam.minExpectedSpecies = 6;
-    neatparam.maxExpectedSpecies = 12;
-    neatparam.adaptSpeciation = true;
+    neatparam.minExpectedSpecies = 15;
+    neatparam.maxExpectedSpecies = 40;
+    neatparam.adaptSpeciation = false;
 
     neatparam.keepChamp = true;
     neatparam.elistism = true;
@@ -62,17 +79,26 @@ int launchESHypeneatTest()
     HyperneatParameters hyperneatParam;
 
     hyperneatParam.activationFunction = new LinearActivation();
-    hyperneatParam.cppnInput = 5;
-    //hyperneatParam.cppnInputFunction = distCppnInput;
-    hyperneatParam.cppnInputFunction = biasCppnInput;
+    hyperneatParam.cppnInput = 4;
+
+#ifdef HELP
+    hyperneatParam.cppnInputFunction = invDistCppnInput;
+#endif // HELP
+
+#ifndef HELP
+    hyperneatParam.cppnInputFunction = basicCppnInput;
+#endif // !HELP
+
     hyperneatParam.cppnOutput = 1;
     hyperneatParam.nDimensions = 2;
-    hyperneatParam.thresholdFunction = fixedThreshold;
-    hyperneatParam.weightModifierFunction = substractWeight;
+    hyperneatParam.thresholdFunction = noThreshold; 
+    //hyperneatParam.weightModifierFunction = noChangeWeight;
+    hyperneatParam.weightModifierFunction = absWeight;
 
-    float threshold = 0.3;
 
-    float maxDist = 1;
+    float threshold = 0.5;
+
+    float maxDist = 4;
 
     hyperneatParam.inputVariables.push_back(&maxDist);
     hyperneatParam.thresholdVariables.push_back(&threshold);
@@ -80,7 +106,6 @@ int launchESHypeneatTest()
 
     ES_Parameters esParam;
 
-    esParam.bandThreshold = 2;
     esParam.width = 1;
 
     esParam.initialDepth = 1;
@@ -93,12 +118,19 @@ int launchESHypeneatTest()
     esParam.center.push_back(0);
     esParam.center.push_back(0);
 
-    int popSize = 150;
+    int popSize = 300;
 
     std::vector<float> pos;
     pos.resize(2);
 
+#ifndef ES_HYPER
+    Hyperneat esHyper(popSize, neatparam, hyperneatParam);
+#endif // !ES_HYPER
+
+#ifdef ES_HYPER
     ES_Hyperneat esHyper(popSize, neatparam, hyperneatParam, esParam);
+#endif // ES_HYPER
+
 
     pos[0] = 0;
     pos[1] = -0.5;
@@ -118,23 +150,37 @@ int launchESHypeneatTest()
 
 
 
+    pos[0] = 0;
+    pos[1] = -0.5;
+    esHyper.addInput(pos);
 
+    pos[0] = 0;
+    pos[1] = 0.5;
+    esHyper.addInput(pos);
+
+    pos[0] = -0.5;
+    pos[1] = 0;
+    esHyper.addInput(pos);
+
+    pos[0] = 0.5;
+    pos[1] = 0;
+    esHyper.addInput(pos);
 
     //Set network output, up, down, left, right
 
     pos[0] = 0;
-    pos[1] = -1;
+    pos[1] = -0.5;
     esHyper.addOutput(pos);
 
     pos[0] = 0;
-    pos[1] = 1;
+    pos[1] = 0.5;
     esHyper.addOutput(pos);
 
-    pos[0] = -1;
+    pos[0] = -0.5;
     pos[1] = 0;
     esHyper.addOutput(pos);
 
-    pos[0] = 1;
+    pos[0] = 0.5;
     pos[1] = 0;
     esHyper.addOutput(pos);
 
@@ -151,7 +197,11 @@ int launchESHypeneatTest()
     NeuralNetwork network;
     esHyper.genomeToNetwork(*esHyper.getGoat(), network);
 
-    snakeTest(&network, true);
+    bool aaa;
+
+    snakeTest(&network, true, aaa);
+
+    esHyper.getGoat()->saveCurrentGenome();
 
     for (int i = 0; i < neatparam.activationFunctions.size(); i++)
     {
@@ -164,13 +214,15 @@ int launchESHypeneatTest()
 }
 
 
-bool esHypeneatTest(int popSize, ES_Hyperneat& esHyper)
+bool esHypeneatTest(int popSize, Hyperneat& esHyper)
 {
     std::vector<float> fitness;
 
     fitness.resize(popSize);
 
-    for (int i3 = 0; i3 < 100; i3++)
+    bool validated = false;
+
+    for (int i3 = 0; i3 < 100 && validated == false; i3++)
     {
         std::cout << std::endl << "gen " << i3 << std::endl;
 
@@ -202,7 +254,7 @@ bool esHypeneatTest(int popSize, ES_Hyperneat& esHyper)
 
         while (cpus > threads.size() + 1)
         {
-            threads.push_back(std::thread(snakeEvaluate, startIndex, currentWorkload + floor(restWorkload), std::ref(fitness), std::ref(esHyper)));
+            threads.push_back(std::thread(snakeEvaluate, startIndex, currentWorkload + floor(restWorkload), std::ref(fitness), std::ref(esHyper), std::ref(validated)));
 
             count += currentWorkload + floor(restWorkload);
 
@@ -227,7 +279,7 @@ bool esHypeneatTest(int popSize, ES_Hyperneat& esHyper)
             count--;
         }
 
-        snakeEvaluate(startIndex, currentWorkload, fitness, esHyper);
+        snakeEvaluate(startIndex, currentWorkload, fitness, esHyper, validated);
 
         for (int i = 0; i < threads.size(); i++)
         {
@@ -244,24 +296,32 @@ bool esHypeneatTest(int popSize, ES_Hyperneat& esHyper)
     return false;
 }
 
-void snakeEvaluate(int startIndex, int currentWorkload, std::vector<float>& fitness, ES_Hyperneat& esHyper)
+void snakeEvaluate(int startIndex, int currentWorkload, std::vector<float>& fitness, Hyperneat& esHyper, bool& validated)
 {
     for (int i = startIndex; i < (startIndex + currentWorkload); i++)
     {
-        fitness[i] = snakeTest(esHyper.getNeuralNetwork(i), false);
+        bool tmp = false;
+
+        fitness[i] = snakeTest(esHyper.getNeuralNetwork(i), false, tmp);
+
+        if (tmp == true)
+        {
+            validated = true;
+        }
     }
 }
 
 
-int snakeTest(NeuralNetwork* network, bool display)
+int snakeTest(NeuralNetwork* network, bool display, bool& validated)
 {
     std::vector<float> scoreArray;
+    int wins = 0;
 
-    scoreArray.resize(10);
+    scoreArray.resize(20, 0);
 
     float fruitScore = sqrt(pow(TAILLE_ECRAN, 2) * 2);
 
-    for(int test = 0; test < 10; test++)
+    for(int test = 0; (test < 20 && display == false) || (test < 1 && display == true); test++)
     {
         if (display == true)
         {
@@ -286,8 +346,8 @@ int snakeTest(NeuralNetwork* network, bool display)
         //Initialisation du snake
         for (int i = 0; i < 3; i++)
         {
-            screen[5+i][4] = -1;
-            snake.push_back(std::pair<int, int>(5 + i, 4));
+            screen[TAILLE_ECRAN/2 + i - 1][TAILLE_ECRAN / 2] = -1;
+            snake.push_back(std::pair<int, int>(TAILLE_ECRAN / 2 + i - 1, TAILLE_ECRAN / 2));
         }
 
         do//Apparition du premier fruit
@@ -306,7 +366,7 @@ int snakeTest(NeuralNetwork* network, bool display)
         std::vector<float> networkInput, output;
         int countChangeDir = 0;
 
-        networkInput.resize(4);//8);
+        networkInput.resize(8, 0);
 
         //START MAIN GAME LOOP
         do {
@@ -317,41 +377,59 @@ int snakeTest(NeuralNetwork* network, bool display)
                 std::cout << snake.back() << " " << fruit << std::endl;
             }
 
-            networkInput[0] = sqrt(pow(TAILLE_ECRAN, 2) * 2)  - sqrt(pow(snake.back().first - fruit.first - 0.5, 2) + pow(snake.back().second - fruit.second, 2));
-            networkInput[1] = sqrt(pow(TAILLE_ECRAN, 2) * 2) - sqrt(pow(snake.back().first - fruit.first + 0.5, 2) + pow(snake.back().second - fruit.second, 2));
-            networkInput[2] = sqrt(pow(TAILLE_ECRAN, 2) * 2) - sqrt(pow(snake.back().first - fruit.first, 2) + pow(snake.back().second - fruit.second - 0.5, 2));
-            networkInput[3] = sqrt(pow(TAILLE_ECRAN, 2) * 2) - sqrt(pow(snake.back().first - fruit.first, 2) + pow(snake.back().second - fruit.second + 0.5, 2));
+            networkInput[0] = (pow(TAILLE_ECRAN, 2) * 2)  - (pow(snake.back().first - fruit.first - 0.5, 2) + pow(snake.back().second - fruit.second, 2));
+            networkInput[1] = (pow(TAILLE_ECRAN, 2) * 2) - (pow(snake.back().first - fruit.first + 0.5, 2) + pow(snake.back().second - fruit.second, 2));
+            networkInput[2] = (pow(TAILLE_ECRAN, 2) * 2) - (pow(snake.back().first - fruit.first, 2) + pow(snake.back().second - fruit.second - 0.5, 2));
+            networkInput[3] = (pow(TAILLE_ECRAN, 2) * 2) - (pow(snake.back().first - fruit.first, 2) + pow(snake.back().second - fruit.second + 0.5, 2));
 
+            for (int n = 0; n < 4; n++)
+            {
+                networkInput[n + 4] = 0;
+            }
 
-            //std::pair<int, int> pos;
+            float result = 0;
+            
+            std::pair<int, int> pos;
 
+            int debug = 0;
+            int aa = 0;
+            int bb = 0;
 
+            for (int i = -1; i <= TAILLE_ECRAN; i++)
+            {
+                pos.first = snake.back().first - i;
 
-            //        if (pos.first == -1 || pos.second == -1 || pos.first == TAILLE_ECRAN || pos.second == TAILLE_ECRAN || 
-            //            (pos.first > -1 && pos.first < TAILLE_ECRAN && pos.second > -1 && pos.second < TAILLE_ECRAN && screen[pos.first][pos.second] == -1))
-            //        {
-            //            float dist = sqrt(pow(TAILLE_ECRAN, 2) * 2) - sqrt(pow(snake.back().first - pos.first - 0.7, 2) + pow(snake.back().second - pos.second, 2));
+                for (int j = -1; j <= TAILLE_ECRAN; j++)
+                {
+                    pos.second = snake.back().second - j;
 
-            //            if (dist > networkInput[4]) networkInput[4] = dist;
+                    if (i == -1 || j == -1 || i == TAILLE_ECRAN || j == TAILLE_ECRAN ||
+                        (i > -1 && i < TAILLE_ECRAN && j > -1 && j < TAILLE_ECRAN && screen[i][j] == -1
+                            && (pos.first != 0 || pos.second != 0)))
+                    {
+                        
+                        float dist = -((pow(TAILLE_ECRAN, 2) * 2) - (pow(float(pos.first) - 0.5f, 2) + pow(pos.second, 2)));
 
-            //            dist = sqrt(pow(TAILLE_ECRAN, 2) * 2) - sqrt(pow(snake.back().first - pos.first + 0.7, 2) + pow(snake.back().second - pos.second, 2));
+                        if (dist < networkInput[4]) networkInput[4] = dist;
 
-            //            if (dist > networkInput[5]) networkInput[5] = dist;
+                        dist = -((pow(TAILLE_ECRAN, 2) * 2) - (pow(float(pos.first) + 0.5f, 2) + pow(pos.second, 2)));
 
-            //            dist = sqrt(pow(TAILLE_ECRAN, 2) * 2) - sqrt(pow(snake.back().first - pos.first, 2) + pow(snake.back().second - pos.second - 0.7, 2));
+                        if (dist < networkInput[5]) networkInput[5] = dist;
 
-            //            if (dist > networkInput[6]) networkInput[6] = dist;
+                        dist = -((pow(TAILLE_ECRAN, 2) * 2) - (pow(pos.first, 2) + pow(float(pos.second) - 0.5f, 2)));
 
-            //            dist = sqrt(pow(TAILLE_ECRAN, 2) * 2) - sqrt(pow(snake.back().first - pos.first, 2) + pow(snake.back().second - pos.second + 0.7, 2));
+                        if (dist < networkInput[6]) networkInput[6] = dist;
 
-            //            if (dist > networkInput[7]) networkInput[7] = dist;
-            //        }
-            //    }
-            //}
+                        dist = -((pow(TAILLE_ECRAN, 2) * 2) - (pow(pos.first, 2) + pow(float(pos.second) + 0.5f, 2)));
+
+                        if (dist < networkInput[7]) networkInput[7] = dist;
+                    }
+                }
+            }
 
             if (display == true)
             {
-                std::cout << networkInput << std::endl;
+                std::cout << "netInput " << networkInput << std::endl;
             }
 
             network->compute(networkInput, output);
@@ -360,12 +438,24 @@ int snakeTest(NeuralNetwork* network, bool display)
             int directionIndex = 0;
             float outputScore = output[0];
 
+            //std::cout << "size " << output.size() << std::endl;
+
+            if (display == true)
+            {
+                std::cout << 0 << " " << output[0] << std::endl;
+            }
+
             for (int i = 1; i < output.size(); i++)
             {
                 if (output[i] > outputScore)
                 {
                     directionIndex = i;
                     outputScore = output[i];
+                }
+
+                if (display == true)
+                {
+                    std::cout << i << " " << output[i] << std::endl;
                 }
             }
 
@@ -403,17 +493,17 @@ int snakeTest(NeuralNetwork* network, bool display)
 
             switch (direction)//lecture de l'entr� pour savoir quel direction prendre
             {
-            case 8:
+            case 8://UP
                 snake.push_back(std::pair<int, int>(snake.back().first - 1, snake.back().second));
                 break;
-            case 2:
+            case 2://Down
                 snake.push_back(std::pair<int, int>(snake.back().first + 1, snake.back().second));
                 break;
-            case 6:
-                snake.push_back(std::pair<int, int>(snake.back().first, snake.back().second + 1));
-                break;
-            case 4:
+            case 4://Left
                 snake.push_back(std::pair<int, int>(snake.back().first, snake.back().second - 1));
+                break;
+            case 6://Right
+                snake.push_back(std::pair<int, int>(snake.back().first, snake.back().second + 1));
                 break;
             }
 
@@ -487,19 +577,45 @@ int snakeTest(NeuralNetwork* network, bool display)
                     fflush(stdin);
                 }*/
 
-                scoreArray[test] += fruitScore - sqrt(pow(snake.back().first - fruit.first, 2) + pow(snake.back().second - fruit.second, 2)) + fruitScore * score;
+                if (sqrt(pow(TAILLE_ECRAN, 2) * 2) - sqrt(pow(snake.back().first - fruit.first - 0.5, 2) + pow(snake.back().second - fruit.second, 2))
+                    < sqrt(pow(TAILLE_ECRAN, 2) * 2) - sqrt(pow(snake[snake.size() - 2].first - fruit.first - 0.5, 2) + pow(snake[snake.size() - 2].second - fruit.second, 2)))
+                {
+                    scoreArray[test] += 0.25;
+                }
+                else {
+                    scoreArray[test] -= 0.25;
+                }
             }
 
         } while (vie >= 1 && score < 10 && timer < 200 && timer < ((TAILLE_ECRAN + 5) * (score + 1)));
         //END MAIN GAME LOOP
 
+        scoreArray[test] += score * TAILLE_ECRAN * 4 + 1;
+
+        if (countChangeDir == 0)
+        {
+            scoreArray[test] = 0;
+        }
+
+        if (score == 10)
+        {
+            wins++;
+        }
     }
 
+    if (wins == 20)
+    {
+        validated = true;
+    }
 
+    float finalScore = 0;
 
+    for (int i = 0; i < scoreArray.size(); i++)
+    {
+        finalScore += scoreArray[i];
+    }
 
+    finalScore /= scoreArray.size();
 
-    std::sort(scoreArray.begin(), scoreArray.end());
-
-    return (scoreArray[2] + scoreArray[4]);
+    return finalScore;
 }
