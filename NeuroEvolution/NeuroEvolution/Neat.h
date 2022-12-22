@@ -77,7 +77,10 @@ public:
 
 	Neat();
 	Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam, INIT init = INIT::ONE);
+	Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam, std::vector<Genome>& initPop);
 	~Neat();
+
+	bool init(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam);
 
 	void fullConnectInit(Genome& gen);
 	void oneConnectionInit(Genome& gen);

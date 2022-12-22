@@ -48,7 +48,7 @@ public:
 class ES_Hyperneat: public Hyperneat
 {
 public:
-	ES_Hyperneat(unsigned int _populationSize, const NeatParameters& _neatParam, const HyperneatParameters& _hyperParam, const ES_Parameters& _esParam);
+	ES_Hyperneat(unsigned int _populationSize, const NeatParameters& _neatParam, const HyperneatParameters& _hyperParam, const ES_Parameters& _esParam, Neat::INIT init = Neat::INIT::ONE);
 	~ES_Hyperneat();
 
 	virtual void createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net);

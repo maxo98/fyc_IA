@@ -5,8 +5,8 @@
 #include <algorithm>
 #include <queue>
 
-ES_Hyperneat::ES_Hyperneat(unsigned int _populationSize, const NeatParameters& _neatParam, const HyperneatParameters& _hyperParam, const ES_Parameters& _esParam):
-	Hyperneat(_populationSize, _neatParam, _hyperParam)
+ES_Hyperneat::ES_Hyperneat(unsigned int _populationSize, const NeatParameters& _neatParam, const HyperneatParameters& _hyperParam, const ES_Parameters& _esParam, Neat::INIT init):
+	Hyperneat(_populationSize, _neatParam, _hyperParam, init)
 {
 	esParam = _esParam;
 }

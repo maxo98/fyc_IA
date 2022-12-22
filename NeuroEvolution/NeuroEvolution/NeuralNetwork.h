@@ -39,11 +39,13 @@ public:
 	void connectNodes(unsigned int layerA, unsigned int nodeA, unsigned int layerB, unsigned int nodeB, float weight);
 	void connectNodes(std::pair<unsigned int, unsigned int> nodeA, std::pair<unsigned int, unsigned int> nodeB, float weight);
 
-	bool compute(const std::vector<float> &inputs , std::vector<float> &outputs);
+	bool compute(const std::vector<float> &inputs, std::vector<float> &outputs);
+	bool computeSingleOuput(const std::vector<float>& inputs, float& output, int index);
+	bool prepareComputation(const std::vector<float>& inputs);
 	void splitLayerComputing(std::deque<Node>::iterator it, int size, bool output = false, std::vector<float>* outputs = nullptr);
 	void concurrentComputing(int workload, int startIndex, std::deque<Node>::iterator it, bool output, std::vector<float>* outputs);
 
-	void backprop(const std::vector<float>& inputs, const std::vector<float>& outputs, float learnRate);
+	bool backprop(const std::vector<float>& inputs, const std::vector<float>& outputs, float learnRate);
 	void applyBackprop(Genome& gen);
 
 	void clear();

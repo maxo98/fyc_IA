@@ -3,11 +3,20 @@
 
 #include "Hyperneat.h"
 
-Hyperneat::Hyperneat(unsigned int _populationSize, const NeatParameters& _neatParam, const HyperneatParameters& _hyperParam)
+Hyperneat::Hyperneat(unsigned int _populationSize, const NeatParameters& _neatParam, const HyperneatParameters& _hyperParam, Neat::INIT init)
 {
 	hyperParam = _hyperParam;
 
-	cppns = new CPPN_Neat(_populationSize, hyperParam.cppnInput, hyperParam.cppnOutput, _neatParam);
+	cppns = new CPPN_Neat(_populationSize, hyperParam.cppnInput, hyperParam.cppnOutput, _neatParam, init);
+
+	networks.resize(_populationSize);
+}
+
+Hyperneat::Hyperneat(unsigned int _populationSize, const NeatParameters& _neatParam, const HyperneatParameters& _hyperParam, std::vector<Genome>& initPop)
+{
+	hyperParam = _hyperParam;
+
+	cppns = new CPPN_Neat(_populationSize, hyperParam.cppnInput, hyperParam.cppnOutput, _neatParam, initPop);
 
 	networks.resize(_populationSize);
 }

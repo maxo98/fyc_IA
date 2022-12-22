@@ -110,7 +110,7 @@ private:
 
 	void shiftNodes(unsigned int node, unsigned int layerMin);
 
-	unsigned int input;
+	unsigned int input, output;
 
 	std::map<unsigned int, GeneConnection> connections;
 	std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int> nodesToConnection;//From a pair of nodes to innovation number of connection

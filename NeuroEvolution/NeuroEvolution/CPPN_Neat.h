@@ -11,7 +11,8 @@ class CPPN_Neat: public Neat
 {
 public:
 	inline CPPN_Neat() {};
-	CPPN_Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParamters);
+	CPPN_Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam, INIT init = INIT::ONE);
+	CPPN_Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam, std::vector<Genome>& initPop);
 	~CPPN_Neat();
 
 	virtual void mutate(Genome& genome, std::mutex* lock = nullptr);

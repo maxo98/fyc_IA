@@ -42,7 +42,8 @@ typedef struct {
 class Hyperneat
 {
 public:
-	Hyperneat(unsigned int _populationSize, const NeatParameters& _neatParamters, const HyperneatParameters& _hyperParam);
+	Hyperneat(unsigned int _populationSize, const NeatParameters& _neatParam, const HyperneatParameters& _hyperParam, Neat::INIT init = Neat::INIT::ONE);
+	Hyperneat(unsigned int _populationSize, const NeatParameters& _neatParam, const HyperneatParameters& _hyperParam, std::vector<Genome>& initPop);
 
 	~Hyperneat();
 

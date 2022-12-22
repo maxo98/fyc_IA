@@ -240,6 +240,44 @@ Node* NeuralNetwork::getNodeFromLayer(std::deque<Node>& layer, unsigned int node
 
 bool NeuralNetwork::compute(const std::vector<float>& inputs, std::vector<float>& outputs)
 {
+	if (prepareComputation(inputs) == true)
+	{
+		//Parallel computing hidden nodes value
+		for (std::deque<std::deque<Node>>::iterator it = hiddenNodes.begin(); it != hiddenNodes.end(); ++it)
+		{
+			std::deque<Node>::iterator itNode = it->begin();
+
+			splitLayerComputing(itNode, it->size());
+		}
+
+		//std::cout << outputNodes.size() << std::endl;
+
+		outputs.resize(outputNodes.size(), 0);
+
+		//Compute the result
+		splitLayerComputing(outputNodes.begin(), outputNodes.size(), true, &outputs);
+
+		return true;
+	}
+
+	return false;
+}
+
+bool NeuralNetwork::computeSingleOuput(const std::vector<float>& inputs, float& output, int index)
+{
+	if (prepareComputation(inputs) == true)
+	{
+		//Compute the result
+		output = outputNodes[index].compute();
+
+		return true;
+	}
+
+	return false;
+}
+
+bool NeuralNetwork::prepareComputation(const std::vector<float>& inputs)
+{
 	//outputs.clear();
 
 	if (inputs.size() >= inputNodes.size())
@@ -273,22 +311,8 @@ bool NeuralNetwork::compute(const std::vector<float>& inputs, std::vector<float>
 			it->setValue(inputs[i]);
 		}
 
-		//Parallel computing hidden nodes value
-		for (std::deque<std::deque<Node>>::iterator it = hiddenNodes.begin(); it != hiddenNodes.end(); ++it)
-		{
-			std::deque<Node>::iterator itNode = it->begin();
-
-			splitLayerComputing(itNode, it->size());
-		}
-
-		//std::cout << outputNodes.size() << std::endl;
-
-		outputs.resize(outputNodes.size(), 0);
-
-		//Compute the result
-		splitLayerComputing(outputNodes.begin(), outputNodes.size(), true, &outputs);
-
 		return true;
+
 	}
 	else {
 		std::cout << "Inputs given smaller than expected\n";
@@ -418,8 +442,10 @@ void NeuralNetwork::concurrentComputing(int workload, int startIndex, std::deque
 	}
 }
 
-void NeuralNetwork::backprop(const std::vector<float>& inputs, const std::vector<float>& outputs, float learnRate)
+bool NeuralNetwork::backprop(const std::vector<float>& inputs, const std::vector<float>& outputs, float learnRate)
 {
+	if (inputs.size() < inputNodes.size() || outputs.size() < outputNodes.size()) return false;
+
 	std::vector<float> tmp;
 
 	if (compute(inputs, tmp) == true)
@@ -451,6 +477,8 @@ void NeuralNetwork::backprop(const std::vector<float>& inputs, const std::vector
 			}
 		}
 	}
+
+	return true;
 }
 
 void NeuralNetwork::applyBackprop(Genome& gen)

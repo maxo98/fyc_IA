@@ -10,17 +10,7 @@
 
 Neat::Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam, INIT init)
 {
-	if (_neatParam.activationFunctions.size() == 0) return;//Avoid Unreal crash, should probably put a debug message
-
-	populationSize = _populationSize;
-	input = _input;
-	output = _output;
-
-	neatParam = _neatParam;
-
-	networks.resize(populationSize);
-	genomes = new Genome[populationSize];
-	futureGen = new Genome[populationSize];
+	if (this->init(_populationSize, _input, _output, _neatParam) == false) return;
 
 	if (init != INIT::NONE)
 	{
@@ -40,6 +30,51 @@ Neat::Neat(unsigned int _populationSize, unsigned int _input, unsigned int _outp
 
 		generateNetworks();
 	}
+}
+
+Neat::Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam, std::vector<Genome>& initPop)
+{
+	if (this->init(_populationSize, _input, _output, _neatParam) == false) return;
+
+	for (int i = 0; i < initPop.size(); i++)
+	{
+		for (std::map<unsigned int, GeneConnection>::iterator it = initPop[i].getConnections()->begin(); it != initPop[i].getConnections()->end(); ++it)
+		{
+			allConnections.emplace(std::pair<int, int>(it->second.getNodeA(), it->second.getNodeB()), it->first);
+		}
+	}
+
+	if (initPop.size() == _populationSize)
+	{
+		for (int i = 0; i < initPop.size(); i++)
+		{
+			genomes[i] = initPop[i];
+		}
+	}
+	else {
+		for (int i = 0; i < _populationSize; i++)
+		{
+			genomes[i] = initPop[randInt(0, initPop.size() - 1 )];
+			mutate(genomes[i]);
+		}
+	}
+}
+
+bool Neat::init(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam)
+{
+	if (_neatParam.activationFunctions.size() == 0) return false;//Avoid Unreal crash, should probably put a debug message
+
+	populationSize = _populationSize;
+	input = _input;
+	output = _output;
+
+	neatParam = _neatParam;
+
+	networks.resize(populationSize);
+	genomes = new Genome[populationSize];
+	futureGen = new Genome[populationSize];
+
+	return true;
 }
 
 Neat::Neat()

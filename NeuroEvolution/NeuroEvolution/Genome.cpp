@@ -9,9 +9,10 @@ Genome::Genome()
     input = 0;
 }
 
-Genome::Genome(unsigned int _input, unsigned int output, std::vector<Activation*> activationFunctions, bool cppn)
+Genome::Genome(unsigned int _input, unsigned int _output, std::vector<Activation*> activationFunctions, bool cppn)
 {
     input = _input;
+    output = _output;
 
     for (unsigned int i = 0; i < input; i++)
     {
@@ -87,8 +88,15 @@ bool Genome::mutateLink(std::unordered_map<std::pair<unsigned int, unsigned int>
         i++;
 
         //Pick two random nodes
-        nodeA = randInt(0, nodes.size() - 1);
-        nodeB = randInt(0, nodes.size() - 1);
+        if (nodes.size() == (input + output))
+        {
+            nodeA = randInt(0, nodes.size() - 1);
+            nodeB = randInt(0, nodes.size() - 1);
+        }
+        else {
+            nodeA = randInt(0, nodes.size() - 1 - output);
+            nodeB = randInt(input, nodes.size() - 1);
+        }
 
         if (nodeA >= nodes.size())
         {

@@ -5,16 +5,31 @@
 #include <algorithm>
 
 
-CPPN_Neat::CPPN_Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam): Neat(_populationSize, _input, _output, _neatParam, INIT::NONE)
+CPPN_Neat::CPPN_Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam, INIT init): Neat(_populationSize, _input, _output, _neatParam, INIT::NONE)
 {
-	for (int i = 0; i < populationSize; i++)
+	if (init != INIT::NONE)
 	{
-		genomes[i] = Genome(_input, output, neatParam.activationFunctions, true);
-		fullConnectInit(genomes[i]);
-	}
+		for (unsigned int i = 0; i < populationSize; i++)
+		{
+			genomes[i] = (Genome(input, output, neatParam.activationFunctions, true));
 
-	generateNetworks();
+			if (init == INIT::ONE)
+			{
+				oneConnectionInit(genomes[i]);
+			}
+			else if (init == INIT::FULL)
+			{
+				fullConnectInit(genomes[i]);
+			}
+		}
+
+		generateNetworks();
+	}
 }
+
+CPPN_Neat::CPPN_Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam, std::vector<Genome>& initPop):
+	Neat(_populationSize, _input, _output, _neatParam, initPop)
+{}
 
 CPPN_Neat::~CPPN_Neat()
 {
