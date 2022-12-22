@@ -38,7 +38,6 @@ Neat::Neat(unsigned int _populationSize, unsigned int _input, unsigned int _outp
 			}
 		}
 
-
 		generateNetworks();
 	}
 }
@@ -151,16 +150,6 @@ void Neat::mutate(Genome& genome, std::mutex* lock)
 			genome.mutateWeights(neatParam.weightMuteStrength, 1.0, Genome::WEIGHT_MUTATOR::GAUSSIAN);
 		}
 
-		//if (neatParam.pbWeightShift > randFloat()) 
-		//{
-		//	genome.mutateWeightShift(neatParam.pbWeightShift);
-		//}
-
-		//if (neatParam.pbWeightRandom > randFloat()) 
-		//{
-		//	genome.mutateWeightRandom(neatParam.pbWeightRandom);
-		//}
-
 		if (neatParam.pbToggleLink > randFloat()) 
 		{
 			genome.mutateLinkToggle();
@@ -224,14 +213,9 @@ void Neat::genomeToNetwork(Genome& genome, NeuralNetwork& network)
 	{
 		if (connection->second.isEnabled() == true)
 		{
-			//if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%i %i %i %i"), nodePosition[connection->second.getNodeA()].first, nodePosition[connection->second.getNodeA()].second, nodePosition[connection->second.getNodeB()].first, nodePosition[connection->second.getNodeB()].second));
-			//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("%i %i"), connection->second.getNodeA(), nodes->size()));
-
 			network.connectNodes(nodePosition[connection->second.getNodeA()], nodePosition[connection->second.getNodeB()], connection->second.getWeight());
 		}
 	}
-
-	//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, "End network");
 }
 
 void Neat::evolve()
@@ -355,7 +339,7 @@ void Neat::evolve()
 		if (finalExpected < populationSize) 
 		{
 			//      cout<<"Population died!"<<endl;
-			//cin>>pause;
+
 			for (std::vector<Species>::iterator it = species.begin(); it != species.end(); ++it)
 			{
 				it->setExpectedOffspring(0);
@@ -1022,7 +1006,9 @@ void Neat::setScore(const std::vector < float >& newScores)
 		highestLastChanged++;
 	}
 	else {
+#ifdef DEBUG
 		std::cout << "new best score " << bestScore << std::endl;
+#endif // DEBUG
 
 		lastBestScore = bestScore;
 		highestLastChanged = 0;

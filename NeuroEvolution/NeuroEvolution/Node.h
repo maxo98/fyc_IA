@@ -17,9 +17,7 @@ public:
 	~Node();
 
 	void wipeConnections();
-	//void removeConnection(Node*);
 	void addConnection(Node*, float, bool);
-	//void changeWeight(Node*, float);
 
 	inline float getOldValue() { return oldValue; }
 

@@ -45,16 +45,6 @@ void CPPN_Neat::mutate(Genome& genome, std::mutex* lock)
 			genome.mutateWeights(neatParam.weightMuteStrength, 1.0, Genome::WEIGHT_MUTATOR::GAUSSIAN);
 		}
 
-		//if (neatParam.pbWeightShift > randFloat()) 
-		//{
-		//	genome.mutateWeightShift(neatParam.pbWeightShift);
-		//}
-
-		//if (neatParam.pbWeightRandom > randFloat()) 
-		//{
-		//	genome.mutateWeightRandom(neatParam.pbWeightRandom);
-		//}
-
 		if (neatParam.pbToggleLink > randFloat())
 		{
 			genome.mutateLinkToggle();

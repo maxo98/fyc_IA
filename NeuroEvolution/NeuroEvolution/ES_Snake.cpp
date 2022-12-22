@@ -22,12 +22,8 @@ int launchESHypeneatTest()
 
     neatparam.pbMutateLink = 0.05;// 0.05;
     neatparam.pbMutateNode = 0.03;//0.03;
-    //neatparam.pbWeightShift = 0.7;
-    //neatparam.pbWeightRandom = 0.2;
     neatparam.pbWeight = 0.9;// 0.9;
     neatparam.pbToggleLink = 0.05;// 0.05;
-    //neatparam.weightShiftStrength = 2.5;
-    //neatparam.weightRandomStrength = 2.5;
     neatparam.weightMuteStrength = 1.3;// 2.5;
     neatparam.pbMutateActivation = 0.7;
 
@@ -120,21 +116,9 @@ int launchESHypeneatTest()
     pos[1] = 0;
     esHyper.addInput(pos);
 
-    //pos[0] = 0;
-    //pos[1] = -0.7;
-    //esHyper.addInput(pos);
 
-    //pos[0] = 0;
-    //pos[1] = 0.7;
-    //esHyper.addInput(pos);
 
-    //pos[0] = -0.7;
-    //pos[1] = 0;
-    //esHyper.addInput(pos);
 
-    //pos[0] = 0.7;
-    //pos[1] = 0;
-    //esHyper.addInput(pos);
 
     //Set network output, up, down, left, right
 
@@ -159,7 +143,6 @@ int launchESHypeneatTest()
     esHyper.generateNetworks();
 
     esHypeneatTest(popSize, esHyper);
-
 
     esHyper.saveHistory();
 
@@ -291,7 +274,6 @@ int snakeTest(NeuralNetwork* network, bool display)
         std::deque<std::pair<int, int>> snake;
 
         int direction = 2, score = 0, input = 0, vie = 1, cpt, found = 0, mange = 0;
-        //srand(time(NULL));//G�n�ration seed al�atoire
 
         for (int i = 0; i < TAILLE_ECRAN; i++)//Initialisation de l'�cran "� vide"
         {
@@ -330,11 +312,6 @@ int snakeTest(NeuralNetwork* network, bool display)
         do {
             timer++;
 
-            //for (int i = 0; i < 4; i++)
-            //{
-            //    networkInput[4 + i] = 0;
-            //}
-
             if (display == true)
             {
                 std::cout << snake.back() << " " << fruit << std::endl;
@@ -348,13 +325,7 @@ int snakeTest(NeuralNetwork* network, bool display)
 
             //std::pair<int, int> pos;
 
-            //for (int i = -TAILLE_ECRAN; i <= TAILLE_ECRAN; i++)
-            //{
-            //    pos.first = i - snake.back().first;
 
-            //    for (int j = -TAILLE_ECRAN; j <= TAILLE_ECRAN; j++)
-            //    {
-            //        pos.second = j - snake.back().second;
 
             //        if (pos.first == -1 || pos.second == -1 || pos.first == TAILLE_ECRAN || pos.second == TAILLE_ECRAN || 
             //            (pos.first > -1 && pos.first < TAILLE_ECRAN && pos.second > -1 && pos.second < TAILLE_ECRAN && screen[pos.first][pos.second] == -1))
@@ -522,19 +493,11 @@ int snakeTest(NeuralNetwork* network, bool display)
         } while (vie >= 1 && score < 10 && timer < 200 && timer < ((TAILLE_ECRAN + 5) * (score + 1)));
         //END MAIN GAME LOOP
 
-        //scoreArray[test] = score * 2 + 1;
     }
 
-    //float finalScore = 0;
 
-    //for (int i = 0; i < scoreArray.size(); i++)
-    //{
-    //    finalScore += scoreArray[i];
-    //}
 
-    //finalScore /= scoreArray.size();
 
-    //return finalScore;
 
     std::sort(scoreArray.begin(), scoreArray.end());
 

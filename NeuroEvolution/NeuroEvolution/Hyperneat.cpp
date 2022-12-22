@@ -15,7 +15,6 @@ Hyperneat::Hyperneat(unsigned int _populationSize, const NeatParameters& _neatPa
 Hyperneat::~Hyperneat()
 {
 	delete cppns;
-//	delete hyperParam.activationFunction;
 }
 
 void Hyperneat::addInput(const std::vector<float>& node)
@@ -122,7 +121,6 @@ void Hyperneat::generateNetworksThread(int startIndex, int worlkload)
 {
 	for (unsigned int cpt = startIndex; cpt < (startIndex + worlkload); cpt++)
 	{
-		//std::cout << cpt << std::endl;
 		createNetwork(*cppns->getNeuralNetwork(cpt), networks[cpt]);
 	}
 }
@@ -169,8 +167,6 @@ void Hyperneat::createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net)
 	//Connect the hidden layers
 	for (std::vector<std::vector<std::vector<float>>>::iterator itLayer = hiddenSubstrates.begin(); itLayer != hiddenSubstrates.end(); ++itLayer)
 	{
-		
-
 		connectLayer(layer, hypernet, net, itLayer->begin(), itLayer->end(), beginPreviousLayer, endPreviousLayer);
 
 		beginPreviousLayer = itLayer->begin();
@@ -215,6 +211,7 @@ void Hyperneat::connectLayer(unsigned int layer, NeuralNetwork& hypernet, Neural
 			if (hyperParam.thresholdFunction(hyperParam.thresholdVariables, output, p1, p2) == true)
 			{
 				float weight = hyperParam.weightModifierFunction(hyperParam.weightVariables, output[0], p1, p2);
+
 				net.connectNodes(layer - 1, nodeA, layer, nodeB, weight);
 			}
 

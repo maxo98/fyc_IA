@@ -18,11 +18,6 @@ void Node::wipeConnections()
 	previousNodes.clear();
 }
 
-/*void Node::removeConnection(Node* node)
-{
-	previousNodes.erase(node);
-}*/
-
 void Node::addConnection(Node* node, float weight, bool recursive)
 {
 	if (recursive == false)
@@ -34,11 +29,6 @@ void Node::addConnection(Node* node, float weight, bool recursive)
 	}
 	
 }
-
-/*void Node::changeWeight(Node* node, float weight)
-{
-	previousNodes.at(node) = weight;
-}*/
 
 float Node::compute()
 {
@@ -64,6 +54,7 @@ float Node::compute()
 		}
 
 		value = activation->activate(value);
+
 		computed = true;
 	}
 

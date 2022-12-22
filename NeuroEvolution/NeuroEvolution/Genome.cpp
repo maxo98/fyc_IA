@@ -169,62 +169,6 @@ bool Genome::mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>
     return true;
 }
 
-//void Genome::mutateWeightShift(float weightShiftStrength)
-//{
-//    bool foundMutation = false;
-//    unsigned int geneConnectionIndex;
-//    unsigned int i = 0;
-//    GeneConnection* connection = nullptr;
-//
-//    //Try to find an enabled connection to create a 100 times
-//    while (i < 100 && foundMutation == false)
-//    {
-//        geneConnectionIndex = randInt(0, connections.size() - 1);
-//        connection = &std::next(connections.begin(), geneConnectionIndex)->second;
-//
-//        if (connection->enabled == true)
-//        {
-//            foundMutation = true;
-//        }
-//
-//        i++;
-//    }
-//
-//    if (foundMutation == true)
-//    {
-//        //Shift the weight by a random offset
-//        connection->weight += (static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 2)) - 1) * weightShiftStrength;
-//    }
-//}
-//
-//void Genome::mutateWeightRandom(float weightRandomStrength)
-//{
-//    bool foundMutation = false;
-//    unsigned int geneConnectionIndex;
-//    unsigned int i = 0;
-//    GeneConnection* connection = nullptr;
-//
-//    //Try to find an enabled connection to create a 100 times
-//    while (i < 100 && foundMutation == false)
-//    {
-//        geneConnectionIndex = randInt(0, connections.size() - 1);
-//        connection = &std::next(connections.begin(), geneConnectionIndex)->second;
-//
-//        if (connection->enabled == true)
-//        {
-//            foundMutation = true;
-//        }
-//
-//        i++;
-//    }
-//
-//    if (foundMutation == true)
-//    {
-//        //Set a new random weight
-//        connection->weight = (static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 2)) -1 ) * weightRandomStrength;
-//    }
-//}
-
 void Genome::mutateLinkToggle()
 {
     unsigned int geneConnectionIndex = randInt(0, connections.size() - 1);
@@ -247,12 +191,6 @@ void Genome::mutateActivation(std::vector<Activation*>& activationFunctions)
 
         unsigned int index = randInt(0, activationFunctions.size() - 1);
         nodes[nodes.size() - indexNode].setActivation(activationFunctions[index]);
-
-        /*for (int i = input; i < nodes.size(); i++)
-        {
-            unsigned int index = randInt(0, activationFunctions.size() - 1);
-            nodes[i].setActivation(activationFunctions[index]);
-        }*/
     }
     else {
         std::cout << "Error mutating genome with 0 nodes\n";

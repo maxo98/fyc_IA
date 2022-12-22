@@ -36,26 +36,6 @@ typedef struct {
 
 } HyperneatParameters;
 
-struct HyperNodeHash {
-public:
-	size_t operator()(const std::vector<float>& node) const {
-		if (node.size() == 0) return 0;
-
-		std::size_t value = 0;
-		std::memcpy(&value, &node[0], std::min(sizeof(float), sizeof(std::size_t)));
-
-		for (int i = 1; i < node.size(); i++)
-		{
-			std::size_t tmp = 0;
-			std::memcpy(&value, &node[i], std::min(sizeof(float), sizeof(std::size_t)));
-
-			value = value ^ (tmp << i);
-		}
-
-		return value; // or use boost::hash_combine
-	}
-};
-
 /**
  * This implementation supposes that we use the same activation function as for all the substrate
  */

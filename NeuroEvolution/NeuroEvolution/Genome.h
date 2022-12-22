@@ -39,8 +39,6 @@ public:
 
 	bool mutateLink(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, std::mutex* lock = nullptr);
 	bool mutateNode(std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections, Activation* activationFunction, std::mutex* lock = nullptr);
-	//void mutateWeightShift(float weightShiftStrength);
-	//void mutateWeightRandom(float weightRandomStrength);
 	void mutateLinkToggle();
 	void mutateActivation(std::vector<Activation*>& activationFunctions);
 	void mutateWeights(float power, float rate, WEIGHT_MUTATOR mutType);
