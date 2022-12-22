@@ -19,7 +19,9 @@ void Activation::initialize()
 	Activation::activationRegister.push_back(SwishActivation());
 	Activation::activationRegister.push_back(HyperbolSecantActivation());
 	Activation::activationRegister.push_back(CedricSpikeActivation());
-	Activation::activationRegister.push_back(InvPyramidActivation());
-	Activation::activationRegister.push_back(JigsawActivation());
+	Activation::activationRegister.push_back(InvPyramidActivation()); 
+	Activation::activationRegister.push_back(JigsawActivation()); 
 	Activation::activationRegister.push_back(AbsActivation());
+	Activation::activationRegister.push_back(SquareActivation());
+	Activation::activationRegister.push_back(SquareRootActivation());
 }

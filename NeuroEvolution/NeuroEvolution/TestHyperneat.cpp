@@ -44,6 +44,7 @@ int launchHypeneatTest()
 	neatparam.excessCoeff = 1.0;
 	neatparam.mutDiffCoeff = 0.4;
 	neatparam.activationDiffCoeff = 1.0;
+	neatparam.weightCoeff = 0;
 
 	neatparam.killRate = 0.2;
 

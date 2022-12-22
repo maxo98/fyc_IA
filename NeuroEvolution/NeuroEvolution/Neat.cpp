@@ -974,6 +974,8 @@ float Neat::distance(Genome& genomeA, Genome& genomeB)
 	float excess = 0;
 	float similar = 0;
 
+	float weightDiff = 0;
+
 
 	while (it1 != genome1->getConnections()->cend() && it2 != genome2->getConnections()->cend()) 
 	{
@@ -982,6 +984,9 @@ float Neat::distance(Genome& genomeA, Genome& genomeB)
 		{
 			//similargene
 			similar++;
+			
+			weightDiff = abs(it1->second.getWeight() - it2->second.getWeight()) * weightDiff;
+			
 			++it1; count++;
 			++it2;
 		}
@@ -1004,7 +1009,7 @@ float Neat::distance(Genome& genomeA, Genome& genomeB)
 	if (similar == 0) similar = 1;
 
 	//Official implmentation does some division by 1.0 here...
-	return neatParam.disjointCoeff * disjoint + neatParam.excessCoeff * excess + neatParam.mutDiffCoeff * ((disjoint + excess) / similar);
+	return neatParam.disjointCoeff * disjoint + neatParam.excessCoeff * excess + neatParam.mutDiffCoeff * ((disjoint + excess) / similar) + weightDiff;
 }
 
 void Neat::setScore(const std::vector < float >& newScores)

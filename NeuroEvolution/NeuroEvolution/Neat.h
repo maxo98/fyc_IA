@@ -34,7 +34,7 @@ typedef struct {
 
 	std::vector<Activation*> activationFunctions;
 
-	float disjointCoeff, excessCoeff, mutDiffCoeff, activationDiffCoeff;
+	float disjointCoeff, excessCoeff, mutDiffCoeff, activationDiffCoeff, weightCoeff;
 	float speciationDistance;
 
 	float speciationDistanceMod;

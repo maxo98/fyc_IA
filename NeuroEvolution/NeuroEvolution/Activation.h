@@ -162,3 +162,20 @@ public:
 	inline virtual std::string getId() const { return "jigsaw"; };
 };
 
+class SquareActivation : public Activation {
+public:
+	virtual float activate(float x) const { return x * x; };
+
+	virtual float derivate(float x) const { return 2 * x; };
+
+	inline virtual std::string getId() const { return "jigsaw"; };
+};
+
+class SquareRootActivation : public Activation {
+public:
+	virtual float activate(float x) const { return sqrt(abs(x)); };
+
+	virtual float derivate(float x) const { return 1 / (2 * sqrt(abs(x))); };
+
+	inline virtual std::string getId() const { return "jigsaw"; };
+};
