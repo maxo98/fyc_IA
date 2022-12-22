@@ -250,8 +250,6 @@ bool NeuralNetwork::compute(const std::vector<float>& inputs, std::vector<float>
 			splitLayerComputing(itNode, it->size());
 		}
 
-		//std::cout << outputNodes.size() << std::endl;
-
 		outputs.resize(outputNodes.size(), 0);
 
 		//Compute the result
@@ -263,12 +261,15 @@ bool NeuralNetwork::compute(const std::vector<float>& inputs, std::vector<float>
 	return false;
 }
 
-bool NeuralNetwork::computeSingleOuput(const std::vector<float>& inputs, float& output, int index)
+bool NeuralNetwork::computeSpecificOuputs(const std::vector<float>& inputs, std::vector<float>& outputs, const std::vector<int>& indices)
 {
+	outputs.clear();
+
 	if (prepareComputation(inputs) == true)
 	{
 		//Compute the result
-		output = outputNodes[index].compute();
+		for(int i = 0; i < indices.size(); i++)
+			outputs.push_back(outputNodes[indices[i]].compute());
 
 		return true;
 	}
@@ -278,8 +279,6 @@ bool NeuralNetwork::computeSingleOuput(const std::vector<float>& inputs, float& 
 
 bool NeuralNetwork::prepareComputation(const std::vector<float>& inputs)
 {
-	//outputs.clear();
-
 	if (inputs.size() >= inputNodes.size())
 	{
 #ifdef WARNING
@@ -369,7 +368,8 @@ void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size,
 	int startIndex = 0;
 	int count = 0;
 
-	if (totalWorkload >= 40)
+	//Until pool threading is implemented
+	if (totalWorkload >= 50)
 	{
 		while (workload < 1)
 		{
@@ -420,8 +420,6 @@ void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size,
 
 	concurrentComputing(currentWorkload, startIndex, it, output, outputs);
 
-	//std::cout << std::endl;
-
 	for (int i = 0; i < threads.size(); i++)
 	{
 		threads[i].join();
@@ -435,7 +433,6 @@ void NeuralNetwork::concurrentComputing(int workload, int startIndex, std::deque
 		if (output == false)
 		{
 			it->compute();
-			//std::cout << i << " " << it->compute();
 		}else{
 			(*outputs)[i] = it->compute();
 		}
