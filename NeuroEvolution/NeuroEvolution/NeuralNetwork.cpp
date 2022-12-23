@@ -460,7 +460,7 @@ bool NeuralNetwork::backprop(const std::vector<float>& inputs, const std::vector
 			}
 		}
 
-		for (std::deque<std::deque<Node>>::iterator itLayer = hiddenNodes.begin(); itLayer != hiddenNodes.end(); ++itLayer)
+		for (std::deque<std::deque<Node>>::reverse_iterator itLayer = hiddenNodes.rbegin(); itLayer != hiddenNodes.rend(); ++itLayer)
 		{
 			for (std::deque<Node>::iterator itNode = itLayer->begin(); itNode != itLayer->end(); ++itNode)
 			{
