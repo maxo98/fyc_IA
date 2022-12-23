@@ -151,6 +151,7 @@
     <ClCompile Include="GeneConnection.cpp" />
     <ClCompile Include="GeneNode.cpp" />
     <ClCompile Include="Genome.cpp" />
+    <ClCompile Include="HyperBackprop.cpp" />
     <ClCompile Include="Hyperneat.cpp" />
     <ClCompile Include="TestHyperneat.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="GeneConnection.h" />
     <ClInclude Include="GeneNode.h" />
     <ClInclude Include="Genome.h" />
+    <ClInclude Include="HyperBackprop.h" />
     <ClInclude Include="Hyperneat.h" />
     <ClInclude Include="TestHyperneat.h" />
     <ClInclude Include="Utils.h" />
