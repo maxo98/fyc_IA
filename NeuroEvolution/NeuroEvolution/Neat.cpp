@@ -12,11 +12,12 @@ Neat::Neat(unsigned int _populationSize, unsigned int _input, unsigned int _outp
 {
 	if (this->init(_populationSize, _input, _output, _neatParam) == false) return;
 
-	if (init != INIT::NONE)
+	for (unsigned int i = 0; i < populationSize; i++)
 	{
-		for (unsigned int i = 0; i < populationSize; i++)
+		genomes[i] = (Genome(input, output, neatParam.activationFunctions));
+
+		if (init != INIT::NONE)
 		{
-			genomes[i] = (Genome(input, output, neatParam.activationFunctions));
 
 			if (init == INIT::ONE)
 			{
@@ -27,9 +28,9 @@ Neat::Neat(unsigned int _populationSize, unsigned int _input, unsigned int _outp
 				fullConnectInit(genomes[i]);
 			}
 		}
-
-		generateNetworks();
 	}
+
+	generateNetworks();
 }
 
 Neat::Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam, std::vector<Genome>& initPop)
@@ -58,11 +59,18 @@ Neat::Neat(unsigned int _populationSize, unsigned int _input, unsigned int _outp
 			mutate(genomes[i]);
 		}
 	}
+
+	generateNetworks();
 }
 
 bool Neat::init(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam)
 {
-	if (_neatParam.activationFunctions.size() == 0) return false;//Avoid Unreal crash, should probably put a debug message
+	if (_neatParam.activationFunctions.size() == 0)
+	{
+		std::cerr << "Neat init failed, zero activation function given" << std::endl;
+
+		return false;//Avoid Unreal crash, should probably put a debug message
+	}
 
 	populationSize = _populationSize;
 	input = _input;
@@ -73,6 +81,8 @@ bool Neat::init(unsigned int _populationSize, unsigned int _input, unsigned int 
 	networks.resize(populationSize);
 	genomes = new Genome[populationSize];
 	futureGen = new Genome[populationSize];
+
+	initialized = true;
 
 	return true;
 }

@@ -314,7 +314,7 @@ bool NeuralNetwork::prepareComputation(const std::vector<float>& inputs)
 
 	}
 	else {
-		std::cout << "Inputs given smaller than expected\n";
+		std::cerr << "Inputs given smaller than expected\n";
 
 		return false;
 	}
@@ -441,7 +441,11 @@ void NeuralNetwork::concurrentComputing(int workload, int startIndex, std::deque
 
 bool NeuralNetwork::backprop(const std::vector<float>& inputs, const std::vector<float>& outputs, float learnRate)
 {
-	if (inputs.size() < inputNodes.size() || outputs.size() < outputNodes.size()) return false;
+	if (inputs.size() < inputNodes.size() || outputs.size() < outputNodes.size())
+	{
+		std::cerr << "Inputs or outputs given smaller than expected\n";
+		return false;
+	}
 
 	std::vector<float> tmp;
 

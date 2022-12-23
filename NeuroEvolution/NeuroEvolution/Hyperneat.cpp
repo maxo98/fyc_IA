@@ -229,6 +229,106 @@ void Hyperneat::connectLayer(unsigned int layer, NeuralNetwork& hypernet, Neural
 	}
 }
 
+
+//Conceived for fully connected, and no weight modification
+bool Hyperneat::backprop(const std::vector<float>& inputs, const std::vector<float>& outputs, float learnRate)
+{
+	if (inputs.size() < inputSubstrate.size() || outputs.size() < outputSubstrate.size()) return false;
+
+	for (int i = 0; i < networks.size(); i++)
+	{
+		std::vector<int> indices;
+		std::vector<float> errors;
+
+		indices.push_back(0);
+
+		int cpt = 0;
+
+		//Compute the error for each connection entering an output nodes
+		//And correct it one by one
+		for (std::deque<Node>::iterator it = networks[i].getOutputNodes()->begin(); it != networks[i].getOutputNodes()->end(); ++it, ++cpt)
+		{
+			indices[0] = cpt;
+			networks[i].computeSpecificOuputs(inputs, errors, indices);
+			
+			float delta = (it->getValue() - outputs[i]) * it->getActivation()->derivate(it->getValue());
+
+			std::vector<float> cppnInputs, cppnOutput;
+
+			cppnOutput.push_back(0);
+
+			int i2 = 0;
+			for (std::vector<std::pair<Node*, float>>::iterator itPrev = it->getPreviousNodes()->begin(); itPrev != it->getPreviousNodes()->end(); ++itPrev, ++i2)
+			{
+				std::vector<float>* p1;
+
+				if (hiddenSubstrates.size() == 0)
+				{
+					p1 = &inputSubstrate[i2];
+				}
+				else {
+					p1 = &hiddenSubstrates.back()[i2];
+				}
+
+				cppnInputs = hyperParam.cppnInputFunction(hyperParam.inputVariables, *p1, outputSubstrate[cpt]);
+
+				cppnOutput[0] = itPrev->second - learnRate * delta * itPrev->first->getValue();
+
+				cppns->getNeuralNetwork(i)->backprop(cppnInputs, cppnOutput, learnRate);
+
+				//networks[i].compute(cppnInputs, cppnOutput);
+
+				//std::cout << "test2 " << cppnOutput[0] << std::endl;
+			}
+			
+			//??? somethings missing here, should compute what the value of the weight should be
+			//if (hiddenSubstrates.size() > 0)
+			//{
+			//	backprop(inputs, outputs, learnRate, hiddenSubstrates.back(), cpt, cppns->getNeuralNetwork(i));
+			//}
+			//else {
+			//	backprop(inputs, outputs, learnRate, inputSubstrate, cpt, cppns->getNeuralNetwork(i));
+			//}
+		}
+	}
+
+	generateNetworks();
+
+	return true;
+}
+
+void Hyperneat::backprop(const std::vector<float>& inputs, const std::vector<float>& outputs, float learnRate, std::vector<std::vector<float>> previousLayer, int outputIndex, NeuralNetwork* net)
+{
+	for (int j = 0; j < previousLayer.size(); j++)
+	{
+		std::vector<float> inputCppn, outputCppn;
+
+		inputCppn.reserve(outputSubstrate[0].size() * 2);
+
+		inputCppn.insert(inputCppn.end(), hiddenSubstrates.back()[j].begin(), hiddenSubstrates.back()[j].end());
+		inputCppn.insert(inputCppn.end(), outputSubstrate[outputIndex].begin(), outputSubstrate[outputIndex].end());
+
+		net->compute(inputCppn, outputCppn);
+
+		if (hyperParam.thresholdFunction(hyperParam.thresholdVariables, outputCppn, hiddenSubstrates.back()[j], outputSubstrate[outputIndex]) == true)
+		{
+			float weight = hyperParam.weightModifierFunction(hyperParam.weightVariables, outputCppn[0], hiddenSubstrates.back()[j], outputSubstrate[outputIndex]);
+
+			outputCppn[0] = weight;
+
+			net->backprop(inputCppn, outputCppn, learnRate);
+		}
+	}
+}
+
+void Hyperneat::applyBackprop()
+{
+	for (int i = 0; i < networks.size(); i++)
+	{
+		networks[i].applyBackprop(cppns->getGenomes()[i]);
+	}
+}
+
 std::vector<float> basicCppnInput(std::vector<void*> variables, std::vector<float> p1, std::vector<float> p2)
 {
 	p1.insert(p1.end(), p2.begin(), p2.end());

@@ -47,6 +47,8 @@ public:
 
 	~Hyperneat();
 
+	inline bool isInit() { return cppns->isInit(); }
+
 	void addInput(const std::vector<float>& node);
 	void addOutput(const std::vector<float>& node);
 	void addHiddenNode(unsigned int layer, const std::vector<float>& node);
@@ -64,10 +66,15 @@ public:
 	virtual void createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net);
 	void initNetworks();
 
+	bool backprop(const std::vector<float>& inputs, const std::vector<float>& outputs, float learnRate);
+	void applyBackprop();
+
 	inline NeuralNetwork* getNeuralNetwork(int i) { return &networks[i]; };
 
 protected:
 	virtual void initNetwork(NeuralNetwork& net);
+
+	void backprop(const std::vector<float>& inputs, const std::vector<float>& outputs, float learnRate, std::vector<std::vector<float>> previousLayer, int outputIndex, NeuralNetwork* net);
 
 	/**
 	* Connect layer to the previous layer

@@ -19,7 +19,11 @@ public:
 	void wipeConnections();
 	void addConnection(Node*, float, bool);
 
+	inline float getValue() { return value; }
 	inline float getOldValue() { return oldValue; }
+	inline Activation* getActivation() { return activation; }
+	inline std::vector<std::pair<Node*, float>>* getPreviousNodes() { return &previousNodes; }
+	inline std::vector<std::pair<Node*, float>>* getRecursionNodes() { return &recursionNodes; }
 
 	inline void setValue(float x) { value = x; computed = true; delta = 0; };
 
@@ -29,9 +33,6 @@ public:
 
 	friend class ANeuralNetworkDisplayHUD;
 	friend class NeuralNetwork;
-
-	inline std::vector<std::pair<Node*, float>>* getPreviousNode() { return &previousNodes; };
-	inline Activation* getActivation() { return activation; };
 	
 private:
 	Activation* activation;

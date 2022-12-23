@@ -81,6 +81,7 @@ public:
 	~Neat();
 
 	bool init(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam);
+	inline bool isInit() { return initialized; }
 
 	void fullConnectInit(Genome& gen);
 	void oneConnectionInit(Genome& gen);
@@ -128,4 +129,6 @@ protected:
 	std::vector<float> champHistory;
 	std::vector<float> avgHistory;
 	Genome goat;
+
+	bool initialized = false;
 };

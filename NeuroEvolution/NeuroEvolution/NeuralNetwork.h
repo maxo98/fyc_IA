@@ -26,6 +26,8 @@ public:
 	inline unsigned int getNInputNode() { return inputNodes.size(); }
 	inline unsigned int getNOutputNode() { return outputNodes.size(); }
 
+	inline std::deque<Node>* getOutputNodes() { return &outputNodes; }
+
 	std::pair<unsigned int, unsigned int> addHiddenNode(unsigned int layer, Activation* activation, int id = -1);
 	void addHiddenNode(int n, unsigned int layer, Activation* activation);
 	std::pair<unsigned int, unsigned int> addInputNode(int id = -1);
