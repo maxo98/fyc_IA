@@ -438,8 +438,6 @@ int snakeTest(NeuralNetwork* network, bool display, bool& validated)
             int directionIndex = 0;
             float outputScore = output[0];
 
-            //std::cout << "size " << output.size() << std::endl;
-
             if (display == true)
             {
                 std::cout << 0 << " " << output[0] << std::endl;

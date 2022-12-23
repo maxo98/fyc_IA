@@ -5,20 +5,22 @@ void backpropTest()
 {
 	NeuralNetwork network;
 
-	Activation* sigmoid = new SigmoidActivation();
+	Activation* tanh = new TanhActivation();
 
 	std::vector<Activation*> arrActiv;
-	arrActiv.push_back(sigmoid);
+	arrActiv.push_back(tanh);
 
 	std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int> allConn;
 
 	Genome gen(2, 1, arrActiv);
 
-	gen.addHiddenNode(sigmoid, 1);
+	gen.addHiddenNode(tanh, 1);
+	gen.addHiddenNode(tanh, 2);
 
 	gen.addConnection(0, 3, allConn);
 	gen.addConnection(1, 3, allConn);
-	gen.addConnection(3, 2, allConn);
+	gen.addConnection(3, 4, allConn);
+	gen.addConnection(4, 2, allConn);
 
 	Neat::genomeToNetwork(gen, network);
 
@@ -34,7 +36,7 @@ void backpropTest()
 
 	for (int i = 0; i < 1000; i++)
 	{
-		network.backprop(input, output, 0.2);
+		network.backprop(input, output, 0.5);
 
 		network.compute(input, tmp);
 
@@ -52,4 +54,6 @@ void backpropTest()
 	network.compute(input, tmp);
 
 	std::cout << tmp << std::endl;
+
+	gen.saveCurrentGenome();
 }
