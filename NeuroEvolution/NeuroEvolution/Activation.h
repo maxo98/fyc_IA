@@ -168,7 +168,7 @@ public:
 
 	virtual float derivate(float x) const { return 2 * x; };
 
-	inline virtual std::string getId() const { return "jigsaw"; };
+	inline virtual std::string getId() const { return "square"; };
 };
 
 class SquareRootActivation : public Activation {
@@ -177,5 +177,5 @@ public:
 
 	virtual float derivate(float x) const { return 1 / (2 * sqrt(abs(x))); };
 
-	inline virtual std::string getId() const { return "jigsaw"; };
+	inline virtual std::string getId() const { return "squareRoot"; };
 };
