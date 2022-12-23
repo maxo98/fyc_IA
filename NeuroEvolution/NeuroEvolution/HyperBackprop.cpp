@@ -17,6 +17,7 @@ void testHyperBackprop()
     hyperneatParam.nDimensions = 2;
     hyperneatParam.thresholdFunction = noThreshold;
     hyperneatParam.weightModifierFunction = noChangeWeight;
+    hyperneatParam.inverseWeightModifierFunction = noChangeWeight;
 
     std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int> allConn;
 
@@ -104,6 +105,8 @@ void testHyperBackprop()
     {
         hyper.backprop(inputs, expectedOutputs, 0.01);
     }
+
+    hyper.applyBackprop();
 
     hyper.getNeuralNetwork(0)->compute(inputs, outputs);
 

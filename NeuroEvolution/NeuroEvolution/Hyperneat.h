@@ -28,6 +28,7 @@ typedef struct {
 	ThresholdFunction thresholdFunction; 
 	CppnInputFunction cppnInputFunction; 
 	WeightModifierFunction weightModifierFunction;
+	WeightModifierFunction inverseWeightModifierFunction;//Only for backprop
 
 	//Optionnal
 	std::vector<void*> thresholdVariables;
@@ -66,6 +67,7 @@ public:
 	virtual void createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net);
 	void initNetworks();
 
+	//Only compute backprop over connections of output nodes
 	bool backprop(const std::vector<float>& inputs, const std::vector<float>& outputs, float learnRate);
 	void applyBackprop();
 
@@ -73,8 +75,6 @@ public:
 
 protected:
 	virtual void initNetwork(NeuralNetwork& net);
-
-	void backprop(const std::vector<float>& inputs, const std::vector<float>& outputs, float learnRate, std::vector<std::vector<float>> previousLayer, int outputIndex, NeuralNetwork* net);
 
 	/**
 	* Connect layer to the previous layer
@@ -128,10 +128,20 @@ inline float proportionnalWeight (std::vector<void*> variables, float weight, co
 	return *(float*)variables[0] * weight;
 }
 
+inline float inverseProportionnalWeight(std::vector<void*> variables, float weight, const std::vector<float>& p1, const std::vector<float>& p2)
+{
+	return weight  / *(float*)variables[0];
+}
+
 inline float substractWeight(std::vector<void*> variables, float weight, const std::vector<float>& p1, const std::vector<float>& p2)
 {
 	float tmp = (abs(weight) - abs(*(float*)variables[0]));
 	return (tmp > 0 ? tmp * (signbit(weight) == true ? 1 : -1) : 0);
+}
+
+inline float addWeight(std::vector<void*> variables, float weight, const std::vector<float>& p1, const std::vector<float>& p2)
+{
+	return (weight == 0 ? 0 : weight + (*(float*)variables[0]) * (signbit(weight) == true ? 1 : -1));
 }
 
 inline float absWeight(std::vector<void*> variables, float weight, const std::vector<float>& p1, const std::vector<float>& p2)

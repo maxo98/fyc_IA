@@ -457,6 +457,8 @@ bool NeuralNetwork::backprop(const std::vector<float>& inputs, const std::vector
 		{
 			it->delta = (it->value - outputs[i]) * it->activation->derivate(it->value);
 
+			if (it->delta == 0) continue;
+
 			for (int cpt = 0; cpt < it->previousNodes.size(); cpt++)
 			{
 				it->previousNodes[cpt].first->delta += it->previousNodes[cpt].second * it->delta;
@@ -469,6 +471,8 @@ bool NeuralNetwork::backprop(const std::vector<float>& inputs, const std::vector
 			for (std::deque<Node>::iterator itNode = itLayer->begin(); itNode != itLayer->end(); ++itNode)
 			{
 				itNode->delta *= itNode->activation->derivate(itNode->value);
+
+				if (itNode->delta == 0) continue;
 
 				for (int cpt = 0; cpt < itNode->previousNodes.size(); cpt++)
 				{
