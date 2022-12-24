@@ -154,6 +154,7 @@
     <ClCompile Include="HyperBackprop.cpp" />
     <ClCompile Include="Hyperneat.cpp" />
     <ClCompile Include="TestHyperneat.cpp" />
+    <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Neat.cpp" />
     <ClCompile Include="NeuralNetwork.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="HyperBackprop.h" />
     <ClInclude Include="Hyperneat.h" />
     <ClInclude Include="TestHyperneat.h" />
+    <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Neat.h" />
     <ClInclude Include="NeuralNetwork.h" />

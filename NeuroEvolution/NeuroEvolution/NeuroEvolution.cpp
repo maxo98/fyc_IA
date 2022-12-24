@@ -5,6 +5,7 @@
 #include "ES_Snake.h"
 #include "BackpropTest.h"
 #include "HyperBackprop.h"
+#include "ThreadPool.h"
 
 int main()
 {
@@ -14,11 +15,15 @@ int main()
 
 	srand(seed);//Some random parts don't use this seed 
 
+	ThreadPool* pool = ThreadPool::GetInstance();
+	pool->start();
+
 	//return launchXor();
 	//return launchHypeneatTest();
 	//return launchESHypeneatTest();
 	//backpropTest();
-	testHyperBackprop();
+	//testHyperBackprop();
+
 	return 0;
 }
 
