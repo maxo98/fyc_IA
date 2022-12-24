@@ -92,7 +92,7 @@ public:
 	void evolve();
 	void adjustFitness();
 	void addToSpecies(Genome* gen);
-	void reproduce(int workload, std::list<Species*>::iterator it, int newBornIndex, std::list<Species*>& sortedSpecies, Genome* newPop, std::mutex* lock);
+	void reproduce(int workload, std::list<Species*>::iterator it, int newBornIndex, std::list<Species*>& sortedSpecies, Genome* newPop, std::mutex* lock, std::atomic<bool>* ticket = nullptr);
 	
 	virtual void mutate(Genome& genome, std::mutex* lock = nullptr);
 	void generateNetworks();

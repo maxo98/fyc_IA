@@ -3,7 +3,7 @@
 
 #include "NeuralNetwork.h"
 #include <limits>
-#include <thread>
+#include "ThreadPool.h"
 
 NeuralNetwork::NeuralNetwork()
 {
@@ -358,7 +358,8 @@ void NeuralNetwork::clearHidden()
 
 void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size, bool output, std::vector<float>* outputs)
 {
-	std::vector<std::thread> threads;
+	int threads = 1;
+	ThreadPool* pool = ThreadPool::getInstance();
 	unsigned int cpus = std::thread::hardware_concurrency();
 
 	float totalWorkload = size;
@@ -368,49 +369,49 @@ void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size,
 	int startIndex = 0;
 	int count = 0;
 
-	//Until pool threading is implemented
-	if (totalWorkload >= 50)
-	{
-		while (workload < 1)
-		{
-			cpus--;
-			workload = totalWorkload / cpus;
-		}
+	std::deque<std::atomic<bool>> tickets;
 
+	while (workload < 10)
+	{
+		cpus--;
+		workload = totalWorkload / cpus;
+	}
+
+	while (cpus > threads)
+	{
 		currentWorkload = floor(workload);
 		float workloadFrac = fmod(workload, 1.0f);
 		restWorkload = workloadFrac;
 
-		while (cpus > threads.size() + 1)
+		tickets.emplace_back(false);
+		pool->queueJob(&NeuralNetwork::concurrentComputing, this, currentWorkload + floor(restWorkload), startIndex, it, output, outputs, &tickets.back());
+		++threads;
+
+		count += currentWorkload + floor(restWorkload);
+
+		for (int i = 0; i < currentWorkload + floor(restWorkload); i++)
 		{
-			threads.push_back(std::thread(&NeuralNetwork::concurrentComputing, this, currentWorkload + floor(restWorkload), startIndex, it, output, outputs));
-
-			count += currentWorkload + floor(restWorkload);
-
-			for (int i = 0; i < currentWorkload + floor(restWorkload); i++)
-			{
-				++it;
-			}
-
-			startIndex += currentWorkload + floor(restWorkload);
-
-			restWorkload -= floor(restWorkload);
-			restWorkload += workloadFrac;
+			++it;
 		}
 
-		while (restWorkload > 0)
-		{
-			restWorkload--;
-			currentWorkload++;
-		}
+		startIndex += currentWorkload + floor(restWorkload);
 
-		count += currentWorkload;
+		restWorkload -= floor(restWorkload);
+		restWorkload += workloadFrac;
+	}
 
-		while (count > totalWorkload)
-		{
-			currentWorkload--;
-			count--;
-		}
+	while (restWorkload > 0)
+	{
+		restWorkload--;
+		currentWorkload++;
+	}
+
+	count += currentWorkload;
+
+	while (count > totalWorkload)
+	{
+		currentWorkload--;
+		count--;
 	}
 
 	if (currentWorkload == 0)
@@ -420,13 +421,13 @@ void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size,
 
 	concurrentComputing(currentWorkload, startIndex, it, output, outputs);
 
-	for (int i = 0; i < threads.size(); i++)
+	for (std::deque<std::atomic<bool>>::iterator itTicket = tickets.begin(); itTicket != tickets.end(); ++itTicket)
 	{
-		threads[i].join();
+		itTicket->wait(false);
 	}
 }
 
-void NeuralNetwork::concurrentComputing(int workload, int startIndex, std::deque<Node>::iterator it, bool output, std::vector<float>* outputs)
+void NeuralNetwork::concurrentComputing(int workload, int startIndex, std::deque<Node>::iterator it, bool output, std::vector<float>* outputs, std::atomic<bool>* ticket)
 {
 	for (int i = startIndex; i < (workload + startIndex); ++i, ++it)
 	{
@@ -436,6 +437,12 @@ void NeuralNetwork::concurrentComputing(int workload, int startIndex, std::deque
 		}else{
 			(*outputs)[i] = it->compute();
 		}
+	}
+
+	if (ticket != nullptr)
+	{
+		(*ticket) = true;
+		ticket->notify_one();
 	}
 }
 

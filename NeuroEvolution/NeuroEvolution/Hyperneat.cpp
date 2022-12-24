@@ -2,6 +2,7 @@
 
 
 #include "Hyperneat.h"
+#include "ThreadPool.h"
 
 Hyperneat::Hyperneat(unsigned int _populationSize, const NeatParameters& _neatParam, const HyperneatParameters& _hyperParam, Neat::INIT init)
 {
@@ -71,7 +72,8 @@ void Hyperneat::clear()
 
 void Hyperneat::generateNetworks()
 {
-	std::vector<std::thread> threads;
+	int threads = 1;
+	ThreadPool* pool = ThreadPool::getInstance();
 	unsigned int cpus = std::thread::hardware_concurrency();
 
 	float totalWorkload = networks.size();
@@ -81,6 +83,8 @@ void Hyperneat::generateNetworks()
 	int startIndex = 0;
 	int count = 0;
 
+	std::deque<std::atomic<bool>> tickets;
+
 #ifdef MULTITHREAD
 	while (workload < 1)
 	{
@@ -88,13 +92,15 @@ void Hyperneat::generateNetworks()
 		workload = totalWorkload / cpus;
 	}
 
-	currentWorkload = floor(workload);
-	float workloadFrac = fmod(workload, 1.0f);
-	restWorkload = workloadFrac;
-
-	while (cpus > threads.size() + 1)
+	while (cpus > threads)
 	{
-		threads.push_back(std::thread(&Hyperneat::generateNetworksThread, this, startIndex, currentWorkload + floor(restWorkload)));
+		currentWorkload = floor(workload);
+		float workloadFrac = fmod(workload, 1.0f);
+		restWorkload = workloadFrac;
+
+		tickets.emplace_back(false);
+		pool->queueJob(&Hyperneat::generateNetworksThread, this, startIndex, currentWorkload + floor(restWorkload), &tickets.back());
+		++threads;
 
 		count += currentWorkload + floor(restWorkload);
 		startIndex += currentWorkload + floor(restWorkload);
@@ -120,17 +126,23 @@ void Hyperneat::generateNetworks()
 
 	generateNetworksThread(startIndex, currentWorkload);
 
-	for (int i = 0; i < threads.size(); i++)
+	for (std::deque<std::atomic<bool>>::iterator itTicket = tickets.begin(); itTicket != tickets.end(); ++itTicket)
 	{
-		threads[i].join();
+		itTicket->wait(false);
 	}
 }
 
-void Hyperneat::generateNetworksThread(int startIndex, int worlkload)
+void Hyperneat::generateNetworksThread(int startIndex, int worlkload, std::atomic<bool>* ticket)
 {
 	for (unsigned int cpt = startIndex; cpt < (startIndex + worlkload); cpt++)
 	{
 		createNetwork(*cppns->getNeuralNetwork(cpt), networks[cpt]);
+	}
+
+	if (ticket != nullptr)
+	{
+		(*ticket) = true;
+		ticket->notify_one();
 	}
 }
 

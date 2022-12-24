@@ -2,21 +2,22 @@
 
 ThreadPool* ThreadPool::singleton = nullptr;
 
-ThreadPool* ThreadPool::GetInstance()
+ThreadPool* ThreadPool::getInstance()
 {
     if (singleton == nullptr) {
         singleton = new ThreadPool();
+
+        singleton->running = false;
+        singleton->tasksTotal = 0;
+        singleton->waiting = false;
+
     }
     return singleton;
 }
 
 ThreadPool::~ThreadPool()
 {
-    waiting = true;
-    std::unique_lock<std::mutex> tasks_lock(tasksMutex);
-    taskDoneCv.wait(tasks_lock, [this] { return (tasksTotal == 0); });
-    waiting = false;
-
+    waitForTask();
     stop();
 }
 
@@ -76,4 +77,12 @@ void ThreadPool::stop()
     }
 
     threads.clear();
+}
+
+void ThreadPool::waitForTask()
+{
+    waiting = true;
+    std::unique_lock<std::mutex> tasks_lock(tasksMutex);
+    taskDoneCv.wait(tasks_lock, [this] { return (tasksTotal == 0); });
+    waiting = false;
 }

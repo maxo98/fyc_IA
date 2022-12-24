@@ -45,7 +45,7 @@ public:
 	bool computeSpecificOuputs(const std::vector<float>& inputs, std::vector<float>& outputs, const std::vector<int>& indices);
 	bool prepareComputation(const std::vector<float>& inputs);
 	void splitLayerComputing(std::deque<Node>::iterator it, int size, bool output = false, std::vector<float>* outputs = nullptr);
-	void concurrentComputing(int workload, int startIndex, std::deque<Node>::iterator it, bool output, std::vector<float>* outputs);
+	void concurrentComputing(int workload, int startIndex, std::deque<Node>::iterator it, bool output, std::vector<float>* outputs, std::atomic<bool>* ticket = nullptr);
 
 	bool backprop(const std::vector<float>& inputs, const std::vector<float>& outputs, float learnRate);
 	void applyBackprop(Genome& gen);

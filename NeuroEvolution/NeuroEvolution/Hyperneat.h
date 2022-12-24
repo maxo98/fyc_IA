@@ -62,7 +62,7 @@ public:
 	void clear();
 
 	void generateNetworks();
-	void generateNetworksThread(int startIndex, int worlkload);
+	void generateNetworksThread(int startIndex, int worlkload, std::atomic<bool>* ticket = nullptr);
 	void genomeToNetwork(Genome& gen, NeuralNetwork& net);
 	virtual void createNetwork(NeuralNetwork& hypernet, NeuralNetwork& net);
 	void initNetworks();

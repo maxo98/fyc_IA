@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <chrono>
 #include <random>
-#include <thread>
+#include "ThreadPool.h"
 
 
 Neat::Neat(unsigned int _populationSize, unsigned int _input, unsigned int _output, const NeatParameters& _neatParam, INIT init)
@@ -547,7 +547,8 @@ void Neat::evolve()
 	//Perform reproduction.  Reproduction is done on a per-Species
 	//basis.  (So this could be paralellized potentially.)
 	int newBornIndex = 0;
-	std::vector<std::thread> threads;
+	int threads = 1;
+	ThreadPool* pool = ThreadPool::getInstance();
 	unsigned int cpus = std::thread::hardware_concurrency();
 	std::mutex lock;
 
@@ -557,6 +558,9 @@ void Neat::evolve()
 	float workload = totalWorkload / cpus;
 	int currentWorkload = totalWorkload;
 	int count = 0;
+	float restWorkload = 0;
+
+	std::deque<std::atomic<bool>> tickets;
 
 #ifdef MULTITHREAD
 	while (workload < 1)
@@ -565,14 +569,15 @@ void Neat::evolve()
 		workload = totalWorkload / cpus;
 	}
 
-	currentWorkload = floor(workload);
-	float workloadFrac = fmod(workload, 1.0f);
-	float restWorkload = workloadFrac;
-
-	while (cpus > threads.size() + 1)
+	while (cpus > threads)
 	{
+		currentWorkload = floor(workload);
+		float workloadFrac = fmod(workload, 1.0f);
+		restWorkload = workloadFrac;
 
-		threads.push_back(std::thread(&Neat::reproduce, this, currentWorkload + floor(restWorkload), itSortedSpecies, newBornIndex, std::ref(sortedSpecies), futureGen, &lock));
+		tickets.emplace_back(false);
+		pool->queueJob(&Neat::reproduce, this, currentWorkload + floor(restWorkload), itSortedSpecies, newBornIndex, std::ref(sortedSpecies), futureGen, &lock, &tickets.back());
+		++threads;
 
 		count += currentWorkload + floor(restWorkload);
 
@@ -603,13 +608,10 @@ void Neat::evolve()
 
 	reproduce(currentWorkload, itSortedSpecies, newBornIndex, sortedSpecies, futureGen, &lock);
 
-
-	for (int i = 0; i < threads.size(); i++)
+	for (std::deque<std::atomic<bool>>::iterator itTicket = tickets.begin(); itTicket != tickets.end(); ++itTicket)
 	{
-		threads[i].join();
+		itTicket->wait(false);
 	}
-
-	threads.clear();
 
 	//Adding to species is done using the pointer champ of the species so we can empty the species now
 	for (std::vector<Species>::iterator itSpecies = species.begin(); itSpecies != species.end(); ++itSpecies)
@@ -684,7 +686,7 @@ void Neat::evolve()
 	generateNetworks();
 }
 
-void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBornIndex, std::list<Species*>& sortedSpecies, Genome* newPop, std::mutex* lock)
+void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBornIndex, std::list<Species*>& sortedSpecies, Genome* newPop, std::mutex* lock, std::atomic<bool>* ticket)
 {
 	for(int i = 0; i < workload; ++i, ++it)
 	{
@@ -849,6 +851,12 @@ void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBorn
 			//Add the new born to species later
 			//To not disturb the reproduction
 		}
+	}
+
+	if (ticket != nullptr)
+	{
+		(*ticket) = true;
+		ticket->notify_one();
 	}
 }
 

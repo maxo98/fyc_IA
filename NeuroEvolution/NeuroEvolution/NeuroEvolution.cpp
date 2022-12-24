@@ -15,12 +15,12 @@ int main()
 
 	srand(seed);//Some random parts don't use this seed 
 
-	ThreadPool* pool = ThreadPool::GetInstance();
+	ThreadPool* pool = ThreadPool::getInstance();
 	pool->start();
 
 	//return launchXor();
 	//return launchHypeneatTest();
-	//return launchESHypeneatTest();
+	return launchESHypeneatTest();
 	//backpropTest();
 	//testHyperBackprop();
 

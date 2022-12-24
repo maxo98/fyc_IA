@@ -7,6 +7,7 @@
 #include <type_traits>
 #include <iostream>
 
+//My name is pool... Deadpool.
 class ThreadPool 
 {
 public:
@@ -14,9 +15,13 @@ public:
 
     void operator=(const ThreadPool&) = delete;
 
-    static ThreadPool* GetInstance();
+    //Default values are set in the getInstance
+    static ThreadPool* getInstance();
 
     void start();
+    void stop();
+    void waitForTask();
+    size_t getTasksTotal() const;
 
     template <class _Fn, class... _Args>
     void queueJob(_Fn&& task, _Args&&... args)
@@ -32,10 +37,6 @@ public:
         taskAvailableCv.notify_one();
     }
 
-
-    void stop();
-    size_t getTasksTotal() const;
-
 protected:
     ThreadPool() {};
 
@@ -46,12 +47,13 @@ private:
 
     void threadLoop();
 
-    std::atomic<bool> running = false;           // Tells threads to stop looking for jobs
+    //Default values are set in the getInstance
+    std::atomic<bool> running;// = false;           // Tells threads to stop looking for jobs
     std::mutex tasksMutex;                  // Prevents data races to the job queue
-    std::condition_variable taskAvailableCv = {}; // Allows threads to wait on new jobs or termination 
+    std::condition_variable taskAvailableCv; // Allows threads to wait on new jobs or termination 
     std::vector<std::thread> threads;
     std::queue<std::function<void()>> tasks;
-    std::atomic<size_t> tasksTotal = 0;
-    std::atomic<bool> waiting = false;
-    std::condition_variable taskDoneCv = {};
+    std::atomic<size_t> tasksTotal;// = 0;
+    std::atomic<bool> waiting;// = false;
+    std::condition_variable taskDoneCv;
 };

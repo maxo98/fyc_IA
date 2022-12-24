@@ -9,6 +9,7 @@
 #include <algorithm> 
 #include <time.h>
 #include <iomanip>
+#include "ThreadPool.h"
 
 
 //#define HELP
@@ -231,7 +232,8 @@ bool esHypeneatTest(int popSize, Hyperneat& esHyper)
             fitness[i] = 0;
         }
 
-        std::vector<std::thread> threads;
+        int threads = 1;
+        ThreadPool* pool = ThreadPool::getInstance();
         unsigned int cpus = std::thread::hardware_concurrency();
 
         float totalWorkload = popSize;
@@ -241,6 +243,8 @@ bool esHypeneatTest(int popSize, Hyperneat& esHyper)
         int startIndex = 0;
         int count = 0;
 
+        std::deque<std::atomic<bool>> tickets;
+
 #ifdef MULTITHREAD
         while (workload < 1)
         {
@@ -248,13 +252,15 @@ bool esHypeneatTest(int popSize, Hyperneat& esHyper)
             workload = totalWorkload / cpus;
         }
 
-        currentWorkload = floor(workload);
-        float workloadFrac = fmod(workload, 1.0f);
-        restWorkload = workloadFrac;
-
-        while (cpus > threads.size() + 1)
+        while (cpus > threads)
         {
-            threads.push_back(std::thread(snakeEvaluate, startIndex, currentWorkload + floor(restWorkload), std::ref(fitness), std::ref(esHyper), std::ref(validated)));
+            currentWorkload = floor(workload);
+            float workloadFrac = fmod(workload, 1.0f);
+            restWorkload = workloadFrac;
+
+            tickets.emplace_back(false);
+            pool->queueJob(snakeEvaluate, startIndex, currentWorkload + floor(restWorkload), std::ref(fitness), std::ref(esHyper), std::ref(validated), &tickets.back());
+            ++threads;
 
             count += currentWorkload + floor(restWorkload);
 
@@ -281,9 +287,9 @@ bool esHypeneatTest(int popSize, Hyperneat& esHyper)
 
         snakeEvaluate(startIndex, currentWorkload, fitness, esHyper, validated);
 
-        for (int i = 0; i < threads.size(); i++)
+        for (std::deque<std::atomic<bool>>::iterator itTicket = tickets.begin(); itTicket != tickets.end(); ++itTicket)
         {
-            threads[i].join();
+            itTicket->wait(false);
         }
 
         esHyper.setScore(fitness);
@@ -296,7 +302,7 @@ bool esHypeneatTest(int popSize, Hyperneat& esHyper)
     return false;
 }
 
-void snakeEvaluate(int startIndex, int currentWorkload, std::vector<float>& fitness, Hyperneat& esHyper, bool& validated)
+void snakeEvaluate(int startIndex, int currentWorkload, std::vector<float>& fitness, Hyperneat& esHyper, bool& validated, std::atomic<bool>* ticket)
 {
     for (int i = startIndex; i < (startIndex + currentWorkload); i++)
     {
@@ -308,6 +314,12 @@ void snakeEvaluate(int startIndex, int currentWorkload, std::vector<float>& fitn
         {
             validated = true;
         }
+    }
+
+    if (ticket != nullptr)
+    {
+        (*ticket) = true;
+        ticket->notify_one();
     }
 }
 
