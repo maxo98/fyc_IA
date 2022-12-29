@@ -749,7 +749,7 @@ void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBorn
 
 				if (neatParam.elistism == true)
 				{
-					index = randGeoDist(std::min(neatParam.rouletteMultiplier / curSpecies->getSpecies()->size(), 1.f), curSpecies->getSpecies()->size() - 1);
+					index = randGeoDist(std::min(neatParam.rouletteMultiplier / curSpecies->getSpecies()->size(), 0.9999f), curSpecies->getSpecies()->size() - 1);
 				}
 				else {
 					index = randInt(0, curSpecies->getSpecies()->size() - 1);
@@ -768,7 +768,7 @@ void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBorn
 					do {
 						if (neatParam.elistism == true)
 						{
-							index = randGeoDist(std::min(neatParam.rouletteMultiplier / curSpecies->getSpecies()->size(), 1.f), curSpecies->getSpecies()->size() - 1);
+							index = randGeoDist(std::min(neatParam.rouletteMultiplier / curSpecies->getSpecies()->size(), 0.9999f), curSpecies->getSpecies()->size() - 1);
 						}
 						else {
 							index = randInt(0, curSpecies->getSpecies()->size() - 1);
@@ -811,7 +811,7 @@ void Neat::reproduce(int workload, std::list<Species*>::iterator it, int newBorn
 
 					if (neatParam.elistism == true)
 					{
-						index = randGeoDist(std::min(neatParam.rouletteMultiplier / randspecies->getSpecies()->size(), 1.f), randspecies->getSpecies()->size() - 1);
+						index = randGeoDist(std::min(neatParam.rouletteMultiplier / randspecies->getSpecies()->size(), 0.9999f), randspecies->getSpecies()->size() - 1);
 					}
 					else {
 						index = randInt(0, randspecies->getSpecies()->size() - 1);

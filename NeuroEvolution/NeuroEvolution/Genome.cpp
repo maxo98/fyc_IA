@@ -505,7 +505,7 @@ void Genome::saveCurrentGenome(const std::string& fileName)
     }
 
     std::fstream file;
-    file.open(fileName, std::fstream::in | std::fstream::out | std::fstream::trunc);
+    file.open(fileName, std::fstream::out | std::fstream::trunc);
 
     for (const auto& data : saveBuffer)
     {
@@ -515,9 +515,62 @@ void Genome::saveCurrentGenome(const std::string& fileName)
     file.close();
 }
 
-void Genome::loadGenome()
+Genome Genome::loadGenome(const std::string& fileName)
 {
+    std::list<DataToSaveStruct> loadBuffer;
+    std::fstream file;
+    Genome loadedGenome = Genome();
 
+    file.open(fileName, std::fstream::in);
+
+    if (!file.is_open())
+    {
+        throw("file has not been opened");
+        file.close();
+        return loadedGenome;
+    }
+
+    std::string line;
+    
+    while (getline(file, line))
+    {
+        std::cout << line << std::endl;
+
+        std::vector<std::string> stringSplited;
+        int idxStart, idxEnd;
+        idxStart = idxEnd = 0;
+
+        while ((idxStart = line.find_first_not_of(' ', idxEnd)) != std::string::npos) 
+        { 
+            idxEnd = line.find(' ', idxStart);
+            stringSplited.push_back(line.substr(idxStart, idxEnd - idxStart));
+        }
+
+        if (std::stoi(stringSplited[0]) == (int)DataToSaveEnum::GENECONNECTION)
+        {
+            loadedGenome.connections.insert(std::make_pair(std::stoi(stringSplited[stringSplited.size() - 2]), loadedGenome.loadGeneConnection(stringSplited)));
+        }
+        else
+        {
+            loadedGenome.nodes.push_back(loadedGenome.loadGeneNode(stringSplited));
+        }
+    }
+
+    file.close();
+    return loadedGenome;
+}
+
+GeneConnection Genome::loadGeneConnection(const std::vector<std::string> data)
+{
+    auto loadedGeneConnection = GeneConnection(std::stoi(data[1]), std::stoi(data[2]), std::stoi(data[3]));
+    loadedGeneConnection.setWeight(std::stoi(data[5]));
+    loadedGeneConnection.setEnabled(std::stoi(data[4]));
+    return loadedGeneConnection;
+}
+
+GeneNode Genome::loadGeneNode(const std::vector<std::string> data)
+{
+    return GeneNode(static_cast<NODE_TYPE>(std::stoi(data[3])), Activation::initActivation(data[1]), std::stoi(data[2]));
 }
 
 std::string Genome::toString()

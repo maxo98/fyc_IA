@@ -57,7 +57,7 @@ public:
 	inline bool getEliminate() { return eliminate; };
 	void saveCurrentGenome(const std::string& fileName = "saveGenome.txt");
 	void addHiddenNode(Activation* activation, unsigned int layer);
-	static void loadGenome();
+	static Genome loadGenome(const std::string& fileName = "saveGenome.txt");
 
 	//Parent A should be the fittest
 	void crossover(Genome& parentA, Genome& parentB, CROSSOVER type);
@@ -67,6 +67,9 @@ public:
 	std::string toString();
 
 private:
+
+	GeneNode loadGeneNode(const std::vector<std::string> data);
+	GeneConnection loadGeneConnection(const std::vector<std::string> data);
 
 	struct DataToSaveStruct {
 		DataToSaveEnum dataTypeEnum;
@@ -88,6 +91,10 @@ private:
 			geneNode(nullptr)
 		{};
 
+		~DataToSaveStruct()
+		{
+		}
+
 		friend std::ostream& operator<<(std::ostream& os, const DataToSaveStruct& data)
 		{
 			os << (int)data.dataTypeEnum;
@@ -98,7 +105,7 @@ private:
 			else
 				os << *data.geneNode;
 
-			os << "  ";
+			os << " ";
 			if (data.idGeneConnection >= 0)
 				os << data.idGeneConnection;
 			os << " ";

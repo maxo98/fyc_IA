@@ -20,6 +20,8 @@ public:
 
 	inline static std::vector<Activation> getRegister() { return Activation::activationRegister; };
 
+	static Activation* initActivation(const std::string& id);
+
 	friend std::ostream& operator<<(std::ostream& os, const Activation& activation)
 	{
 		os << activation.getId();
@@ -108,7 +110,7 @@ public:
 
 	virtual float derivate(float x) const { return cos(x) / x - sin(x) / (x * x); };
 
-	inline virtual std::string getId() const { return "sinc"; };
+	inline virtual std::string getId() const { return "posSinc"; };
 };
 
 class GaussianActivation : public Activation {

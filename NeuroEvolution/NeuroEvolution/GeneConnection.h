@@ -24,6 +24,7 @@ public:
 	inline bool isEnabled() const { return enabled; };
 
 	inline void setWeight(float _weight) { weight = _weight; };
+	inline void setEnabled(bool _enabled) { enabled = _enabled; };
 
 	friend class Genome;
 	friend class CPPN_Neat;

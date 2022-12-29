@@ -109,6 +109,7 @@ public:
 	friend class ANeuralNetworkDisplayHUD;
 
 	Genome* getGoat() { return &goat; };
+	void setGoat(Genome _goat) { goat = _goat; };
 
 	//Taken from official implementation, no idea how it works
 	float gaussRand();
