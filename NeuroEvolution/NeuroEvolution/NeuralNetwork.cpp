@@ -371,6 +371,7 @@ void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size,
 
 	std::deque<std::atomic<bool>> tickets;
 
+#ifdef MULTITHREAD
 	while (workload < 10)
 	{
 		cpus--;
@@ -399,6 +400,8 @@ void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size,
 		restWorkload -= floor(restWorkload);
 		restWorkload += workloadFrac;
 	}
+
+#endif MULTITHREAD
 
 	while (restWorkload > 0)
 	{
@@ -454,6 +457,45 @@ bool NeuralNetwork::backprop(const std::vector<float>& inputs, const std::vector
 		return false;
 	}
 
+#ifndef MULTITHTREAD
+	std::vector<float> tmp;
+
+	if (compute(inputs, tmp) == true)
+	{
+		//Compute error and update weight
+		int i = 0;
+		for (std::deque<Node>::iterator it = outputNodes.begin(); it != outputNodes.end(); ++it, ++i)
+		{
+			it->delta = (it->value - outputs[i]) * it->activation->derivate(it->value);
+
+			if (it->delta == 0) continue;
+
+			for (int cpt = 0; cpt < it->previousNodes.size(); cpt++)
+			{
+				it->previousNodes[cpt].first->delta += it->previousNodes[cpt].second * it->delta;
+				it->previousNodes[cpt].second -= learnRate * it->delta * it->previousNodes[cpt].first->value;//Update weights
+			}
+		}
+
+		for (std::deque<std::deque<Node>>::reverse_iterator itLayer = hiddenNodes.rbegin(); itLayer != hiddenNodes.rend(); ++itLayer)
+		{
+			for (std::deque<Node>::iterator itNode = itLayer->begin(); itNode != itLayer->end(); ++itNode)
+			{
+				itNode->delta *= itNode->activation->derivate(itNode->value);
+
+				if (itNode->delta == 0) continue;
+
+				for (int cpt = 0; cpt < itNode->previousNodes.size(); cpt++)
+				{
+					itNode->previousNodes[cpt].first->delta += itNode->previousNodes[cpt].second * itNode->delta;
+					itNode->previousNodes[cpt].second -= learnRate * itNode->delta * itNode->previousNodes[cpt].first->value;//Update weights
+				}
+			}
+		}
+
+		return true;
+	}
+#else
 	std::vector<float> tmp;
 
 	if (compute(inputs, tmp) == true)
@@ -467,6 +509,9 @@ bool NeuralNetwork::backprop(const std::vector<float>& inputs, const std::vector
 
 		return true;
 	}
+
+	
+#endif // !MULTITHTREAD
 
 	return false;
 }

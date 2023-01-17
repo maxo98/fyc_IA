@@ -3,6 +3,7 @@
 #pragma once
 
 #define WARNING
+#define MULTITHREAD
 
 #include <list>
 #include "Node.h"
