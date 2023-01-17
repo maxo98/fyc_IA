@@ -1003,7 +1003,7 @@ float Neat::distance(Genome& genomeA, Genome& genomeB)
 			//similargene
 			similar++;
 			
-			weightDiff = abs(it1->second.getWeight() - it2->second.getWeight()) * weightDiff;
+			weightDiff = abs(it1->second.getWeight() - it2->second.getWeight()) * neatParam.weightCoeff;
 			
 			++it1; count++;
 			++it2;

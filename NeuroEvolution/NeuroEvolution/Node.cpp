@@ -13,6 +13,24 @@ Node::~Node()
 {
 }
 
+Node::Node(const Node& other)
+{
+	activation = other.activation;
+	previousNodes = other.previousNodes;
+	recursionNodes = other.recursionNodes;
+	computed = false;
+	id = -1;
+}
+
+Node::Node(Node&& other) noexcept
+{
+	activation = std::move(other.activation);
+	previousNodes = std::move(other.previousNodes);
+	recursionNodes = std::move(other.recursionNodes);
+	computed = false;
+	id = std::move(other.id);
+}
+
 void Node::wipeConnections()
 {
 	previousNodes.clear();

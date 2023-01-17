@@ -6,6 +6,7 @@
 #include <map>
 #include "Activation.h"
 #include <iostream>
+#include <mutex>
 
 /**
  * 
@@ -15,6 +16,9 @@ class Node
 public:
 	Node(Activation* activation, int _id = -1);
 	~Node();
+
+	Node(const Node& other);
+	Node(Node&& other) noexcept;
 
 	void wipeConnections();
 	void addConnection(Node*, float, bool);
@@ -43,4 +47,5 @@ private:
 	float oldValue;
 	int id;
 	float delta = 0;//Error bakcprop
+	std::mutex deltaMtx;
 };
