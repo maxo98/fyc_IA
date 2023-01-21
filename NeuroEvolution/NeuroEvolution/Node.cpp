@@ -71,6 +71,7 @@ float Node::compute()
 			return 0;
 		}
 
+		backpropValue = value;
 		value = activation->activate(value);
 
 		computed = true;

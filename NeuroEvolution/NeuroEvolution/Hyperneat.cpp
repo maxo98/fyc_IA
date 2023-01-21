@@ -265,7 +265,7 @@ bool Hyperneat::backprop(const std::vector<float>& inputs, const std::vector<flo
 		for (std::deque<Node>::iterator it = networks[i].getOutputNodes()->begin(); it != networks[i].getOutputNodes()->end(); ++it, ++cpt)
 		{
 			
-			float delta = (it->getValue() - outputs[i]) * it->getActivation()->derivate(it->getValue());
+			float delta = (it->getValue() - outputs[i]) * it->getActivation()->derivate(it->getBackpropValue(), it->getValue());
 
 			if (delta == 0) continue;
 			
