@@ -20,8 +20,6 @@ public:
 	NeuralNetwork();
 	~NeuralNetwork();
 
-	void fullyConnect();//Might be deprecated
-
 	inline unsigned int getLayerSize() { return hiddenNodes.size() + 2; };
 	unsigned int getNHiddenNode(unsigned int layer);
 	inline unsigned int getNInputNode() { return inputNodes.size(); }

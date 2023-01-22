@@ -13,65 +13,6 @@ NeuralNetwork::~NeuralNetwork()
 {
 }
 
-//Might be deprecated
-void NeuralNetwork::fullyConnect()
-{
-    //Connect ouput nodes to previous layer
-    std::deque<Node>::iterator itOutput;
-
-    for (itOutput = outputNodes.begin(); itOutput != outputNodes.end(); ++itOutput)
-    {
-        std::deque<Node>::iterator itPrevious;
-
-        if (hiddenNodes.size() > 0)
-        {
-            for (itPrevious = hiddenNodes.back().begin(); itPrevious != hiddenNodes.back().end(); ++itPrevious)
-            {
-                itOutput->addConnection(&(*itPrevious), 0.5, false);
-            }
-        }
-        else {
-            for (itPrevious = inputNodes.begin(); itPrevious != inputNodes.end(); ++itPrevious)
-            {
-                itOutput->addConnection(&(*itPrevious), 0.5, false);
-            }
-        }
-    }
-
-    //Connect hidden layers to previous hidden layers
-    std::deque <std::deque<Node>>::reverse_iterator itLayer = hiddenNodes.rbegin();
-    std::deque<Node>::iterator itNext = itLayer->begin();
-    std::deque<Node>::iterator itNextEnd = itLayer->end();
-
-    while ((++itLayer) != hiddenNodes.rend())
-    {
-        for (itNext; itNext != itNextEnd; ++itNext)
-        {
-            std::deque<Node>::iterator itPrevious = itLayer->begin();
-            std::deque<Node>::iterator itPreviousEnd = itLayer->end();
-
-            for (itPrevious; itPrevious != itLayer->end(); ++itPrevious)
-            {
-                itNext->addConnection(&(*itPrevious), 0.5, false);
-            }
-        }
-
-        itNext = itLayer->begin();
-        itNextEnd = itLayer->end();
-    }
-
-    //Connect first hidden layer to input layer
-    //std::list<Node>::iterator itNext;
-    for (itNext = hiddenNodes.front().begin(); itNext != hiddenNodes.front().end(); ++itNext)
-    {
-        std::deque<Node>::iterator it_input;
-        for (it_input = inputNodes.begin(); it_input != inputNodes.end(); ++it_input)
-        {
-            itNext->addConnection(&(*it_input), 0.5, false);
-        }
-    }
-}
-
 unsigned int NeuralNetwork::getNHiddenNode(unsigned int layer)
 {
     layer--;

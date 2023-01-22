@@ -588,3 +588,76 @@ void Genome::addHiddenNode(Activation* activation, unsigned int layer)
 {
     nodes.push_back(GeneNode(NODE_TYPE::HIDDEN, activation, layer));
 }
+
+void Genome::fullyConnect(int nLayer, int nNode, Activation* hiddenActivation, Activation* outputActivation, std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections,
+    WeightInitFunction weightInit, const long long& seed)
+{
+    nodes.clear();
+
+    connections.clear();
+    nodesToConnection.clear();
+    orderAddedCon.clear();
+
+    for (unsigned int i = 0; i < input; i++)
+    {
+        nodes.push_back(GeneNode(NODE_TYPE::INPUT, hiddenActivation));
+    }
+
+    if (nLayer != 0)
+    {
+        //Create and connect hidden layers
+        for (unsigned int i = 0; i < nLayer; i++)
+        {
+            for (unsigned int cpt = 0; cpt < nNode; cpt++)
+            {
+                int in = (i == 0 ? input : nNode);
+                int out = (i == (nLayer - 1) ? output : nNode);
+
+                nodes.push_back(std::move(GeneNode(NODE_TYPE::HIDDEN, hiddenActivation, i + 1)));
+
+                if (i == 0)
+                {
+                    for (unsigned int i2 = 0; i2 < input - 1; i2++)
+                    {
+                        addConnection(i2, cpt + i * nNode + input, allConnections, weightInit(in, out, seed));
+                    }
+                }
+                else {
+                    for (unsigned int i2 = 0; i2 < nNode; i2++)
+                    {
+                        addConnection(i2 + (i - 1) * nNode + input, cpt + i * nNode + input, allConnections, weightInit(in, out, seed));
+                    }
+                }
+
+                addConnection(input - 1, cpt + i * nNode + input, allConnections, 0);//Bias connection
+            }
+        }
+
+        //Create and connect output nodes
+        for (unsigned int i = 0; i < output; i++)
+        {
+            nodes.push_back(GeneNode(NODE_TYPE::OUTPUT, outputActivation, 999999));
+
+            for (unsigned int i2 = 0; i2 < nNode; i2++)
+            {
+                addConnection(i2 + (nLayer - 1) * nNode + input, i + nLayer * nNode + input, allConnections, weightInit(nNode, 0, seed));
+            }
+
+            addConnection(input - 1, i + nLayer * nNode + input, allConnections, 0);//Bias connection
+        }
+    }
+    else {
+        for (unsigned int i = 0; i < output; i++)
+        {
+            nodes.push_back(GeneNode(NODE_TYPE::OUTPUT, outputActivation, 999999));
+
+            for (unsigned int i2 = 0; i2 < input; i2++)
+            {
+                addConnection(i2, i + input, allConnections, weightInit(input, 0, seed));
+            }
+
+            addConnection(input - 1, i + nLayer * nNode + input, allConnections, 0);//Bias connection
+        }
+    }
+
+}
