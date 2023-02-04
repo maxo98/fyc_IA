@@ -1,0 +1,426 @@
+﻿  Activation.cpp
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(50,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(68,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(93,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(109,60): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(129,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(138,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(145,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(155,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+  GeneConnection.cpp
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(50,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(68,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(93,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(109,60): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(129,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(138,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(145,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(155,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+  GeneNode.cpp
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(50,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(68,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(93,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(109,60): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(129,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(138,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(145,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(155,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\GeneNode.cpp(14,7): warning C4101: 'err' : variable locale non référencée
+  Genome.cpp
+C:\projets\scolaire\53DJV\fyc\NEAT\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(50,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(68,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(93,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(109,60): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(129,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(138,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(145,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(155,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(28,72): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(59,49): warning C4267: '=' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(93,48): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(94,48): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(97,57): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(98,52): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(103,17): warning C4101: 'err' : variable locale non référencée
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(145,64): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(166,40): warning C4267: 'initialisation' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(182,73): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(197,68): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(197,68): warning C4305: 'argument' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(200,71): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(232,33): warning C4244: '=' : conversion de 'unsigned __int64' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(233,25): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(262,29): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(263,33): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(268,33): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(274,34): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(275,45): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(278,34): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(279,38): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(328,73): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(331,73): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(543,63): warning C4267: '=' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(545,46): warning C4267: '=' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Genome.cpp(566,45): warning C4244: 'argument' : conversion de 'int' en 'float', perte possible de données
+  Neat.cpp
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(50,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(68,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(93,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(109,60): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(129,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(138,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(145,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(155,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.h(25,37): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.h(27,38): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.h(28,39): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.h(90,33): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(56,21): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(58,55): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(109,16): warning C4244: 'initialisation' : conversion de '_Rep' en 'unsigned int', perte possible de données
+          with
+          [
+              _Rep=std::chrono::system_clock::rep
+          ]
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(182,75): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(286,123): warning C4244: '+=' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(288,77): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(336,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(356,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(364,35): warning C4018: '>=' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(383,21): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(395,25): warning C4018: '>' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(408,26): warning C4018: '>' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(429,102): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(480,25): warning C4018: '>=' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(523,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(556,22): warning C4244: 'initialisation' : conversion de 'unsigned __int64' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(558,22): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(571,14): warning C4018: '>' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(573,26): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(581,49): warning C4244: '+=' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(627,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(704,29): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(765,146): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(769,61): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(787,148): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(790,63): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(830,149): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(833,63): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(919,54): warning C4244: 'argument' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(1045,45): warning C4244: '=' : conversion de 'unsigned __int64' en 'float', perte possible de données
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\type_traits(1540,77): warning C4244: 'argument' : conversion de '_Cv_TiD' en 'int', perte possible de données
+          with
+          [
+              _Cv_TiD=float
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(669): message : voir la référence à l'instanciation de la fonction modèle 'void std::invoke<_Cv_FD&,_Cv_TiD&,float&,std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>&,int&,std::list<_Ty,std::allocator<_Ty>>&,Genome*&,std::mutex*&,std::atomic<bool>*&>(_Callable,_Ty1,float &,std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &,int &,std::list<_Ty,std::allocator<_Ty>> &,Genome *&,std::mutex *&,std::atomic<bool> *&) noexcept(false)' en cours de compilation
+          with
+          [
+              _Cv_FD=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),
+              _Cv_TiD=Neat *,
+              _Ty=Species *,
+              _Callable=void (__cdecl Neat::* &)(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),
+              _Ty1=Neat *&
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(1305): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Invoker_ret<std::_Unforced,false>::_Call<_Cv_FD&,_Cv_TiD&,float&,std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>&,int&,std::list<_Ty,std::allocator<_Ty>>&,Genome*&,std::mutex*&,std::atomic<bool>*&>(_Fx,_Cv_TiD &,float &,std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &,int &,std::list<_Ty,std::allocator<_Ty>> &,Genome *&,std::mutex *&,std::atomic<bool> *&) noexcept(false)' en cours de compilation
+          with
+          [
+              _Cv_FD=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),
+              _Cv_TiD=Neat *,
+              _Ty=Species *,
+              _Fx=void (__cdecl Neat::* &)(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *)
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(1343): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Call_binder<std::_Unforced,0,1,2,3,4,5,6,7,_Ty1,_Ty2,std::tuple<>>(std::_Invoker_ret<std::_Unforced,false>,std::integer_sequence<size_t,0,1,2,3,4,5,6,7>,_Cv_FD &,_Cv_tuple_TiD &,_Untuple &&) noexcept(false)' en cours de compilation
+          with
+          [
+              _Ty1=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),
+              _Ty2=std::tuple<Neat *,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *,std::mutex *,std::atomic<bool> *>,
+              _Cv_FD=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),
+              _Cv_tuple_TiD=std::tuple<Neat *,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *,std::mutex *,std::atomic<bool> *>,
+              _Untuple=std::tuple<>
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\type_traits(1524): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Binder<std::_Unforced,_Ty,Neat*,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species*>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex*,std::atomic<bool>*>::operator ()<>(void) noexcept(false)' en cours de compilation
+          with
+          [
+              _Ty=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *)
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\type_traits(1524): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Binder<std::_Unforced,_Ty,Neat*,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species*>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex*,std::atomic<bool>*>::operator ()<>(void) noexcept(false)' en cours de compilation
+          with
+          [
+              _Ty=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *)
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(650): message : voir la référence à l'instanciation de la fonction modèle 'void std::invoke<_Callable&>(std::_Binder<std::_Unforced,_Ty,Neat*,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species*>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex*,std::atomic<bool>*>&) noexcept(false)' en cours de compilation
+          with
+          [
+              _Callable=std::_Binder<std::_Unforced,void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),Neat *,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex *,std::atomic<bool> *>,
+              _Ty=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *)
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(821): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Invoker_ret<_Rx,true>::_Call<_Callable&,>(_Fx) noexcept(false)' en cours de compilation
+          with
+          [
+              _Rx=void,
+              _Callable=std::_Binder<std::_Unforced,void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),Neat *,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex *,std::atomic<bool> *>,
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),Neat *,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex *,std::atomic<bool> *> &
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(822): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Invoker_ret<_Rx,true>::_Call<_Callable&,>(_Fx) noexcept(false)' en cours de compilation
+          with
+          [
+              _Rx=void,
+              _Callable=std::_Binder<std::_Unforced,void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),Neat *,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex *,std::atomic<bool> *>,
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),Neat *,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex *,std::atomic<bool> *> &
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(821): message : pendant la compilation de la fonction membre classe modèle '_Rx std::_Func_impl_no_alloc<std::_Binder<std::_Unforced,_Ty,Neat*,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species*>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex*,std::atomic<bool>*>,_Rx>::_Do_call(void)'
+          with
+          [
+              _Rx=void,
+              _Ty=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *)
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(717): message : voir la référence à l'instanciation classe modèle 'std::_Func_impl_no_alloc<std::_Binder<std::_Unforced,_Ty,Neat*,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species*>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex*,std::atomic<bool>*>,_Ret>' en cours de compilation
+          with
+          [
+              _Ty=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),
+              _Ret=void
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(911): message : voir les informations de référence sur le modèle de variable 'const bool _Is_large<std::_Func_impl_no_alloc<std::_Binder<std::_Unforced,void (__cdecl Neat::*)(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *> > >,int,std::list<Species *,std::allocator<Species *> > &,Genome *,std::mutex *,std::atomic<bool> *),Neat *,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *> > > &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *> > >,Genome * &,std::mutex *,std::atomic<bool> *>,void> >' en cours de compilation
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(1042): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Func_class<_Ret>::_Reset<std::_Binder<std::_Unforced,_Ty,Neat*,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species*>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex*,std::atomic<bool>*>>(_Fx &&)' en cours de compilation
+          with
+          [
+              _Ret=void,
+              _Ty=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),Neat *,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex *,std::atomic<bool> *>
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(1042): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Func_class<_Ret>::_Reset<std::_Binder<std::_Unforced,_Ty,Neat*,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species*>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex*,std::atomic<bool>*>>(_Fx &&)' en cours de compilation
+          with
+          [
+              _Ret=void,
+              _Ty=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),Neat *,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex *,std::atomic<bool> *>
+          ]
+C:\projets\scolaire\53DJV\fyc\NEAT\ThreadPool.h(28): message : voir la référence à l'instanciation de la fonction modèle 'std::function<void (void)>::function<std::_Binder<std::_Unforced,_Ty,Neat*,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species*>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex*,std::atomic<bool>*>,0>(_Fx)' en cours de compilation
+          with
+          [
+              _Ty=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),Neat *,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex *,std::atomic<bool> *>
+          ]
+C:\projets\scolaire\53DJV\fyc\NEAT\ThreadPool.h(29): message : voir la référence à l'instanciation de la fonction modèle 'std::function<void (void)>::function<std::_Binder<std::_Unforced,_Ty,Neat*,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species*>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex*,std::atomic<bool>*>,0>(_Fx)' en cours de compilation
+          with
+          [
+              _Ty=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *),Neat *,float,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>> &,int &,std::reference_wrapper<std::list<Species *,std::allocator<Species *>>>,Genome *&,std::mutex *,std::atomic<bool> *>
+          ]
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.cpp(578): message : voir la référence à l'instanciation de la fonction modèle 'void ThreadPool::queueJob<void(__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>,int,std::list<_Ty,std::allocator<_Ty>> &,Genome *,std::mutex *,std::atomic<bool> *),Neat*,float,std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>&,int&,std::reference_wrapper<std::list<_Ty,std::allocator<_Ty>>>,Genome*&,std::mutex*,std::atomic<bool>*>(_Fn &&,Neat *&&,float &&,std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>> &,int &,std::reference_wrapper<std::list<_Ty,std::allocator<_Ty>>> &&,Genome *&,std::mutex *&&,std::atomic<bool> *&&)' en cours de compilation
+          with
+          [
+              _Ty=Species *,
+              _Fn=void (__cdecl Neat::* )(int,std::_List_iterator<std::_List_val<std::_List_simple_types<Species *>>>,int,std::list<Species *,std::allocator<Species *>> &,Genome *,std::mutex *,std::atomic<bool> *)
+          ]
+  NeuralNetwork.cpp
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(50,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(68,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(93,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(109,60): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(129,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(138,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(145,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(155,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.h(25,37): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.h(27,38): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.h(28,39): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(88,1): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(250,42): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(256,78): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(365,22): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(368,22): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(381,14): warning C4018: '>' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(383,26): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(391,49): warning C4244: '+=' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(398,54): warning C4244: '+=' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(525,22): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(528,22): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(540,14): warning C4018: '>' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(542,26): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(550,49): warning C4244: '+=' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(557,54): warning C4244: '+=' : conversion de 'float' en 'int', perte possible de données
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\utility(186,48): warning C4267: 'initialisation' : conversion de 'size_t' en '_Ty2', perte possible de données
+          with
+          [
+              _Ty2=unsigned int
+          ]
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(125): message : voir la référence à l'instanciation de la fonction modèle 'std::pair<unsigned int,unsigned int>::pair<unsigned int&,unsigned __int64,0>(_Other1,_Other2 &&) noexcept' en cours de compilation
+          with
+          [
+              _Other1=unsigned int &,
+              _Other2=unsigned __int64
+          ]
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(125): message : voir la référence à l'instanciation de la fonction modèle 'std::pair<unsigned int,unsigned int>::pair<unsigned int&,unsigned __int64,0>(_Other1,_Other2 &&) noexcept' en cours de compilation
+          with
+          [
+              _Other1=unsigned int &,
+              _Other2=unsigned __int64
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\type_traits(1540,77): warning C4244: 'argument' : conversion de '_Cv_TiD' en 'int', perte possible de données
+          with
+          [
+              _Cv_TiD=float
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(669): message : voir la référence à l'instanciation de la fonction modèle 'void std::invoke<_Cv_FD&,_Cv_TiD&,float&,int&,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<_Ty>>>&,bool&,std::vector<float,std::allocator<float>>*&,std::atomic<bool>*&>(_Callable,_Ty1,float &,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<_Ty>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool> *&) noexcept(false)' en cours de compilation
+          with
+          [
+              _Cv_FD=void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),
+              _Cv_TiD=NeuralNetwork *,
+              _Ty=Node,
+              _Callable=void (__cdecl NeuralNetwork::* &)(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),
+              _Ty1=NeuralNetwork *&
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(1305): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Invoker_ret<std::_Unforced,false>::_Call<_Cv_FD&,_Cv_TiD&,float&,int&,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<_Ty>>>&,bool&,std::vector<float,std::allocator<float>>*&,std::atomic<bool>*&>(_Fx,_Cv_TiD &,float &,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<_Ty>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool> *&) noexcept(false)' en cours de compilation
+          with
+          [
+              _Cv_FD=void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),
+              _Cv_TiD=NeuralNetwork *,
+              _Ty=Node,
+              _Fx=void (__cdecl NeuralNetwork::* &)(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *)
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(1343): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Call_binder<std::_Unforced,0,1,2,3,4,5,6,_Ty1,_Ty2,std::tuple<>>(std::_Invoker_ret<std::_Unforced,false>,std::integer_sequence<size_t,0,1,2,3,4,5,6>,_Cv_FD &,_Cv_tuple_TiD &,_Untuple &&) noexcept(false)' en cours de compilation
+          with
+          [
+              _Ty1=void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),
+              _Ty2=std::tuple<NeuralNetwork *,float,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *>,
+              _Cv_FD=void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),
+              _Cv_tuple_TiD=std::tuple<NeuralNetwork *,float,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *>,
+              _Untuple=std::tuple<>
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\type_traits(1524): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Binder<std::_Unforced,_Ty,NeuralNetwork*,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool>*>::operator ()<>(void) noexcept(false)' en cours de compilation
+          with
+          [
+              _Ty=void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *)
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\type_traits(1524): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Binder<std::_Unforced,_Ty,NeuralNetwork*,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool>*>::operator ()<>(void) noexcept(false)' en cours de compilation
+          with
+          [
+              _Ty=void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *)
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(650): message : voir la référence à l'instanciation de la fonction modèle 'void std::invoke<_Callable&>(std::_Binder<std::_Unforced,_Ty,NeuralNetwork*,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool>*>&) noexcept(false)' en cours de compilation
+          with
+          [
+              _Callable=std::_Binder<std::_Unforced,void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),NeuralNetwork *,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool> *>,
+              _Ty=void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *)
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(821): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Invoker_ret<_Rx,true>::_Call<_Callable&,>(_Fx) noexcept(false)' en cours de compilation
+          with
+          [
+              _Rx=void,
+              _Callable=std::_Binder<std::_Unforced,void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),NeuralNetwork *,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool> *>,
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),NeuralNetwork *,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool> *> &
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(822): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Invoker_ret<_Rx,true>::_Call<_Callable&,>(_Fx) noexcept(false)' en cours de compilation
+          with
+          [
+              _Rx=void,
+              _Callable=std::_Binder<std::_Unforced,void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),NeuralNetwork *,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool> *>,
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),NeuralNetwork *,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool> *> &
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(821): message : pendant la compilation de la fonction membre classe modèle '_Rx std::_Func_impl_no_alloc<std::_Binder<std::_Unforced,_Ty,NeuralNetwork*,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool>*>,_Rx>::_Do_call(void)'
+          with
+          [
+              _Rx=void,
+              _Ty=void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *)
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(717): message : voir la référence à l'instanciation classe modèle 'std::_Func_impl_no_alloc<std::_Binder<std::_Unforced,_Ty,NeuralNetwork*,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool>*>,_Ret>' en cours de compilation
+          with
+          [
+              _Ty=void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),
+              _Ret=void
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(911): message : voir les informations de référence sur le modèle de variable 'const bool _Is_large<std::_Func_impl_no_alloc<std::_Binder<std::_Unforced,void (__cdecl NeuralNetwork::*)(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node> > >,bool,std::vector<float,std::allocator<float> > *,std::atomic<bool> *),NeuralNetwork *,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node> > > &,bool &,std::vector<float,std::allocator<float> > * &,std::atomic<bool> *>,void> >' en cours de compilation
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(1042): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Func_class<_Ret>::_Reset<std::_Binder<std::_Unforced,_Ty,NeuralNetwork*,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool>*>>(_Fx &&)' en cours de compilation
+          with
+          [
+              _Ret=void,
+              _Ty=void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),NeuralNetwork *,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool> *>
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(1042): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Func_class<_Ret>::_Reset<std::_Binder<std::_Unforced,_Ty,NeuralNetwork*,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool>*>>(_Fx &&)' en cours de compilation
+          with
+          [
+              _Ret=void,
+              _Ty=void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),NeuralNetwork *,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool> *>
+          ]
+C:\projets\scolaire\53DJV\fyc\NEAT\ThreadPool.h(28): message : voir la référence à l'instanciation de la fonction modèle 'std::function<void (void)>::function<std::_Binder<std::_Unforced,_Ty,NeuralNetwork*,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool>*>,0>(_Fx)' en cours de compilation
+          with
+          [
+              _Ty=void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),NeuralNetwork *,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool> *>
+          ]
+C:\projets\scolaire\53DJV\fyc\NEAT\ThreadPool.h(29): message : voir la référence à l'instanciation de la fonction modèle 'std::function<void (void)>::function<std::_Binder<std::_Unforced,_Ty,NeuralNetwork*,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool>*>,0>(_Fx)' en cours de compilation
+          with
+          [
+              _Ty=void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),NeuralNetwork *,float,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool> *>
+          ]
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.cpp(388): message : voir la référence à l'instanciation de la fonction modèle 'void ThreadPool::queueJob<void(__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<_Ty>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *),NeuralNetwork*,float,int&,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<_Ty>>>&,bool&,std::vector<float,std::allocator<float>>*&,std::atomic<bool>*>(_Fn &&,NeuralNetwork *&&,float &&,int &,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<_Ty>>> &,bool &,std::vector<float,std::allocator<float>> *&,std::atomic<bool> *&&)' en cours de compilation
+          with
+          [
+              _Ty=Node,
+              _Fn=void (__cdecl NeuralNetwork::* )(int,int,std::_Deque_iterator<std::_Deque_val<std::_Deque_simple_types<Node>>>,bool,std::vector<float,std::allocator<float>> *,std::atomic<bool> *)
+          ]
+  Node.cpp
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(50,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(68,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(93,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(109,60): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(129,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(138,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(145,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(155,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+  pch.cpp
+  Species.cpp
+C:\projets\scolaire\53DJV\fyc\NEAT\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(50,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(68,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(93,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(109,60): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(129,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(138,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(145,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(155,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Species.cpp(69,17): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Species.cpp(70,20): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Species.cpp(79,23): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+  ThreadPool.cpp
+  Utils.cpp
+C:\projets\scolaire\53DJV\fyc\NEAT\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+  Wrapper.cpp
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(50,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(68,51): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(93,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(109,60): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(129,76): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(138,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(145,70): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Activation.h(155,51): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.h(25,37): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.h(27,38): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\NeuralNetwork.h(28,39): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Neat.h(90,33): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Wrapper.cpp(93,70): warning C4267: 'argument' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\NEAT\Wrapper.cpp(107,40): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\NEAT\Wrapper.cpp(108,40): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\NEAT\Wrapper.cpp(110,40): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\NEAT\Wrapper.cpp(114,39): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\NEAT\Wrapper.cpp(116,35): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\NEAT\Wrapper.cpp(124,43): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\NEAT\Wrapper.cpp(126,49): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\NEAT\Wrapper.cpp(130,37): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\NEAT\Wrapper.cpp(132,48): warning C4305: '=' : troncation de 'double' à 'float'
+     Création de la bibliothèque C:\projets\scolaire\53DJV\fyc\NEAT\x64\Release\NEAT.lib et de l'objet C:\projets\scolaire\53DJV\fyc\NEAT\x64\Release\NEAT.exp
+  Génération de code en cours
+  Previous IPDB not found, fall back to full compilation.
+  All 2480 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Fin de la génération du code
+  NEAT.vcxproj -> C:\projets\scolaire\53DJV\fyc\NEAT\x64\Release\NEAT.dll
