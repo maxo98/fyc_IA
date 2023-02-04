@@ -341,19 +341,9 @@ void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size,
         restWorkload += workloadFrac;
     }
 
-    while (restWorkload > 0)
-    {
-        restWorkload--;
-        currentWorkload++;
-    }
+    currentWorkload = totalWorkload - count;
 
     count += currentWorkload;
-
-    while (count > totalWorkload)
-    {
-        currentWorkload--;
-        count--;
-    }
 
     if (currentWorkload == 0)
     {
@@ -501,19 +491,9 @@ void NeuralNetwork::splitBackpropThread(std::deque<Node>::iterator it, int size,
         restWorkload += workloadFrac;
     }
 
-    while (restWorkload > 0)
-    {
-        restWorkload--;
-        currentWorkload++;
-    }
+    currentWorkload = totalWorkload - count;
 
     count += currentWorkload;
-
-    while (count > totalWorkload)
-    {
-        currentWorkload--;
-        count--;
-    }
 
     if (currentWorkload == 0)
     {

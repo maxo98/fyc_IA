@@ -279,21 +279,8 @@ bool esHypeneatTest(int popSize, Neat& algo)
             restWorkload -= floor(restWorkload);
             restWorkload += workloadFrac;
         }
-
-        while (restWorkload > 0)
-        {
-            restWorkload--;
-            currentWorkload++;
-        }
 #endif //MULTITHREAD
-
-        count += currentWorkload;
-
-        while (count > totalWorkload)
-        {
-            currentWorkload--;
-            count--;
-        }
+        currentWorkload = totalWorkload - count;
 
         snakeEvaluate(startIndex, currentWorkload, fitness, algo, validated);
 

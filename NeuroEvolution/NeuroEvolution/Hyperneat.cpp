@@ -108,21 +108,11 @@ void Hyperneat::generateNetworks()
 		restWorkload -= floor(restWorkload);
 		restWorkload += workloadFrac;
 	}
-
-	while (restWorkload > 0)
-	{
-		restWorkload--;
-		currentWorkload++;
-	}
 #endif // MULTITHREAD
 
-	count += currentWorkload;
+	currentWorkload = totalWorkload - count;
 
-	while (count > totalWorkload)
-	{
-		currentWorkload--;
-		count--;
-	}
+	count += currentWorkload;
 
 	generateNetworksThread(startIndex, currentWorkload);
 
