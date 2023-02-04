@@ -11,6 +11,7 @@ int main()
 {
 	//1675537590
 	auto seed = time(NULL);
+	seed = 1675537590;
 
 	std::cout << "seed " << seed << std::endl;
 

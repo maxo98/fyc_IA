@@ -561,7 +561,7 @@ void Neat::evolve()
 	float restWorkload = 0;
 
 	std::deque<std::atomic<bool>> tickets;
-
+	
 #ifdef MULTITHREAD
 	while (workload < 1)
 	{
@@ -598,13 +598,9 @@ void Neat::evolve()
 	}
 #endif // MULTITHREAD
 
-	count += currentWorkload;
+	currentWorkload = totalWorkload - count;
 
-	while (count > totalWorkload)
-	{
-		currentWorkload--;
-		count--;
-	}
+	count += currentWorkload;
 
 	reproduce(currentWorkload, itSortedSpecies, newBornIndex, sortedSpecies, futureGen, &lock);
 

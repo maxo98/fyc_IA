@@ -65,7 +65,7 @@ int launchESHypeneatTest()
     neatparam.pbMutateOnly = 0.25;
     neatparam.pbMateOnly = 0.2;
 
-    neatparam.speciationDistance = 3;
+    neatparam.speciationDistance = 5.5;
 
 
     neatparam.speciationDistanceMod = 0.3;
