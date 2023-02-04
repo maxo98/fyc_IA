@@ -9,6 +9,7 @@
 
 int main()
 {
+	//1675537590
 	auto seed = time(NULL);
 
 	std::cout << "seed " << seed << std::endl;
@@ -20,9 +21,9 @@ int main()
 
 	//return launchXor();
 	//return launchHypeneatTest();
-	//return launchESHypeneatTest();
+	return launchESHypeneatTest();
 	//backpropTest();
-	testHyperBackprop();
+	//testHyperBackprop();
 
 	return 0;
 }

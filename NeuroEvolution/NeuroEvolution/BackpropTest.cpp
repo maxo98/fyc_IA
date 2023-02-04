@@ -49,6 +49,12 @@ void backpropTest()
 
 	network.applyBackprop(gen);
 
+	gen.saveCurrentGenome();
+
+	NeuralNetwork testNetwork;
+	Genome testGen(2, 1, arrActiv);
+	testGen.loadGenome();
+
 	Neat::genomeToNetwork(gen, network);
 
 	network.compute(input, tmp);

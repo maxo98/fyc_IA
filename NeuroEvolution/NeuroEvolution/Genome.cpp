@@ -534,7 +534,9 @@ Genome Genome::loadGenome(const std::string& fileName)
     
     while (getline(file, line))
     {
+#ifdef DEBUG
         std::cout << line << std::endl;
+#endif // DEBUG
 
         std::vector<std::string> stringSplited;
         int idxStart, idxEnd;
