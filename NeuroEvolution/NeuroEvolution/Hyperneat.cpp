@@ -74,22 +74,33 @@ void Hyperneat::generateNetworks()
 {
 	int threads = 1;
 	ThreadPool* pool = ThreadPool::getInstance();
-	unsigned int cpus = std::thread::hardware_concurrency();
+	size_t taskLaunched = pool->getTasksTotal();
+	unsigned int cpus = (pool->getThreadPoolSize() >= taskLaunched ? pool->getThreadPoolSize() - taskLaunched : 0);
 
 	float totalWorkload = networks.size();
-	float workload = totalWorkload / cpus;
+	float workload = (cpus > 1 ? totalWorkload / cpus : totalWorkload);
 	float restWorkload = 0;
 	int currentWorkload = totalWorkload;
 	int startIndex = 0;
 	int count = 0;
 
+	if (totalWorkload == 1)
+	{
+		cpus = 1;
+	}
+
 	std::deque<std::atomic<bool>> tickets;
 
 #ifdef MULTITHREAD
-	while (workload < 1)
+	while (workload < 1 && cpus > 2)
 	{
 		cpus--;
 		workload = totalWorkload / cpus;
+	}
+
+	if (workload < 1.f)
+	{
+		cpus = 0;
 	}
 
 	while (cpus > threads)

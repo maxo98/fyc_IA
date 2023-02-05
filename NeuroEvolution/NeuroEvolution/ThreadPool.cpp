@@ -25,8 +25,8 @@ void ThreadPool::start()
 {
     running = true;
 
-    const uint32_t num_threads = std::thread::hardware_concurrency() - 1; // Max # of threads the system supports
-    threads.resize(num_threads);
+    const uint32_t num_threads = std::thread::hardware_concurrency() * 1.5; // Max # of threads the system supports
+    threads.resize(num_threads);//As some threads are gonna be sleeping we should allow more hardawre concurrency
 
     for (uint32_t i = 0; i < num_threads; i++) 
     {

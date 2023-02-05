@@ -547,26 +547,37 @@ void Neat::evolve()
 	//Perform reproduction.  Reproduction is done on a per-Species
 	//basis.  (So this could be paralellized potentially.)
 	int newBornIndex = 0;
-	int threads = 1;
-	ThreadPool* pool = ThreadPool::getInstance();
-	unsigned int cpus = std::thread::hardware_concurrency();
 	std::mutex lock;
-
 	std::list<Species*>::iterator itSortedSpecies = sortedSpecies.begin();
 
+	int threads = 1;
+	ThreadPool* pool = ThreadPool::getInstance();
+	size_t taskLaunched = pool->getTasksTotal();
+	unsigned int cpus = (pool->getThreadPoolSize() > taskLaunched ? pool->getThreadPoolSize() - taskLaunched : 0);
+
 	float totalWorkload = sortedSpecies.size();
-	float workload = totalWorkload / cpus;
+	float workload = (cpus > 1 ? totalWorkload / cpus : totalWorkload);
+	float restWorkload = 0;
 	int currentWorkload = totalWorkload;
 	int count = 0;
-	float restWorkload = 0;
+
+	if (totalWorkload == 1)
+	{
+		cpus = 1;
+	}
 
 	std::deque<std::atomic<bool>> tickets;
-	
+
 #ifdef MULTITHREAD
-	while (workload < 1)
+	while (workload < 1 && cpus > 2)
 	{
 		cpus--;
 		workload = totalWorkload / cpus;
+	}
+
+	if (workload < 1.f)
+	{
+		cpus = 0;
 	}
 
 	while (cpus > threads)

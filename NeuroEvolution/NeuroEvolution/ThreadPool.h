@@ -22,6 +22,10 @@ public:
     void stop();
     void waitForTask();
     size_t getTasksTotal() const;
+    inline unsigned short getThreadPoolSize() const
+    {
+        return threads.size();
+    }
 
     template <class _Fn, class... _Args>
     void queueJob(_Fn&& task, _Args&&... args)

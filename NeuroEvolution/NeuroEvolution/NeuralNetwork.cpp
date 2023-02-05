@@ -302,7 +302,7 @@ void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size,
     int threads = 1;
     ThreadPool* pool = ThreadPool::getInstance();
     size_t taskLaunched = pool->getTasksTotal();
-    unsigned int cpus = (std::thread::hardware_concurrency() > taskLaunched ? std::thread::hardware_concurrency() - taskLaunched : 0);
+    unsigned int cpus = (pool->getThreadPoolSize() >= taskLaunched ? pool->getThreadPoolSize() - taskLaunched : 0);
 
     float totalWorkload = size;
     float workload = (cpus > 1 ? totalWorkload / cpus : totalWorkload);
@@ -318,7 +318,7 @@ void NeuralNetwork::splitLayerComputing(std::deque<Node>::iterator it, int size,
 
     std::deque<std::atomic<bool>> tickets;
 
-    while (workload < 20 && cpus > 2)
+    while (workload < 10 && cpus > 2)
     {
         cpus--;
         workload = totalWorkload / cpus;
@@ -463,21 +463,32 @@ void NeuralNetwork::splitBackpropThread(std::deque<Node>::iterator it, int size,
 {
     int threads = 1;
     ThreadPool* pool = ThreadPool::getInstance();
-    unsigned int cpus = std::thread::hardware_concurrency();
+    size_t taskLaunched = pool->getTasksTotal();
+    unsigned int cpus = (pool->getThreadPoolSize() >= taskLaunched ? pool->getThreadPoolSize() - taskLaunched : 0);
 
     float totalWorkload = size;
-    float workload = totalWorkload / cpus;
+    float workload = (cpus > 1 ? totalWorkload / cpus : totalWorkload);
     float restWorkload = 0;
     int currentWorkload = totalWorkload;
     int startIndex = 0;
     int count = 0;
 
+    if (totalWorkload == 1)
+    {
+        cpus = 1;
+    }
+
     std::deque<std::atomic<bool>> tickets;
 
-    while (workload < 1)
+    while (workload < 1 && cpus > 2)
     {
         cpus--;
         workload = totalWorkload / cpus;
+    }
+
+    if (workload < 1.f)
+    {
+        cpus = 0;
     }
 
     while (cpus > threads)
