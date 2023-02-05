@@ -8,10 +8,12 @@ std::vector<type> wrapperArrayToVector(const type* data, const size_t length)
 {
 	std::vector<type> newVector = std::vector<type>(length);
 
-	for (int i = 0; i < length; i++)
+	std::memcpy(&newVector[0], &data[0], length * sizeof(type));
+
+	/*for (int i = 0; i < length; i++)
 	{
 		newVector[i] = data[i];
-	}
+	}*/
 
 	return newVector;
 }
@@ -29,6 +31,12 @@ extern "C"
 	NEAT_EXPORT void Evolve(Neat* neat);
 	NEAT_EXPORT void NetworkFromGenome(Genome* genome, NeuralNetwork* neuralNetwork);
 	NEAT_EXPORT ThreadPool* InitThreadPool();
+	NEAT_EXPORT int getPop(Neat* neat);
+}
+
+int getPop(Neat* neat)
+{
+	return neat->getPopulationSize();
 }
 
 ThreadPool* InitThreadPool()
