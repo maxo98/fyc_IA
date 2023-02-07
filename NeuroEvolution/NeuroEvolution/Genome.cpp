@@ -565,7 +565,7 @@ Genome Genome::loadGenome(const std::string& fileName)
 GeneConnection Genome::loadGeneConnection(const std::vector<std::string> data)
 {
     auto loadedGeneConnection = GeneConnection(std::stoi(data[1]), std::stoi(data[2]), std::stoi(data[3]));
-    loadedGeneConnection.setWeight(std::stoi(data[5]));
+    loadedGeneConnection.setWeight(std::stof(data[5]));
     loadedGeneConnection.setEnabled(std::stoi(data[4]));
     return loadedGeneConnection;
 }
