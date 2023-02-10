@@ -24,10 +24,10 @@ extern "C"
 	NEAT_EXPORT void DeleteInstance(void* instance);
 	NEAT_EXPORT Neat* InstantiateNeat(size_t popSize, unsigned int input, unsigned int output, NeatParameters* neatParam);
 	NEAT_EXPORT NeuralNetwork* GetNeuralNetwork(Neat* neat, unsigned int popSize);
-	NEAT_EXPORT void GetNeuralNetworkCompute(NeuralNetwork* neuralNetwork, float* outputArray, size_t lengthOutPut);
+	NEAT_EXPORT void GetNeuralNetworkCompute(NeuralNetwork* neuralNetwork, float* inputArray, size_t lengthInPut, float* outputArray, size_t lengthOutPut);
 	NEAT_EXPORT void SetScore(Neat* neat, float* score, const unsigned int length);
 	NEAT_EXPORT void SaveGoat(Neat* neat, char* fileName);
-	NEAT_EXPORT Genome* LoadGoat(char* fileName);
+	//NEAT_EXPORT Genome* LoadGoat(char* fileName);
 	NEAT_EXPORT void Evolve(Neat* neat);
 	NEAT_EXPORT void NetworkFromGenome(Genome* genome, NeuralNetwork* neuralNetwork);
 	NEAT_EXPORT ThreadPool* InitThreadPool();
@@ -46,9 +46,11 @@ ThreadPool* InitThreadPool()
 	return pool;
 }
 
-void GetNeuralNetworkCompute(NeuralNetwork* neuralNetwork, float* outputArray, size_t lengthOutPut)
+void GetNeuralNetworkCompute(NeuralNetwork* neuralNetwork, float* inputArray, size_t lengthInPut, float* outputArray, size_t lengthOutPut)
 {
-	std::vector<float> inputs = std::vector<float>(lengthOutPut + 1);
+	std::vector<float> inputs = wrapperArrayToVector(inputArray, lengthInPut);
+	inputs.push_back(0.5);
+
 	std::vector<float> outputsConverted = std::vector<float>(lengthOutPut);
 
 	neuralNetwork->compute(inputs, outputsConverted);
@@ -70,10 +72,10 @@ void SaveGoat(Neat* neat, char* fileName)
 	neat->getGoat()->saveCurrentGenome(s);
 }
 
-Genome* LoadGoat(char* fileName)
+/*Genome* LoadGoat(char* fileName)
 {
 	return Genome::loadGenome(fileName);
-}
+}*/
 
 void NetworkFromGenome(Genome* genome, NeuralNetwork* neuralNetwork)
 {
