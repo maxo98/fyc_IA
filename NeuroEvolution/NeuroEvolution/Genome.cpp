@@ -612,7 +612,7 @@ void Genome::fullyConnect(int nLayer, int nNode, Activation* hiddenActivation, A
         {
             for (unsigned int cpt = 0; cpt < nNode; cpt++)
             {
-                int in = (i == 0 ? input : nNode);
+                int in = (i == 0 ? input-1 : nNode);
                 int out = (i == (nLayer - 1) ? output : nNode);
 
                 nodes.push_back(std::move(GeneNode(NODE_TYPE::HIDDEN, hiddenActivation, i + 1)));

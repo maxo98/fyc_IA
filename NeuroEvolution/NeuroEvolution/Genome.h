@@ -151,7 +151,7 @@ inline float lecunUniformInit(int input, int out, const long long& seed)
 //He init, mean 0, variance sqrt(2/nInput)
 inline float heUniformInit(int input, int out, const long long& seed)
 {
-	return randPosNeg() * randFloat() * sqrt(2.f / input);
+	return randFloat() * sqrt(2.f / input);
 }
 
 //Xavier glorot: mean 0, variance 1 / sqrt(nInput)
