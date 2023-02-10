@@ -10,8 +10,14 @@
 #include "Utils.h"
 #include "GeneNode.h"
 #include "GeneConnection.h"
+#include <random>
 
 class CPPN_Neat;
+
+//input number of connections to the node
+//currentLayerIndex: layer index starting from 0
+//prevLayer, currentLayer: number of nodes on these layers
+typedef float (*WeightInitFunction) (int input, int out, const long long& seed);
 
 /**
  * 
@@ -57,7 +63,10 @@ public:
 	inline bool getEliminate() { return eliminate; };
 	void saveCurrentGenome(const std::string& fileName = "saveGenome.txt");
 	void addHiddenNode(Activation* activation, unsigned int layer);
-	static Genome* loadGenome(const std::string& fileName = "saveGenome.txt");
+	static Genome loadGenome(const std::string& fileName = "saveGenome.txt");
+
+	void fullyConnect(int nLayer, int nNode, Activation* hiddenActivation, Activation* outputActivation, std::unordered_map<std::pair<unsigned int, unsigned int>, unsigned int>& allConnections,
+		WeightInitFunction weightInit, const long long& seed);
 
 	//Parent A should be the fittest
 	void crossover(Genome& parentA, Genome& parentB, CROSSOVER type);
@@ -132,3 +141,29 @@ private:
 inline bool genomeSortDesc(Genome* i, Genome* j) { return (i->getScore() > j->getScore()); };
 
 inline bool genomeSortAsc(Genome* i, Genome* j) { return (i->getScore() < j->getScore()); };
+
+//Lecun init : mean 0, Standard deviation sqrt(1/nInput) where nInput number of connection entering the node
+inline float lecunUniformInit(int input, int out, const long long& seed)
+{
+	return randPosNeg() * randFloat() * sqrt(1.f/input);
+}
+
+//He init, mean 0, variance sqrt(2/nInput)
+inline float heUniformInit(int input, int out, const long long& seed)
+{
+	return randFloat() * sqrt(2.f / input);
+}
+
+//Xavier glorot: mean 0, variance 1 / sqrt(nInput)
+inline float xavierUniformInit(int input, int out, const long long& seed)
+{
+	return randPosNeg() * randFloat() / sqrt(float(input));
+}
+
+//Normalized xavier: mean 0, variance sqrt(6.f) / sqrt(nInput + nOutput) where nInput is the umber of connection entering, and nOutput the number of connections coming out
+inline float xavierNormalInit(int input, int out, const long long& seed)
+{
+	std::normal_distribution<float> normalDist(0.0, sqrt(6.f) / sqrt(float(input + out)));
+	std::default_random_engine generator(seed);
+	return randPosNeg() * randFloat() * normalDist(generator);
+}

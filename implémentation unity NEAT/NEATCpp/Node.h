@@ -24,6 +24,7 @@ public:
 	void addConnection(Node*, float, bool);
 
 	inline float getValue() { return value; }
+	inline float getBackpropValue() { return backpropValue; }
 	inline float getOldValue() { return oldValue; }
 	inline Activation* getActivation() { return activation; }
 	inline std::vector<std::pair<Node*, float>>* getPreviousNodes() { return &previousNodes; }
@@ -48,4 +49,5 @@ private:
 	int id;
 	float delta = 0;//Error bakcprop
 	std::mutex deltaMtx;
+	float backpropValue;
 };
