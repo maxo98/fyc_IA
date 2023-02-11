@@ -296,7 +296,7 @@ int snakeTest(NeuralNetwork* network, bool display, bool& validation)
 	return finalScore;
 }
 
-void snakeEvaluate(int startIndex, int currentWorkload, std::vector<float>& fitness, Neat neat, bool& validated, std::atomic<bool>* ticket = nullptr)
+void snakeEvaluate(int startIndex, int currentWorkload, std::vector<float>& fitness, Neat& neat, bool& validated, std::atomic<bool>* ticket = nullptr)
 {
 	for (int i = startIndex; i < (startIndex + currentWorkload); i++)
 	{
@@ -320,7 +320,7 @@ void snakeEvaluate(int startIndex, int currentWorkload, std::vector<float>& fitn
 	}
 }
 
-bool neatTest(unsigned int popSize, Neat neat)
+bool neatTest(unsigned int popSize, Neat& neat)
 {
 	std::vector<float> fitness;
 	fitness.resize(popSize);

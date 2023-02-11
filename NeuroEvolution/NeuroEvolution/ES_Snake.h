@@ -3,7 +3,7 @@
 
 int launchESHypeneatTest();
 
-#define NEAT
+//#define NEAT
 
 #ifndef NEAT
 bool esHypeneatTest(int popSize, Hyperneat& esHyper);

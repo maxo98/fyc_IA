@@ -13,8 +13,8 @@
 
 
 #define HELP
-//#define ES_HYPER
-//#define TROLLOLOL
+#define ES_HYPER
+#define HELP2
 
 #define TAILLE_ECRAN 20
 
@@ -22,26 +22,26 @@ int launchESHypeneatTest()
 {
     NeatParameters neatparam;
 
-#ifndef TROLLOLOL
+#ifndef HELP2
     neatparam.activationFunctions.push_back(new ThresholdActivation());
     neatparam.activationFunctions.push_back(new AbsActivation());
     neatparam.activationFunctions.push_back(new SinActivation());
     neatparam.activationFunctions.push_back(new HyperbolSecantActivation());
     neatparam.activationFunctions.push_back(new TanhActivation());
     neatparam.activationFunctions.push_back(new LinearActivation());
-#endif // !TROLLOLOL
+#endif // !HELP2
 
-    /*
-#ifdef TROLLOLOL
+    
+#ifdef HELP2
     neatparam.activationFunctions.push_back(new SquareActivation());
     neatparam.activationFunctions.push_back(new SquareRootActivation());
-#endif // TROLLOLOL
-    */
-    neatparam.pbMutateLink = 0.05;// 0.05;
+#endif // HELP2
+    
+    neatparam.pbMutateLink = 0.4;// 0.05;
     neatparam.pbMutateNode = 0.03;//0.03;
     neatparam.pbWeight = 0.9;// 0.9;
     neatparam.pbToggleLink = 0.01;// 0.05;
-    neatparam.weightMuteStrength = 0.5;// 2.5;
+    neatparam.weightMuteStrength = 1.5;// 2.5;
     neatparam.pbMutateActivation = 0.7;
 
     neatparam.disjointCoeff = 1.0;
@@ -65,10 +65,10 @@ int launchESHypeneatTest()
     neatparam.pbMutateOnly = 0.25;
     neatparam.pbMateOnly = 0.2;
 
-    neatparam.speciationDistance = 5.5;
+    neatparam.speciationDistance = 5;
 
 
-    neatparam.speciationDistanceMod = 0.3;
+    neatparam.speciationDistanceMod = 0.5;
     neatparam.minExpectedSpecies = 15;
     neatparam.maxExpectedSpecies = 40;
     neatparam.adaptSpeciation = false;
@@ -233,7 +233,7 @@ bool esHypeneatTest(int popSize, Neat& algo)
 
     bool validated = false;
 
-    for (int i3 = 0; i3 < 100 && validated == false; i3++)
+    for (int i3 = 0; i3 < 200 && validated == false; i3++)
     {
         std::cout << std::endl << "gen " << i3 << std::endl;
 
