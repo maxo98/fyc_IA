@@ -1,0 +1,180 @@
+﻿  snake intégration.cpp
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\include\Activation.h(50,74): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\include\Activation.h(68,74): warning C4244: 'return' : conversion de 'int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\include\Activation.h(93,74): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\include\Activation.h(109,67): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\include\Activation.h(129,99): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\include\Activation.h(138,100): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\include\Activation.h(145,77): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\include\Activation.h(155,74): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\include\Utils.h(20,52): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\include\Genome.h(167,39): warning C4244: 'argument' : conversion de 'const __int64' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\include\NeuralNetwork.h(23,37): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\include\NeuralNetwork.h(25,38): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\include\NeuralNetwork.h(26,39): warning C4267: 'return' : conversion de 'size_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\include\Neat.h(90,33): warning C4267: 'return' : conversion de 'size_t' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(21,8): warning C4244: 'argument' : conversion de 'time_t' en 'unsigned int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(119,156): warning C4244: '=' : conversion de 'double' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(120,156): warning C4244: '=' : conversion de 'double' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(121,156): warning C4244: '=' : conversion de 'double' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(122,156): warning C4244: '=' : conversion de 'double' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(145,18): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(148,111): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(151,111): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(154,111): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(338,9): warning C4244: 'return' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(349,25): warning C4244: '=' : conversion de 'int' en '_Ty', perte possible de données
+          with
+          [
+              _Ty=float
+          ]
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(376,21): warning C4018: '<' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(385,23): warning C4244: 'initialisation' : conversion de 'unsigned int' en 'float', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(388,23): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(402,15): warning C4018: '>' : incompatibilité signed/unsigned
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(404,27): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(412,50): warning C4244: '+=' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(413,55): warning C4244: '+=' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(420,35): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(441,32): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(442,32): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(443,27): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(444,32): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(446,37): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(450,31): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(461,35): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(463,41): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(467,29): warning C4305: '=' : troncation de 'double' à 'float'
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(471,40): warning C4305: '=' : troncation de 'double' à 'float'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\type_traits(1534,98): warning C4244: 'argument' : conversion de '_Cv_TiD' en 'int', perte possible de données
+          with
+          [
+              _Cv_TiD=float
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(669): message : voir la référence à l'instanciation de la fonction modèle 'void std::invoke<void(__cdecl *&)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),_Cv_TiD&,float&,std::vector<float,std::allocator<float>>&,Neat&,bool&,std::atomic<bool>*&>(_Callable,_Ty1,float &,std::vector<float,std::allocator<float>> &,Neat &,bool &,std::atomic<bool> *&) noexcept(false)' en cours de compilation
+          with
+          [
+              _Cv_TiD=int,
+              _Callable=void (__cdecl *&)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),
+              _Ty1=int &
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(1305): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Invoker_ret<std::_Unforced,false>::_Call<void(__cdecl *&)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),_Cv_TiD&,float&,std::vector<float,std::allocator<float>>&,Neat&,bool&,std::atomic<bool>*&>(_Fx,_Cv_TiD &,float &,std::vector<float,std::allocator<float>> &,Neat &,bool &,std::atomic<bool> *&) noexcept(false)' en cours de compilation
+          with
+          [
+              _Cv_TiD=int,
+              _Fx=void (__cdecl *&)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *)
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(1343): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Call_binder<std::_Unforced,0,1,2,3,4,5,void(__cdecl *)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),_Ty2,std::tuple<>>(std::_Invoker_ret<std::_Unforced,false>,std::integer_sequence<size_t,0,1,2,3,4,5>,_Cv_FD &,_Cv_tuple_TiD &,_Untuple &&) noexcept(false)' en cours de compilation
+          with
+          [
+              _Ty2=std::tuple<int,float,std::reference_wrapper<std::vector<float,std::allocator<float>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool> *>,
+              _Cv_FD=void (__cdecl *)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),
+              _Cv_tuple_TiD=std::tuple<int,float,std::reference_wrapper<std::vector<float,std::allocator<float>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool> *>,
+              _Untuple=std::tuple<>
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\type_traits(1524): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),_Ty2 &,_Ty,std::reference_wrapper<std::vector<_Ty,std::allocator<_Ty>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool>*>::operator ()<>(void) noexcept(false)' en cours de compilation
+          with
+          [
+              _Ty2=int,
+              _Ty=float
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\type_traits(1524): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),_Ty2 &,_Ty,std::reference_wrapper<std::vector<_Ty,std::allocator<_Ty>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool>*>::operator ()<>(void) noexcept(false)' en cours de compilation
+          with
+          [
+              _Ty2=int,
+              _Ty=float
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(650): message : voir la référence à l'instanciation de la fonction modèle 'void std::invoke<_Callable&>(std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),_Ty2 &,_Ty,std::reference_wrapper<std::vector<_Ty,std::allocator<_Ty>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool>*>&) noexcept(false)' en cours de compilation
+          with
+          [
+              _Callable=std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),int &,float,std::reference_wrapper<std::vector<float,std::allocator<float>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool> *>,
+              _Ty2=int,
+              _Ty=float
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(821): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Invoker_ret<_Rx,true>::_Call<_Callable&,>(_Fx) noexcept(false)' en cours de compilation
+          with
+          [
+              _Rx=void,
+              _Callable=std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),int &,float,std::reference_wrapper<std::vector<float,std::allocator<float>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool> *>,
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),int &,float,std::reference_wrapper<std::vector<float,std::allocator<float>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool> *> &
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(822): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Invoker_ret<_Rx,true>::_Call<_Callable&,>(_Fx) noexcept(false)' en cours de compilation
+          with
+          [
+              _Rx=void,
+              _Callable=std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),int &,float,std::reference_wrapper<std::vector<float,std::allocator<float>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool> *>,
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),int &,float,std::reference_wrapper<std::vector<float,std::allocator<float>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool> *> &
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(821): message : pendant la compilation de la fonction membre classe modèle '_Rx std::_Func_impl_no_alloc<std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),_Ty2 &,_Ty,std::reference_wrapper<std::vector<_Ty,std::allocator<_Ty>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool>*>,_Rx>::_Do_call(void)'
+          with
+          [
+              _Rx=void,
+              _Ty2=int,
+              _Ty=float
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(717): message : voir la référence à l'instanciation classe modèle 'std::_Func_impl_no_alloc<std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),_Ty2 &,_Ty,std::reference_wrapper<std::vector<_Ty,std::allocator<_Ty>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool>*>,_Ret>' en cours de compilation
+          with
+          [
+              _Ty2=int,
+              _Ty=float,
+              _Ret=void
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(911): message : voir les informations de référence sur le modèle de variable 'const bool _Is_large<std::_Func_impl_no_alloc<std::_Binder<std::_Unforced,void (__cdecl&)(int,int,std::vector<float,std::allocator<float> > &,Neat,bool &,std::atomic<bool> *),int &,float,std::reference_wrapper<std::vector<float,std::allocator<float> > >,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool> *>,void> >' en cours de compilation
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(1042): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Func_class<_Ret>::_Reset<std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),_Ty2 &,_Ty,std::reference_wrapper<std::vector<_Ty,std::allocator<_Ty>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool>*>>(_Fx &&)' en cours de compilation
+          with
+          [
+              _Ret=void,
+              _Ty2=int,
+              _Ty=float,
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),int &,float,std::reference_wrapper<std::vector<float,std::allocator<float>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool> *>
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\functional(1042): message : voir la référence à l'instanciation de la fonction modèle 'void std::_Func_class<_Ret>::_Reset<std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),_Ty2 &,_Ty,std::reference_wrapper<std::vector<_Ty,std::allocator<_Ty>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool>*>>(_Fx &&)' en cours de compilation
+          with
+          [
+              _Ret=void,
+              _Ty2=int,
+              _Ty=float,
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),int &,float,std::reference_wrapper<std::vector<float,std::allocator<float>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool> *>
+          ]
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\include\ThreadPool.h(28): message : voir la référence à l'instanciation de la fonction modèle 'std::function<void (void)>::function<std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),_Ty2 &,_Ty,std::reference_wrapper<std::vector<_Ty,std::allocator<_Ty>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool>*>,0>(_Fx)' en cours de compilation
+          with
+          [
+              _Ty2=int,
+              _Ty=float,
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),int &,float,std::reference_wrapper<std::vector<float,std::allocator<float>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool> *>
+          ]
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\include\ThreadPool.h(29): message : voir la référence à l'instanciation de la fonction modèle 'std::function<void (void)>::function<std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),_Ty2 &,_Ty,std::reference_wrapper<std::vector<_Ty,std::allocator<_Ty>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool>*>,0>(_Fx)' en cours de compilation
+          with
+          [
+              _Ty2=int,
+              _Ty=float,
+              _Fx=std::_Binder<std::_Unforced,void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),int &,float,std::reference_wrapper<std::vector<float,std::allocator<float>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,std::atomic<bool> *>
+          ]
+C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\snake intégration.cpp(409): message : voir la référence à l'instanciation de la fonction modèle 'void ThreadPool::queueJob<void(__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *),int&,float,std::reference_wrapper<std::vector<float,std::allocator<float>>>,std::reference_wrapper<Neat>,std::reference_wrapper<bool>,_Ty*>(_Fn,int &,float &&,std::reference_wrapper<std::vector<float,std::allocator<float>>> &&,std::reference_wrapper<Neat> &&,std::reference_wrapper<bool> &&,_Ty *&&)' en cours de compilation
+          with
+          [
+              _Ty=std::atomic<bool>,
+              _Fn=void (__cdecl &)(int,int,std::vector<float,std::allocator<float>> &,Neat,bool &,std::atomic<bool> *)
+          ]
+  Génération de code en cours
+  1 of 2822 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    5 functions had inline decision re-evaluated but remain unchanged
+  Fin de la génération du code
+  snake intégration.vcxproj -> C:\projets\scolaire\53DJV\fyc\intégration_neat\snake intégration\x64\Release\snake intégration.exe
